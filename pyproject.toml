@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "function-calling-test-suite"
+version = "0.1.0"
+description = ""
+authors = ["Nick Hale <nick@acorn.io>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pytest = "^8.1.1"
+jsonschema = "^4.21.1"
+requests = "^2.31.0"
+openai = "^1.16.1"
+pydantic = "2.6.4"
+pytest-html = "^4.1.1"
+pytest-json-report = "^1.5.0"
+pytest-order = "^1.2.1"
+pandas = "^2.2.2"
+plotly = "^5.22.0"
+kaleido = "0.2.1"
+pyyaml = "^6.0.1"
+
+[tool.poetry.scripts]
+plot-results = "function_calling_test_suite.plot_results:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+generate_report_on_test = true
+addopts = """
+    --cache-clear -v -s --tb=short
+    --order-scope=session --order-dependencies
+    --self-contained-html --html=reports/fcts_report.html
+    --json-report --json-report-file=none --json-report-indent=4
+"""
