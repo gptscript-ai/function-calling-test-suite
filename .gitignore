@@ -1,0 +1,30 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Poetry lock file (optional, consider including for reproducible builds)
+# poetry.lock
+
+# Installation logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.coverage.*
+.pytest_cache/
+
+# Environment variables
+.env
+
+# IDE-specific directories
+.idea/
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

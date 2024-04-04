@@ -1,0 +1,286 @@
+[
+    {
+        "prompt": "Call funcA with 1, then call funcB with it's result",
+        "available_functions": [
+            {
+                "name": "funcA",
+                "description": "Performs funcA",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "string",
+                            "description": "Param 1"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "funcB",
+                "description": "Performs funcB",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "string",
+                            "description": "Param 1"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "funcA",
+                "arguments": {
+                    "param1": "1"
+                },
+                "result": "This is output of funcA(1)"
+            },
+            {
+                "name": "funcB",
+                "arguments": {
+                    "param1": "This is output of funcA(1)"
+                },
+                "result": "This is output of funcB(This is the output of funcA(1))"
+            }
+        ]
+    },
+    {
+        "prompt": "Call funcA with 1 and funcB with 2, then call funcC with their results",
+        "available_functions": [
+            {
+                "name": "funcA",
+                "description": "Performs funcA",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "string",
+                            "description": "Param 1"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "funcB",
+                "description": "Performs funcB",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param2": {
+                            "type": "string",
+                            "description": "Param 2"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "funcC",
+                "description": "Performs funcC",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "string",
+                            "description": "Param 1"
+                        },
+                        "param2": {
+                            "type": "string",
+                            "description": "Param 2"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "funcA",
+                "arguments": {
+                    "param1": "1"
+                },
+                "result": "This is the output of funcA(1)"
+            },
+            {
+                "name": "funcB",
+                "arguments": {
+                    "param2": "2"
+                },
+                "result": "This is the output of funcB(2)"
+            },
+            {
+                "name": "funcC",
+                "arguments": {
+                    "param1": "This is the output of funcA(1)",
+                    "param2": "This is the output of funcB(2)"
+                },
+                "result": ""
+            }
+        ]
+    },
+    {
+        "prompt": "Call funcA with 1 and funcB with 2, then call funcC with their results. Wait for the result of funcC, then call funcD with 3 and funcE with 4, then call funcF with their result and finally call funcG with the result of funcC and funcF",
+        "available_functions": [
+            {
+                "name": "funcA",
+                "description": "Performs funcA",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "string",
+                            "description": "Param 1"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "funcB",
+                "description": "Performs funcB",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "string",
+                            "description": "Param 1"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "funcC",
+                "description": "Performs funcC",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "array",
+                            "description": "An ordered list of function parameters",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "name": "funcD",
+                "description": "Performs funcD",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "string",
+                            "description": "Param 1"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "funcE",
+                "description": "Performs funcE",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "string",
+                            "description": "Param 1"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "funcF",
+                "description": "Performs funcF",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "array",
+                            "description": "An ordered list of function parameters",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "name": "funcG",
+                "description": "Performs funcG",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "param1": {
+                            "type": "array",
+                            "description": "An ordered list of function parameters",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "funcA",
+                "arguments": {
+                    "param1": "1"
+                },
+                "result": "This is the output of funcA(1)"
+            },
+            {
+                "name": "funcB",
+                "arguments": {
+                    "param1": "2"
+                },
+                "result": "This is the output of funcB(2)"
+            },
+            {
+                "name": "funcC",
+                "arguments": {
+                    "param1": [
+                        "This is the output of funcA(1)",
+                        "This is the output of funcB(2)"
+                    ]
+                },
+                "result": "This is the output of funcC(funcA(1), funcB(2))"
+            },
+            {
+                "name": "funcD",
+                "arguments": {
+                    "param1": "3"
+                },
+                "result": "This is the output of funcD(3)"
+            },
+            {
+                "name": "funcE",
+                "arguments": {
+                    "param1": "4"
+                },
+                "result": "This is the output of funcE(4)"
+            },
+            {
+                "name": "funcF",
+                "arguments": {
+                    "param1": [
+                        "This is the output of funcD(3)",
+                        "This is the output of funcE(4)"
+                    ]
+                },
+                "result": "This is the output of funcF(funcD(3), funcE(4))"
+            },
+            {
+                "name": "funcG",
+                "arguments": {
+                    "param1": [
+                        "This is the output of funcC(funcA(1), funcB(2))",
+                        "This is the output of funcF(funcD(3), funcE(4))"
+                    ]
+                },
+                "result": "This is the output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))"
+            }
+        ]
+    }
+]

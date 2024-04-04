@@ -1,0 +1,76 @@
+[
+  {
+    "prompt": "Call funcA with 1",
+    "available_functions": [
+      {
+        "name": "funcA",
+        "description": "Performs funcA",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "string",
+              "description": "Param 1"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "name": "funcA",
+        "arguments": {
+          "param1": "1"
+        },
+        "result": "This is output of funcA(1)"
+      }
+    ]
+  },
+  {
+    "prompt": "Call funcA with 1, 2, 3, 4, 5",
+    "available_functions": [
+      {
+        "name": "funcA",
+        "description": "Performs funcA",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "string",
+              "description": "Param 1"
+            },
+            "param2": {
+              "type": "string",
+              "description": "Param 2"
+            },
+            "param3": {
+              "type": "string",
+              "description": "Param 3"
+            },
+            "param4": {
+              "type": "string",
+              "description": "Param 4"
+            },
+            "param5": {
+              "type": "string",
+              "description": "Param 6"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "name": "funcA",
+        "arguments": {
+          "param1": "1",
+          "param2": "2",
+          "param3": "3",
+          "param4": "4",
+          "param5": "5"
+        },
+        "result": "This is output of funcA(1, 2, 3, 4, 5)"
+      }
+    ]
+  }
+]

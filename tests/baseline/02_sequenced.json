@@ -1,0 +1,47 @@
+[{
+    "prompt": "Call funcA with 1 and wait for the result, then call funcB with 2",
+    "available_functions": [
+      {
+        "name": "funcA",
+        "description": "Performs funcA",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "string",
+              "description": "Param 1"
+            }
+          }
+        }
+      },
+      {
+        "name": "funcB",
+        "description": "Performs funcB",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "string",
+              "description": "Param 1"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "name": "funcA",
+        "arguments": {
+          "param1": "1"
+        },
+        "result": "This is output of funcA(1)"
+      },
+      {
+        "name": "funcB",
+        "arguments": {
+          "param1": "2"
+        },
+        "result": "This is output of funcB(2)"
+      }
+    ]
+  }]
