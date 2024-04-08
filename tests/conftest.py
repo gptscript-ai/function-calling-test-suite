@@ -6,8 +6,9 @@ from benchmark import TestCase
 
 def pytest_addoption(parser):
     parser.addoption("--suite", action="store", default="tests/baseline", help="Directory containing JSON files with test cases")
+    parser.addoption("--stream", action="store", default=False, help="Enable streaming for all chat completion requests")
 
-def load_test_cases(suite):
+def load_test_cases(suite: str, stream: bool):
     suite_test_cases = []
     test_case_files = [f for f in os.listdir(suite) if f.endswith('.json')]
 
@@ -18,9 +19,9 @@ def load_test_cases(suite):
         
         for idx, item in enumerate(json_data):
             try:
-                test_case = TestCase.model_validate(item)
                 test_id = f"{test_case_file}-{idx}"
-                suite_test_cases.append((test_case, test_id))
+                test_case = TestCase.model_validate(item)
+                suite_test_cases.append((test_id, stream, test_case))
             except Exception as e:
                 print(f"Error parsing {test_case_file} at index {idx}: {e}")
 
@@ -44,8 +45,9 @@ def pytest_exception_interact(node, call, report):
 def pytest_generate_tests(metafunc):
     if "test_case" in metafunc.fixturenames:
         suite = metafunc.config.getoption("--suite")
-        test_cases = load_test_cases(suite)
-        metafunc.parametrize("test_case, test_id", test_cases, ids=[test_id for _, test_id in test_cases])
+        stream = bool(metafunc.config.getoption("--stream"))
+        test_cases = load_test_cases(suite, stream)
+        metafunc.parametrize("test_id, stream, test_case", test_cases, ids=[test_id for test_id, _, _ in test_cases])
 
 @pytest.fixture(scope="session")
 def llm():
