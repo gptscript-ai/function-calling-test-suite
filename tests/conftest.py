@@ -26,6 +26,21 @@ def load_test_cases(suite):
 
     return suite_test_cases
 
+# Assuming you have a fixture that receives `test_case` and `test_id` parameters
+@pytest.fixture(autouse=True)
+def attach_test_case_to_node(request, test_case):
+    request.node.test_case = test_case
+
+def pytest_exception_interact(node, call, report):
+    if report.failed:
+        if hasattr(node, 'test_case'):
+           test_case = node.test_case
+           messages = [message.model_dump() if hasattr(message, 'model_dump') else message for message in test_case.actual.messages]
+           print(json.dumps(messages, indent=4))
+
+           responses = [response.model_dump() for response in test_case.actual.responses]
+           print(json.dumps(responses, indent=4))
+
 def pytest_generate_tests(metafunc):
     if "test_case" in metafunc.fixturenames:
         suite = metafunc.config.getoption("--suite")
