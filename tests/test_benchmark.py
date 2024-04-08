@@ -14,7 +14,7 @@ def test_benchmark(llm: OpenAI, model: str | None, test_case: TestCase, test_id:
     messages = [{
        "role": "system",
        "content": """
-Make tool calls necessary to execute the available functions in order to perform the given prompt as correctly and efficiently as possible.
+Make the necessary tool calls to execute the available functions in the order specified by the given prompt as correctly and efficiently as possible.
 You never explain yourself or provide additional commentary.
 You never respond with content.
 """.replace("\n", "")
