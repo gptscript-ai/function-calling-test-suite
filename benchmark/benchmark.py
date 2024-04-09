@@ -9,9 +9,10 @@ class FunctionDefinition(BaseModel):
     parameters: Dict[str, Any]  # Adjust the type as needed
 
 class ExpectedFunctionCall(BaseModel):
-    name: str
-    arguments: Dict[str, Any] 
-    result: str
+    name: Optional[str] = None 
+    arguments: Optional[Dict[str, Any]] = None 
+    result: Optional[str] = None 
+    finish_reason: Optional[str] = "tool_calls"
 
 class Actual(BaseModel):
     tools: Optional[List[Any]] = []
@@ -30,7 +31,24 @@ class TestCase(BaseModel):
 
     @field_validator('categories')
     @classmethod
-    def ensure_min_categories(cls, v):
-        if len(v) < 1:
+    def ensure_categories(cls, categories):
+        if len(categories) < 1:
             raise ValueError("Must contain at least one category")
-        return v
+
+        return categories
+
+    @field_validator('expected_function_calls')
+    @classmethod
+    def ensure_expected_function_calls(cls, expected_function_calls):
+        if len(expected_function_calls) < 1:
+            raise ValueError("Must contain at least one expected call")
+        
+        stop_index = -1 
+        for index, expected_call in enumerate(expected_function_calls):
+            if stop_index >= 0: 
+                raise ValueError(f"Call [{stop_index}] with finish_reason=\"stop\" must be the final expected call")
+            
+            if expected_call.finish_reason == "stop":
+                stop_index = index
+
+        return expected_function_calls 

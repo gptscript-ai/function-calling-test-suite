@@ -30,7 +30,7 @@ You never respond with content.
         messages=messages
     )
 
-    call_idx = 1
+    call_index = 0
     expected_calls = deque(test_case.expected_function_calls)
     while expected_calls:
         completion = llm.chat.completions.create(
@@ -47,26 +47,30 @@ You never respond with content.
         test_case.actual.responses.append(model_response)
 
         choices = model_response.choices
-        assert len(choices) > 0, f"Model response should have a choice for call {call_idx}"
+        assert len(choices) > 0, f"Model response should have a choice for call {call_index}"
 
         choice = choices[0]
-        assert choice.finish_reason == "tool_calls", f"Model response should have correct finish_reason for call {call_idx}"
-            
         model_message = choice.message 
-        assert model_message.role == "assistant", f"Model response should have correct role for call {call_idx}"
-            
-        actual_calls = model_message.tool_calls
-        assert len(actual_calls) > 0, f"Model response should have at least one tool call for call {call_idx}"
+        assert model_message.role == "assistant", f"Model response should have correct role for call {call_index}"
 
+        expected_call = expected_calls[0]
+        assert choice.finish_reason == expected_call.finish_reason, f"Model response should have correct finish_reason for call {call_index}"
+
+        actual_calls = model_message.tool_calls
         messages.append(model_message)
+        if expected_call.finish_reason == "stop":
+            assert len(actual_calls or []) == 0, f"Model response should return additional tool calls after finish_reason \"{expected_call.finish_reason}\" for call {call_index}"
+            return
+
+        assert len(actual_calls) > 0, f"Model response should have at least one tool call for call {call_index}"
 
         for actual_call in actual_calls:
             expected_call = expected_calls.popleft()
 
-            assert actual_call.id != "", f"Model response tool call should have an id set for call {call_idx}" 
-            assert actual_call.type == "function", f"Model response tool call should have correct type for call {call_idx}"
-            assert actual_call.function.name == expected_call.name, f"Model response tool should call the expected function for call {call_idx}"
-            assert json.loads(actual_call.function.arguments) == expected_call.arguments, f"Model response tool call should have correct arguments for call {call_idx}"
+            assert actual_call.id != "", f"Model response tool call should have an id set for call {call_index}"
+            assert actual_call.type == "function", f"Model response tool call should have correct type for call {call_index}"
+            assert actual_call.function.name == expected_call.name, f"Model response tool should call the expected function for call {call_index}"
+            assert json.loads(actual_call.function.arguments) == expected_call.arguments, f"Model response tool call should have correct arguments for call {call_index}"
     
             messages.append({
                 "tool_call_id": actual_call.id,
@@ -76,7 +80,7 @@ You never respond with content.
             }) 
             test_case.actual.messages=messages
 
-            call_idx += 1
+            call_index += 1
 
 
 
