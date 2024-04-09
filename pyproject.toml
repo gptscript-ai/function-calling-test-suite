@@ -12,6 +12,7 @@ jsonschema = "^4.21.1"
 requests = "^2.31.0"
 openai = "^1.16.1"
 pydantic = "2.6.4"
+pytest-html = "^4.1.1"
 
 
 [build-system]
@@ -19,4 +20,5 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-addopts = "--junitxml=benchmark_report.xml"  # Path for the generated JUnit report
+generate_report_on_test = true
+addopts = "--junitxml=benchmark_report.xml --html=benchmark_report.html --self-contained-html"  # Path for the generated JUnit report
