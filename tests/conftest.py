@@ -116,11 +116,21 @@ def attach_test_case_to_node(request, test_case):
     request.node.test_case = test_case
 
 def pytest_exception_interact(node, call, report):
-    if report.failed:
-        if hasattr(node, 'test_case'):
-           test_case = node.test_case
-           messages = [message.model_dump() if hasattr(message, 'model_dump') else message for message in test_case.actual.messages]
-           print(json.dumps(messages, indent=4))
+    if not (report.failed and hasattr(node, 'test_case')):
+        return
 
-           responses = [response.model_dump() for response in test_case.actual.responses]
-           print(json.dumps(responses, indent=4))
+    test_id = node.nodeid
+    test_case = node.test_case
+    available_functions = [available_function.model_dump() for available_function in test_case.available_functions]
+    report.longrepr.addsection(f"{test_id} (Available Functions)", json.dumps(available_functions, indent=4))
+
+    messages = [message.model_dump() if hasattr(message, 'model_dump') else message for message in test_case.actual.messages]
+    report.longrepr.addsection(f"{test_id} (Request Messages)", json.dumps(messages, indent=4))
+
+    responses = [response.model_dump() for response in test_case.actual.responses]
+    report.longrepr.addsection(f"{test_id} (Actual Responses)", json.dumps(responses, indent=4))
+
+    expected_calls = [expected_call.model_dump() for expected_call in test_case.expected_function_calls] 
+    report.longrepr.addsection(f"{test_id} (Expected Function Calls)", json.dumps(expected_calls, indent=4))
+
+
