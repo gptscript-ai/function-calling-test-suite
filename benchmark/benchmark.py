@@ -1,6 +1,5 @@
-from pydantic import Field, BaseModel
-# from pydantic.json import pydantic_encoder
-from typing import Optional, List, Dict, Any
+from pydantic import Field, BaseModel, field_validator
+from typing import Optional, Set, List, Dict, Any
 from openai.types.chat import ChatCompletion
 
 
@@ -21,7 +20,17 @@ class Actual(BaseModel):
 
 class TestCase(BaseModel):
     __test__ = False
+
+    categories: Set[str]
+
     prompt: str
     available_functions: List[FunctionDefinition]
     expected_function_calls: List[ExpectedFunctionCall]
     actual: Actual = Field(default_factory=Actual)
+
+    @field_validator('categories')
+    @classmethod
+    def ensure_min_categories(cls, v):
+        if len(v) < 1:
+            raise ValueError("Must contain at least one category")
+        return v
