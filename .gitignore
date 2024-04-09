@@ -28,3 +28,6 @@ pip-log.txt
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# Default benchmark reports
+benchmark_report.*
