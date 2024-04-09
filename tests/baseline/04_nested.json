@@ -1,5 +1,8 @@
 [
     {
+    "categories": [
+      "nested"
+    ],
         "prompt": "Call funcB with the result of funcA when funcA with 1",
         "available_functions": [
             {
@@ -47,6 +50,10 @@
         ]
     },
     {
+    "categories": [
+      "nested",
+      "grouped"
+    ],
         "prompt": "Call funcC with the result of funcA with 1 and funcB with 2",
         "available_functions": [
             {

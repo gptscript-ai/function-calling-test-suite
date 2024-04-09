@@ -1,4 +1,7 @@
 [{
+    "categories": [
+      "sequenced"
+    ],
     "prompt": "Call funcA with 1 and wait for the result, then call funcB with 2",
     "available_functions": [
       {
