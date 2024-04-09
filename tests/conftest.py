@@ -1,13 +1,15 @@
 import os
 import pytest
 import json
+import fnmatch
 from openai import OpenAI
 from benchmark import TestCase
 
 
 def pytest_addoption(parser):
+    parser.addoption("--spec-filter", action="store", default="*", help="Filter which test specs are run by their generated test IDs")
     parser.addoption("--suite", action="store", default="tests/baseline", help="Directory containing JSON files with test cases")
-    parser.addoption("--stream", action="store", default=False, help="Enable streaming for all chat completion requests")
+    parser.addoption("--stream", action="store", default=False, help="Enables streaming for all chat completion requests")
 
 @pytest.fixture(scope="session")
 def llm():
@@ -21,12 +23,13 @@ def model() -> str | None:
 
 def pytest_generate_tests(metafunc):
     if "test_case" in metafunc.fixturenames:
+        spec_filter = metafunc.config.getoption("--spec-filter")
         suite = metafunc.config.getoption("--suite")
         stream = bool(metafunc.config.getoption("--stream"))
-        test_cases = load_test_cases(suite, stream)
+        test_cases = load_test_cases(spec_filter, suite, stream)
         metafunc.parametrize("test_id, stream, test_case", test_cases, ids=[test_id for test_id, _, _ in test_cases])
 
-def load_test_cases(suite: str, stream: bool):
+def load_test_cases(spec_filter: str, suite: str, stream: bool):
     suite_test_cases = []
     test_case_files = [f for f in os.listdir(suite) if f.endswith('.json')]
 
@@ -35,13 +38,16 @@ def load_test_cases(suite: str, stream: bool):
         with open(file_path, 'r') as file:
             json_data = json.load(file)
         
-        for idx, item in enumerate(json_data):
+        for index, item in enumerate(json_data):
             try:
-                test_id = f"{test_case_file}-{idx}"
+                test_id = f"{test_case_file}-{index}"
+                if not fnmatch.fnmatch(test_id, spec_filter):
+                    continue
+
                 test_case = TestCase.model_validate(item)
                 suite_test_cases.append((test_id, stream, test_case))
             except Exception as e:
-                print(f"Error parsing {test_case_file} at index {idx}: {e}")
+                print(f"Error parsing {test_case_file} at index {index}: {e}")
 
     return suite_test_cases
 
