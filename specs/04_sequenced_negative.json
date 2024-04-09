@@ -1,8 +1,10 @@
-[{
+[
+  {
     "categories": [
-      "sequenced"
+      "sequenced",
+      "negative"
     ],
-    "prompt": "Call funcA with 1 and wait for the result, then call funcB with 2",
+    "prompt": "Call funcA with 1 and wait for the result, then call funcB with 'foo'",
     "available_functions": [
       {
         "name": "funcA",
@@ -24,7 +26,7 @@
           "type": "object",
           "properties": {
             "param1": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 1"
             }
           }
@@ -40,11 +42,8 @@
         "result": "This is output of funcA(1)"
       },
       {
-        "name": "funcB",
-        "arguments": {
-          "param1": "2"
-        },
-        "result": "This is output of funcB(2)"
+        "finish_reason": "stop"
       }
     ]
-  }]
+  }
+]

@@ -1,9 +1,10 @@
 [
     {
-    "categories": [
-      "nested"
-    ],
-        "prompt": "Call funcB with the result of funcA when funcA with 1",
+        "categories": [
+            "chained",
+            "negative"
+        ],
+        "prompt": "Call funcA with 1, then call funcB with it's result",
         "available_functions": [
             {
                 "name": "funcA",
@@ -25,7 +26,7 @@
                     "type": "object",
                     "properties": {
                         "param1": {
-                            "type": "string",
+                            "type": "integer",
                             "description": "Param 1"
                         }
                     }
@@ -38,23 +39,19 @@
                 "arguments": {
                     "param1": "1"
                 },
-                "result": "This is the output of funcA(1)"
+                "result": "This is output of funcA(1)"
             },
             {
-                "name": "funcB",
-                "arguments": {
-                    "param1": "This is the output of funcA(1)"
-                },
-                "result": "This is the output of funcB(funcA(1))"
+                "finish_reason": "stop"
             }
         ]
     },
     {
-    "categories": [
-      "nested",
-      "grouped"
-    ],
-        "prompt": "Call funcC with the result of funcA with 1 and funcB with 2",
+        "categories": [
+            "chained",
+            "negative"
+        ],
+        "prompt": "Call funcA with 1, then call funcB with it's result",
         "available_functions": [
             {
                 "name": "funcA",
@@ -75,25 +72,8 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "param1": {
-                            "type": "string",
-                            "description": "Param 1"
-                        }
-                    }
-                }
-            },
-            {
-                "name": "funcC",
-                "description": "Performs funcC",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "param1": {
-                            "type": "string",
-                            "description": "Param 1"
-                        },
                         "param2": {
-                            "type": "string",
+                            "type": "integer",
                             "description": "Param 2"
                         }
                     }
@@ -106,22 +86,10 @@
                 "arguments": {
                     "param1": "1"
                 },
-                "result": "This is the output of funcA(1)"
+                "result": "This is output of funcA(1)"
             },
             {
-                "name": "funcB",
-                "arguments": {
-                    "param1": "2"
-                },
-                "result": "This is the output of funcB(2)"
-            },
-            {
-                "name": "funcC",
-                "arguments": {
-                    "param1": "This is the output of funcA(1)",
-                    "param2": "This is the output of funcB(2)"
-                },
-                "result": "This is the output of funcC(funcA(1), funcB(2))"
+                "finish_reason": "stop"
             }
         ]
     }

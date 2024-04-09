@@ -1,0 +1,83 @@
+[
+  {
+    "categories": [
+      "basic",
+      "negative"
+    ],
+    "prompt": "Call funcA with 'foo'",
+    "available_functions": [
+      {
+        "name": "funcA",
+        "description": "Performs funcA",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "integer",
+              "description": "Param 1"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "finish_reason": "stop"
+      }
+    ]
+  },
+  {
+    "categories": [
+      "basic",
+      "negative"
+    ],
+    "prompt": "Call funcB with 1",
+    "available_functions": [
+      {
+        "name": "funcA",
+        "description": "Performs funcA",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "string",
+              "description": "Param 1"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "finish_reason": "stop"
+      }
+    ]
+  },
+  {
+    "categories": [
+      "basic",
+      "negative"
+    ],
+    "prompt": "Call funcA with 1 and funcB with 2",
+    "available_functions": [
+      {
+        "name": "funcA",
+        "description": "Performs funcA",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "string",
+              "description": "Param 1"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "finish_reason": "stop"
+      }
+    ]
+  }
+]

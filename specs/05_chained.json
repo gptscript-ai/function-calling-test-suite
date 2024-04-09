@@ -1,8 +1,8 @@
 [
     {
-    "categories": [
-      "chained"
-    ],
+        "categories": [
+            "chained"
+        ],
         "prompt": "Call funcA with 1, then call funcB with it's result",
         "available_functions": [
             {
@@ -50,10 +50,10 @@
         ]
     },
     {
-    "categories": [
-      "chained",
-      "grouped"
-    ],
+        "categories": [
+            "chained",
+            "grouped"
+        ],
         "prompt": "Call funcA with 1 and funcB with 2, then call funcC with their results",
         "available_functions": [
             {
@@ -126,10 +126,10 @@
         ]
     },
     {
-    "categories": [
-      "chained",
-      "grouped"
-    ],
+        "categories": [
+            "chained",
+            "grouped"
+        ],
         "prompt": "Call funcA with 1 and funcB with 2, then call funcC with their results. Wait for the result of funcC, then call funcD with 3 and funcE with 4, then call funcF with their result and finally call funcG with the result of funcC and funcF",
         "available_functions": [
             {
