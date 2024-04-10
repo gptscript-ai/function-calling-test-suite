@@ -1,5 +1,6 @@
 [
   {
+    "description": "Doesn't call a function with a given argument if its type doesn't match the function's parameter",
     "categories": [
       "basic",
       "negative"
@@ -27,6 +28,7 @@
     ]
   },
   {
+    "description": "Doesn't call a function that is not available",
     "categories": [
       "basic",
       "negative"
@@ -54,6 +56,7 @@
     ]
   },
   {
+    "description": "Only calls available functions when some are not available",
     "categories": [
       "basic",
       "negative"

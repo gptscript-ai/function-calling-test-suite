@@ -1,5 +1,6 @@
 [
   {
+    "description": "Doesn't call a function with a given argument of the wrong type after making a successful call to another function",
     "categories": [
       "sequenced",
       "negative"

@@ -1,5 +1,6 @@
 [
     {
+        "description": "Calls a function with the result of another function",
         "categories": [
             "chained"
         ],
@@ -50,6 +51,7 @@
         ]
     },
     {
+        "description": "Calls a function with the results of two other functions",
         "categories": [
             "chained",
             "grouped"
@@ -126,6 +128,7 @@
         ]
     },
     {
+        "description": "Calls multiple functions with the results of multiple other functions",
         "categories": [
             "chained",
             "grouped"

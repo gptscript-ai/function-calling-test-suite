@@ -22,6 +22,7 @@ class Actual(BaseModel):
 class TestCase(BaseModel):
     __test__ = False
 
+    description: Optional[str] = None
     categories: Set[str]
 
     prompt: str

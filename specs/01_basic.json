@@ -1,5 +1,6 @@
 [
   {
+    "description": "Calls a function with a single parameter and provided input",
     "categories": [
       "basic"
     ],
@@ -30,6 +31,7 @@
     ]
   },
   {
+    "description": "Calls a function with multiple distinct parameter namess given ordered arguments",
     "categories": [
       "basic"
     ],

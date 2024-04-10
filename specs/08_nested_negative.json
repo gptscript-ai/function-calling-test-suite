@@ -1,5 +1,6 @@
 [
     {
+        "description": "Doesn't call a function with an argument of the wrong type derived from the output of another function with an inverted prompt",
         "categories": [
             "nested",
             "negative"

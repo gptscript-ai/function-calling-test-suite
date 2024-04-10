@@ -1,5 +1,6 @@
 [
   {
+    "description": "Calls functions in the given order",
     "categories": [
       "sequenced"
     ],
