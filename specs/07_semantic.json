@@ -1,0 +1,178 @@
+[
+    {
+        "description": "",
+        "categories": [
+            "basic",
+            "semantic"
+        ],
+        "prompt": "Get the current weather in San Francisco, CA",
+        "available_functions": [
+            {
+                "name": "get_current_weather",
+                "description": "Get the current weather in a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "get_current_weather",
+                "arguments": {
+                    "location": "San Francisco, CA"
+                },
+                "result": "Sunny, 75 degrees"
+            }
+        ]
+    },
+    {
+        "description": "",
+        "categories": [
+            "basic",
+            "semantic"
+        ],
+        "prompt": "Get the current weather in celsius for San Francisco, CA",
+        "available_functions": [
+            {
+                "name": "get_current_weather",
+                "description": "Get the current weather in a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA"
+                        },
+                        "unit": {
+                            "type": "string",
+                            "enum": [
+                                "celsius",
+                                "fahrenheit"
+                            ]
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "get_current_weather",
+                "arguments": {
+                    "location": "San Francisco, CA",
+                    "unit": "celsius"
+                },
+                "result": "Sunny, 24 degrees"
+            }
+        ]
+    },
+    {
+        "description": "",
+        "categories": [
+            "sequenced",
+            "semantic"
+        ],
+        "prompt": "Get the current weather in celsius for San Francisco, CA. Then get the current time in Phoenix, AZ.",
+        "available_functions": [
+            {
+                "name": "get_current_weather",
+                "description": "Get the current weather in a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "get_current_time",
+                "description": "Get the current time in a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "get_current_weather",
+                "arguments": {
+                    "location": "San Francisco, CA"
+                },
+                "result": "Sunny, 75 degrees"
+            },
+            {
+                "name": "get_current_time",
+                "arguments": {
+                    "location": "Phoenix, AZ"
+                },
+                "result": "14:30"
+            }
+        ]
+    },
+    {
+        "description": "",
+        "categories": [
+            "chained",
+            "semantic"
+        ],
+        "prompt": "Get the current weather for San Francisco, CA. Then tell me if that weather is hot or cold.",
+        "available_functions": [
+            {
+                "name": "get_current_weather",
+                "description": "Get the current weather in a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "is_it_hot",
+                "description": "Determines if the given weather conditions are hot or cold",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "weather": {
+                            "type": "string",
+                            "description": "The current weather conditions, e.g. Cloudy, 40 degrees"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "get_current_weather",
+                "arguments": {
+                    "location": "San Francisco, CA"
+                },
+                "result": "Sunny, 75 degrees"
+            },
+            {
+                "name": "is_it_hot",
+                "arguments": {
+                    "weather": "Sunny, 75 degrees"
+                },
+                "result": "hot"
+            }
+        ]
+    }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "description": "",
+    "categories": [
+      "basic",
+      "semantic",
+      "negative"
+    ],
+    "prompt": "Get the current time in Tokyo",
+    "available_functions": [
+      {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "finish_reason": "stop"
+      }
+    ]
+  }
+]
