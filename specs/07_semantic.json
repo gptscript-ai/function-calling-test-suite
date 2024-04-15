@@ -174,5 +174,89 @@
                 "result": "hot"
             }
         ]
+    },
+    {
+        "description": "Calls a function with the result of two other functions",
+        "categories": [
+            "chained",
+            "semantic"
+        ],
+        "prompt": "Get the current weather for San Francisco, CA. Then tell me if that weather is hot or cold.",
+        "available_functions": [
+            {
+                "name": "get_current_time",
+                "description": "Get the current time at the given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA"
+                        }
+                    },
+                    "required": [
+                        "location"
+                    ]
+                }
+            },
+            {
+                "name": "get_weather",
+                "description": "Get the weather at the given time in a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA"
+                        },
+                        "time": {
+                            "type": "string",
+                            "description": "The time to get the weather at, e.g. 21:00"
+                        }
+                    },
+                    "required": [
+                        "location",
+                        "time"
+                    ]
+                }
+            },
+            {
+                "name": "is_it_hot",
+                "description": "Determines if the given weather conditions are hot or cold",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "weather": {
+                            "type": "string",
+                            "description": "The current weather conditions, e.g. Cloudy, 40 degrees"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "get_current_time",
+                "arguments": {
+                    "location": "San Francisco, CA"
+                },
+                "result": "13:00"
+            },
+            {
+                "name": "get_weather",
+                "arguments": {
+                    "location": "San Francisco, CA",
+                    "time": "13:00"
+                },
+                "result": "Sunny, 75 degrees"
+            },
+            {
+                "name": "is_it_hot",
+                "arguments": {
+                    "weather": "Sunny, 75 degrees"
+                },
+                "result": "hot"
+            }
+        ]
     }
 ]
