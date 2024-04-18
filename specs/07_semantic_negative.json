@@ -1,6 +1,6 @@
 [
   {
-    "description": "",
+    "description": "Doesn't call a function if its description doesn't match the prompt",
     "categories": [
       "basic",
       "semantic",
@@ -23,6 +23,162 @@
       }
     ],
     "expected_function_calls": [
+      {
+        "finish_reason": "stop"
+      }
+    ]
+  },
+  {
+    "description": "Doesn't call a function with a given argument if its type doesn't match the function's parameter",
+    "categories": [
+      "basic",
+      "semantic",
+      "negative"
+    ],
+    "prompt": "Check if 'foo' is a lucky number",
+    "available_functions": [
+      {
+        "name": "is_lucky",
+        "description": "Checks if a given number is lucky",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "number": {
+              "type": "number",
+              "description": "The number to check for luck"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "finish_reason": "stop"
+      }
+    ]
+  },
+  {
+    "description": "Only calls available functions when some are not available",
+    "categories": [
+      "basic",
+      "semantic",
+      "negative"
+    ],
+    "prompt": "Get the current weather in Buford, GA then get the current time there.",
+    "available_functions": [
+      {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "finish_reason": "stop"
+      }
+    ]
+  },
+  {
+    "description": "Doesn't call a function with a given argument of the wrong type after making a successful call to another function",
+    "categories": [
+      "sequenced",
+      "semantic",
+      "negative"
+    ],
+    "prompt": "Get the current weather in Cape Coral, FL and wait for the result, then tell me if 'foo' is a lucky number",
+    "available_functions": [
+      {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA"
+            }
+          }
+        }
+      },
+      {
+        "name": "is_lucky",
+        "description": "Checks if a given number is lucky",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "number": {
+              "type": "number",
+              "description": "The number to check for luck"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "name": "get_current_weather",
+        "arguments": {
+          "location": "Cape Coral, FL"
+        },
+        "result": "Sunny, 80 degrees"
+      },
+      {
+        "finish_reason": "stop"
+      }
+    ]
+  },
+  {
+    "description": "Doesn't call a function with an argument of the wrong type derived from the output of another function",
+    "categories": [
+      "chained",
+      "semantic",
+      "negative"
+    ],
+    "prompt": "Get the current weather in Phoenix, AZ, then use the result to tell me if the weather is hot or cold",
+    "available_functions": [
+      {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA"
+            }
+          }
+        }
+      },
+      {
+        "name": "hot_or_cold",
+        "description": "Determines if a given weather condition is hot or cold",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "weather_conditions": {
+              "type": "integer",
+              "description": "The current weather conditions to determine if they are hot or cold"
+            }
+          }
+        }
+      }
+    ],
+    "expected_function_calls": [
+      {
+        "name": "get_current_weather",
+        "arguments": {
+          "location": "Phoenix, AZ"
+        },
+        "result": "sunny"
+      },
       {
         "finish_reason": "stop"
       }
