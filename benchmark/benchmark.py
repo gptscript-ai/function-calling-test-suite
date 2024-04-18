@@ -52,4 +52,14 @@ class TestCase(BaseModel):
             if expected_call.finish_reason == "stop":
                 stop_index = index
 
-        return expected_function_calls 
+        return expected_function_calls
+
+    @classmethod
+    def create(cls, description, categories, prompt, functions, function_calls):
+        return cls(
+            description=description,
+            categories=set(categories),
+            prompt=prompt,
+            available_functions=[FunctionDefinition(**func) for func in functions],
+            expected_function_calls=[ExpectedFunctionCall(**call) for call in function_calls]
+        )

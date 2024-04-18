@@ -1,7 +1,7 @@
 import json
 import time
 from openai import OpenAI, Stream
-from openai.types.chat import ChatCompletionMessageToolCall, ChatCompletion, ChatCompletionChunk, ChatCompletionAssistantMessageParam
+from openai.types.chat import ChatCompletion, ChatCompletionChunk
 from benchmark import TestCase, Actual
 from collections import deque 
 

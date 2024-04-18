@@ -31,7 +31,7 @@
     ]
   },
   {
-    "description": "Calls a function with multiple distinct parameter namess given ordered arguments",
+    "description": "Calls a function with multiple distinct parameter names given ordered arguments",
     "categories": [
       "basic"
     ],
