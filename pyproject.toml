@@ -13,6 +13,7 @@ requests = "^2.31.0"
 openai = "^1.16.1"
 pydantic = "2.6.4"
 pytest-html = "^4.1.1"
+# pytest-csv = "^3.0.0"
 
 
 [build-system]
@@ -21,4 +22,5 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 generate_report_on_test = true
-addopts = "--tb=short --junitxml=benchmark_report.xml --html=benchmark_report.html --self-contained-html"  # Path for the generated JUnit report
+# addopts = "--tb=short --junitxml=benchmark_report.xml --html=benchmark_report.html --self-contained-html --csv=benchmark_report.csv"
+addopts = "--tb=short --junitxml=benchmark_report.xml --html=benchmark_report.html --self-contained-html"
