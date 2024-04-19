@@ -5,7 +5,7 @@ from openai.types.chat import ChatCompletion, ChatCompletionChunk
 from benchmark import TestCase, Actual
 from collections import deque 
 
-def test_benchmark(llm: OpenAI, model: str | None, test_id: str, stream: bool, test_case: TestCase):
+def test_benchmark(llm: OpenAI, model: str | None, test_id: str, stream: bool, use_system_prompt: bool, test_case: TestCase):
     tools = []
     for function in test_case.available_functions:
         tools.append({
@@ -13,17 +13,21 @@ def test_benchmark(llm: OpenAI, model: str | None, test_id: str, stream: bool, t
             "function": function,
         })
 
-    messages = [{
+    messages = []
+    if use_system_prompt:
+        messages.append({
        "role": "system",
        "content": """
 Make the necessary tool calls to execute the available functions in the order specified by the given prompt as correctly and efficiently as possible.
 You never explain yourself or provide additional commentary.
 You never respond with content.
 """.replace("\n", "")
-    }, {
+    })
+
+    messages.append({
        "role": "user",
        "content": test_case.prompt,
-    }]
+    })
 
     test_case.actual = Actual(
         tools=tools,
