@@ -1,6 +1,6 @@
 [
     {
-        "description": "",
+        "description": "Calls a function with a single parameter and provided input",
         "categories": [
             "basic",
             "semantic"
@@ -32,7 +32,7 @@
         ]
     },
     {
-        "description": "",
+        "description": "Calls a function with multiple distinct parameter names given ordered arguments",
         "categories": [
             "basic",
             "semantic"
@@ -72,7 +72,7 @@
         ]
     },
     {
-        "description": "",
+        "description": "Calls functions in the given order",
         "categories": [
             "sequenced",
             "semantic"
@@ -124,12 +124,12 @@
         ]
     },
     {
-        "description": "",
+        "description": "Calls a function with the result of another function",
         "categories": [
             "chained",
             "semantic"
         ],
-        "prompt": "Get the current weather for San Francisco, CA. Then tell me if that weather is hot or cold.",
+        "prompt": "Get the current weather for San Francisco, CA. Then tell me if the result is hot or cold.",
         "available_functions": [
             {
                 "name": "get_current_weather",
