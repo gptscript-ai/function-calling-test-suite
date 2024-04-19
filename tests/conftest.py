@@ -2,6 +2,7 @@ import os
 import pytest
 import json
 import fnmatch
+import csv
 from openai import OpenAI
 from benchmark import TestCase
 
@@ -63,11 +64,26 @@ def pytest_runtest_makereport(item, call):
         return
 
     test_case = item.test_case
-    report.test_case_data = {
-       "categories": list(test_case.categories)
-    }
-
     item.user_properties.append(("categories", test_case.categories))
+
+    # Add row for CSV report
+    test_case = item.test_case
+    model = item.funcargs.get('model', 'No model specified')  # Ensure the model is being passed correctly
+    result = "PASSED" if report.outcome == "passed" else "FAILED"
+    test_data = {
+        "test_id": item.nodeid,
+        "model": model,
+        "description": getattr(test_case, 'description', 'No description'),
+        "prompt": getattr(test_case, 'prompt', 'No prompt'),
+        "result": result,
+        "duration": report.duration
+    }
+        
+    # Store test data in session.config which is accessible across hooks
+    if not hasattr(item.session.config, '_test_results'):
+        item.session.config._test_results = {}
+    item.session.config._test_results[(item.nodeid, model)] = test_data
+
 
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
     passed_tests = terminalreporter.stats.get('passed', [])
@@ -133,4 +149,29 @@ def pytest_exception_interact(node, call, report):
     expected_calls = [expected_call.model_dump() for expected_call in test_case.expected_function_calls] 
     report.longrepr.addsection(f"{test_id} (Expected Function Calls)", json.dumps(expected_calls, indent=4))
 
+def pytest_sessionfinish(session, exitstatus):
+    fieldnames = ['test_id', 'description', 'prompt', 'model', 'result', 'duration']
+    csv_path = 'aggregate_report.csv'
+    existing_data = {}
 
+    # Load existing data from CSV
+    if os.path.exists(csv_path):
+        with open(csv_path, mode='r', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                key = (row['test_id'], row['model'])  # Unique key based on test_id and model
+                existing_data[key] = row
+
+    # Collect new test results from session.config
+    test_results = getattr(session.config, '_test_results', {})
+
+    # Update existing data with new results or add new results
+    for key, data in test_results.items():
+        existing_data[key] = data  # This will update existing entries and add new ones
+
+    # Write updated data back to CSV
+    with open(csv_path, mode='w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for data in existing_data.values():
+            writer.writerow(data)
