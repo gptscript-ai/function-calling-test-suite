@@ -61,7 +61,7 @@
             },
             "param5": {
               "type": "string",
-              "description": "Param 6"
+              "description": "Param 5"
             }
           }
         }
