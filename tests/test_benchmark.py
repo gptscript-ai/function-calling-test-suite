@@ -5,7 +5,7 @@ from openai.types.chat import ChatCompletion, ChatCompletionChunk
 from benchmark import TestCase, Actual
 from collections import deque 
 
-def test_benchmark(llm: OpenAI, model: str | None, test_id: str, stream: bool, use_system_prompt: bool, test_case: TestCase):
+def test_benchmark(llm: OpenAI, model: str | None, test_id: str, request_delay: float, stream: bool, use_system_prompt: bool, test_case: TestCase):
     tools = []
     for function in test_case.available_functions:
         tools.append({
@@ -37,6 +37,9 @@ You never respond with content.
     call_index = 0
     expected_calls = deque(test_case.expected_function_calls)
     while expected_calls:
+        if request_delay > 0.0:
+            time.sleep(request_delay)
+
         completion = llm.chat.completions.create(
             model=model,
             messages=messages,
