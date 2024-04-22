@@ -13,6 +13,7 @@ def pytest_addoption(parser):
     parser.addoption("--spec-dir", action="store", default="specs", help="Directory containing JSON test spec files")
     parser.addoption("--stream", action="store", default=False, help="Enables streaming for all chat completion requests")
     parser.addoption("--aggregate-report-file", action="store", default="aggregate_benchmark_report.csv", help="Add benchmark results for the model to an aggregate CSV file")
+    parser.addoption("--request-delay", action="store", default=0.0, help="Delay in seconds between chat completion requests")
 
 @pytest.fixture(scope="session")
 def llm():
@@ -34,10 +35,11 @@ def pytest_generate_tests(metafunc):
         spec_filter = metafunc.config.getoption("--spec-filter")
         spec_dir = metafunc.config.getoption("--spec-dir")
         stream = bool(metafunc.config.getoption("--stream"))
-        test_cases = load_test_cases(spec_filter, spec_dir, stream)
-        metafunc.parametrize("test_id, stream, test_case", test_cases, ids=[test_id for test_id, _, _ in test_cases])
+        request_delay = float(metafunc.config.getoption("--request-delay"))
+        test_cases = load_test_cases(spec_filter, spec_dir, request_delay, stream)
+        metafunc.parametrize("test_id, request_delay, stream, test_case", test_cases, ids=[test_id for test_id, _, _, _ in test_cases])
 
-def load_test_cases(spec_filter: str, spec_dir: str, stream: bool):
+def load_test_cases(spec_filter: str, spec_dir: str, request_delay: float, stream: bool):
     suite_test_cases = []
     test_case_files = [f for f in os.listdir(spec_dir) if f.endswith('.json')]
 
@@ -53,7 +55,7 @@ def load_test_cases(spec_filter: str, spec_dir: str, stream: bool):
                     continue
 
                 test_case = TestCase.model_validate(item)
-                suite_test_cases.append((test_id, stream, test_case))
+                suite_test_cases.append((test_id, request_delay, stream, test_case))
             except Exception as e:
                 print(f"Error parsing {test_case_file} at index {index}: {e}")
 
