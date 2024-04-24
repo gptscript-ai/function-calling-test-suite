@@ -9,6 +9,7 @@ from benchmark import TestCase
 
 
 def pytest_addoption(parser):
+    parser.addoption("--spec-run-count", action="store", default=10, type=int, help="Number of times each test spec should be run")
     parser.addoption("--spec-filter", action="store", default="*", help="Filter which test specs are run by their generated test IDs")
     parser.addoption("--spec-dir", action="store", default="specs", help="Directory containing JSON test spec files")
     parser.addoption("--stream", action="store", default=False, help="Enables streaming for all chat completion requests")
@@ -33,15 +34,16 @@ def attach_test_case_to_node(request, test_case):
 
 def pytest_generate_tests(metafunc):
     if "test_case" in metafunc.fixturenames:
+        spec_run_count = metafunc.config.getoption("--spec-run-count")
         spec_filter = metafunc.config.getoption("--spec-filter")
         spec_dir = metafunc.config.getoption("--spec-dir")
         request_delay = float(metafunc.config.getoption("--request-delay"))
         stream = bool(metafunc.config.getoption("--stream"))
         use_system_prompt = bool(metafunc.config.getoption("--use-system-prompt"))
-        test_cases = load_test_cases(spec_filter, spec_dir, request_delay, stream, use_system_prompt)
+        test_cases = load_test_cases(spec_run_count, spec_filter, spec_dir, request_delay, stream, use_system_prompt)
         metafunc.parametrize("test_id, request_delay, stream, use_system_prompt, test_case", test_cases, ids=[test_id for test_id, _, _, _, _ in test_cases])
 
-def load_test_cases(spec_filter: str, spec_dir: str, request_delay: float, stream: bool, use_system_prompt: bool):
+def load_test_cases(spec_run_count: int, spec_filter: str, spec_dir: str, request_delay: float, stream: bool, use_system_prompt: bool):
     suite_test_cases = []
     test_case_files = [f for f in os.listdir(spec_dir) if f.endswith('.json')]
 
@@ -57,7 +59,9 @@ def load_test_cases(spec_filter: str, spec_dir: str, request_delay: float, strea
                     continue
 
                 test_case = TestCase.model_validate(item)
-                suite_test_cases.append((test_id, request_delay, stream, use_system_prompt, test_case))
+                for run in range(spec_run_count):
+                    suite_test_cases.append((f"{test_id}-{run}", request_delay, stream, use_system_prompt, test_case.model_copy(deep=True)))
+
             except Exception as e:
                 print(f"Error parsing {test_case_file} at index {index}: {e}")
 
@@ -158,6 +162,7 @@ def pytest_sessionfinish(session, exitstatus):
     csv_path = session.config.getoption("--aggregate-report-file")
     test_results = {}
     fieldnames = ['test_id', 'categories', 'description', 'prompt']  # Default fields
+    processed = set()  # Set to track processed test_id, model combinations
 
     # Check if the CSV exists and read existing data
     if os.path.exists(csv_path):
@@ -174,34 +179,38 @@ def pytest_sessionfinish(session, exitstatus):
             if model_column not in fieldnames:
                 fieldnames.append(model_column)  # Add new model to fieldnames if it's not already there
             
-            # Extracting the simplified test_id from nodeid
-            match = re.search(r'\[([^\]]+)\]', nodeid)
+            # Extract the simplified test_id from nodeid
+            match = re.search(r'\[(.*?)-\d+\]', nodeid)
             simplified_test_id = match.group(1) if match else nodeid
+            key = (simplified_test_id, model_column)
             
-            if simplified_test_id in test_results:
-                # Update existing record with new result
-                test_results[simplified_test_id][model_column] = "PASS" if data['result'] == "PASSED" else "FAIL"
-            else:
-                # Add new test record if it doesn't exist
+            if simplified_test_id not in test_results:
                 test_results[simplified_test_id] = {f: "" for f in fieldnames}
                 test_results[simplified_test_id]['test_id'] = simplified_test_id
                 test_results[simplified_test_id]['categories'] = data['categories']
                 test_results[simplified_test_id]['description'] = data['description']
                 test_results[simplified_test_id]['prompt'] = data['prompt']
-                test_results[simplified_test_id][model_column] = "PASS" if data['result'] == "PASSED" else "FAIL"
 
-    # Ensure all entries have all model columns
-    for entry in test_results.values():
-        for field in fieldnames:
-            if field not in entry:
-                entry[field] = "Not Run"  # Mark models not tested in this session as "Not Run"
+            # Check if this is the first run of this combination in the current session
+            if key not in processed:
+                # Reset the counts for the first run of this combination
+                passed, total_runs = 0, 0
+                processed.add(key)
+            else:
+                # Get current counts if not the first run
+                passed, total_runs = map(int, test_results[simplified_test_id][model_column].split('/') if test_results[simplified_test_id][model_column] else (0, 0))
 
-    # Sort entries by test_id before writing to CSV
-    sorted_test_ids = sorted(test_results.keys())
+            # Increment runs and update pass rate for test spec
+            total_runs += 1
+            if data['result'] == 'PASSED':
+                passed += 1
+
+            # Update the fraction in the CSV
+            test_results[simplified_test_id][model_column] = f"{passed}/{total_runs}"
     
     # Write updated data back to CSV
     with open(csv_path, mode='w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        for test_id in sorted_test_ids:
+        for test_id in sorted(test_results.keys()):
             writer.writerow(test_results[test_id])
