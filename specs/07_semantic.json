@@ -181,11 +181,11 @@
             "chained",
             "semantic"
         ],
-        "prompt": "Get the current weather for San Francisco, CA. Then tell me if that weather is hot or cold.",
+        "prompt": "Get today's weather for Atlantic City, NJ. Then tell me if that weather is hot or cold.",
         "available_functions": [
             {
-                "name": "get_current_time",
-                "description": "Get the current time at the given location",
+                "name": "get_date",
+                "description": "Get the current date at the given location. Results are in ISO 8601 date format; e.g. 2024-04-25",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -201,7 +201,7 @@
             },
             {
                 "name": "get_weather",
-                "description": "Get the weather at the given time in a given location",
+                "description": "Get the weather for a location on a given date.",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -209,14 +209,14 @@
                             "type": "string",
                             "description": "The city and state, e.g. San Francisco, CA"
                         },
-                        "time": {
+                        "date": {
                             "type": "string",
-                            "description": "The time to get the weather at, e.g. 21:00"
+                            "description": "The date in ISO 8601 format to return the weather for; e.g. 2024-05-18"
                         }
                     },
                     "required": [
                         "location",
-                        "time"
+                        "date"
                     ]
                 }
             },
@@ -236,17 +236,17 @@
         ],
         "expected_function_calls": [
             {
-                "name": "get_current_time",
+                "name": "get_date",
                 "arguments": {
-                    "location": "San Francisco, CA"
+                    "location": "Atlantic City, NJ"
                 },
-                "result": "13:00"
+                "result": "2024-05-18"
             },
             {
                 "name": "get_weather",
                 "arguments": {
-                    "location": "San Francisco, CA",
-                    "time": "13:00"
+                    "location": "Atlantic City, NJ",
+                    "date": "2024-05-18"
                 },
                 "result": "Sunny, 75 degrees"
             },
