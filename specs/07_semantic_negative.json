@@ -154,7 +154,10 @@
               "type": "string",
               "description": "The city and state, e.g. San Francisco, CA"
             }
-          }
+          },
+          "required": [
+            "location"
+          ]
         }
       },
       {
@@ -167,7 +170,10 @@
               "type": "integer",
               "description": "The current weather conditions to determine if they are hot or cold"
             }
-          }
+          },
+          "required": [
+            "weather_conditions"
+          ]
         }
       }
     ],
