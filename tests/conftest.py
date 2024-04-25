@@ -18,9 +18,15 @@ def pytest_addoption(parser):
     parser.addoption("--request-delay", action="store", default=0.0, help="Delay in seconds between chat completion requests")
 
 @pytest.fixture(scope="session")
-def llm():
+def model_client():
     api_key = os.getenv("BENCHMARK_API_KEY")
     base_url = os.getenv("BENCHMARK_BASE_URL")
+    return OpenAI(base_url=base_url, api_key=api_key)
+
+@pytest.fixture(scope="session")
+def judge_client():
+    api_key = os.getenv("OPENAI_API_KEY")
+    base_url = os.getenv("OPENAI_BASE_URL")
     return OpenAI(base_url=base_url, api_key=api_key)
 
 @pytest.fixture(scope="session")

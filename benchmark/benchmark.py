@@ -32,6 +32,7 @@ class TestCase(BaseModel):
     prompt: str
     available_functions: List[FunctionDefinition]
     expected_function_calls: List[ExpectedFunctionCall]
+    final_answer_should: Optional[str] = None
 
     actual: Actual = Field(default_factory=Actual)
 
