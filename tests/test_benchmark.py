@@ -61,6 +61,13 @@ You never respond with content.
         assert model_message.role == "assistant", f"Model response should have correct role for call {call_index}"
 
         expected_call = expected_calls[0]
+
+        if choice.finish_reason == "stop":
+            while expected_calls:
+                if not expected_call.optional:
+                    break
+                expected_call = expected_calls.popleft()
+
         assert choice.finish_reason == expected_call.finish_reason, f"Model response should have correct finish_reason for call {call_index}"
 
         actual_calls = model_message.tool_calls
@@ -69,27 +76,22 @@ You never respond with content.
             assert len(actual_calls or []) == 0, f"Model response should return additional tool calls after finish_reason \"{expected_call.finish_reason}\" for call {call_index}"
             return
 
-        assert len(actual_calls) > 0, f"Model response should have at least one tool call for call {call_index}"
-
         for actual_call in actual_calls:
             expected_call = expected_calls.popleft()
-
+            assert actual_call.function.name == expected_call.name, f"Model response tool should call the expected function for call {call_index}"
             assert actual_call.id != "", f"Model response tool call should have an id set for call {call_index}"
             assert actual_call.type == "function", f"Model response tool call should have correct type for call {call_index}"
-            assert actual_call.function.name == expected_call.name, f"Model response tool should call the expected function for call {call_index}"
             assert json.loads(actual_call.function.arguments) == expected_call.arguments, f"Model response tool call should have correct arguments for call {call_index}"
-    
+
             messages.append({
                 "tool_call_id": actual_call.id,
                 "role": "tool",
-                "name": expected_call.name, 
+                "name": expected_call.name,
                 "content": expected_call.result
-            }) 
-            test_case.actual.messages=messages
+            })
 
+            test_case.actual.messages = messages
             call_index += 1
-
-
 
 def to_chat_completion(response: ChatCompletion | Stream[ChatCompletionChunk]) -> ChatCompletion:
     if isinstance(response, ChatCompletion):
@@ -156,7 +158,7 @@ def to_chat_completion(response: ChatCompletion | Stream[ChatCompletionChunk]) -
                 else:
                     tool_calls[choice.index][response_call.index]["function"]["arguments"] += arguments 
 
-        
+
     for index, choice in choices.items():
         if index not in tool_calls:
             continue
