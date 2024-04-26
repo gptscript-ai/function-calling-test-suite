@@ -30,7 +30,10 @@
               "type": "integer",
               "description": "Param 1"
             }
-          }
+          },
+          "required": [
+            "param1"
+          ]
         }
       }
     ],
@@ -47,6 +50,6 @@
         "finish_reason": "stop"
       }
     ],
-    "final_answer_should": "The answer should indicate that the operation cannot be completed or should ask for more information to continue"
+    "final_answer_should": "The answer should indicate that the given operation cannot be completed or should ask for more information in order to continue. It may additionally indicate a typing issue related to the given parameters and arguments."
   }
 ]

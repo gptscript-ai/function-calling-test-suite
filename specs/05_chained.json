@@ -4,7 +4,7 @@
         "categories": [
             "chained"
         ],
-        "prompt": "Call funcA with 1, then call funcB with it's result",
+        "prompt": "Call funcA with 1, then funcB with the result, the return the result of calling funcB",
         "available_functions": [
             {
                 "name": "funcA",
@@ -13,7 +13,7 @@
                     "type": "object",
                     "properties": {
                         "param1": {
-                            "type": "string",
+                            "type": "integer",
                             "description": "Param 1"
                         }
                     }
@@ -29,7 +29,10 @@
                             "type": "string",
                             "description": "Param 1"
                         }
-                    }
+                    },
+                    "required": [
+                        "param1"
+                    ]
                 }
             }
         ],
@@ -37,18 +40,22 @@
             {
                 "name": "funcA",
                 "arguments": {
-                    "param1": "1"
+                    "param1": 1
                 },
-                "result": "This is output of funcA(1)"
+                "result": "This is the output of funcA(1)"
             },
             {
                 "name": "funcB",
                 "arguments": {
-                    "param1": "This is output of funcA(1)"
+                    "param1": "This is the output of funcA(1)"
                 },
-                "result": "This is output of funcB(This is the output of funcA(1))"
+                "result": "This is the output of funcB(funcA(1))"
+            },
+            {
+                "finish_reason": "stop"
             }
-        ]
+        ],
+        "final_answer_should": "The answer should indicate that the result of calling funcB is \"This is the output of funcB(funcA(1))\""
     },
     {
         "description": "Calls a function with the results of two other functions",
@@ -56,7 +63,7 @@
             "chained",
             "grouped"
         ],
-        "prompt": "Call funcA with 1 and funcB with 2, then call funcC with their results",
+        "prompt": "Call funcA with 1 and funcB with 2, then return the result of calling funcC with results of the previous calls",
         "available_functions": [
             {
                 "name": "funcA",
@@ -65,7 +72,7 @@
                     "type": "object",
                     "properties": {
                         "param1": {
-                            "type": "string",
+                            "type": "integer",
                             "description": "Param 1"
                         }
                     }
@@ -78,7 +85,7 @@
                     "type": "object",
                     "properties": {
                         "param2": {
-                            "type": "string",
+                            "type": "integer",
                             "description": "Param 2"
                         }
                     }
@@ -106,14 +113,14 @@
             {
                 "name": "funcA",
                 "arguments": {
-                    "param1": "1"
+                    "param1": 1
                 },
                 "result": "This is the output of funcA(1)"
             },
             {
                 "name": "funcB",
                 "arguments": {
-                    "param2": "2"
+                    "param2": 2
                 },
                 "result": "This is the output of funcB(2)"
             },
@@ -123,9 +130,13 @@
                     "param1": "This is the output of funcA(1)",
                     "param2": "This is the output of funcB(2)"
                 },
-                "result": ""
+                "result": "This is the output of funcC(funcA(1), funcB(2))"
+            },
+            {
+                "finish_reason": "stop"
             }
-        ]
+        ],
+        "final_answer_should": "The answer should indicate that the result of calling funcC is \"This is the output of funcC(funcA(1), funcB(2))\""
     },
     {
         "description": "Calls multiple functions with the results of multiple other functions",
@@ -142,7 +153,7 @@
                     "type": "object",
                     "properties": {
                         "param1": {
-                            "type": "string",
+                            "type": "integer",
                             "description": "Param 1"
                         }
                     }
@@ -155,7 +166,7 @@
                     "type": "object",
                     "properties": {
                         "param1": {
-                            "type": "string",
+                            "type": "integer",
                             "description": "Param 1"
                         }
                     }
@@ -174,7 +185,10 @@
                                 "type": "string"
                             }
                         }
-                    }
+                    },
+                    "required": [
+                        "param1"
+                    ]
                 }
             },
             {
@@ -184,7 +198,7 @@
                     "type": "object",
                     "properties": {
                         "param1": {
-                            "type": "string",
+                            "type": "integer",
                             "description": "Param 1"
                         }
                     }
@@ -197,7 +211,7 @@
                     "type": "object",
                     "properties": {
                         "param1": {
-                            "type": "string",
+                            "type": "integer",
                             "description": "Param 1"
                         }
                     }
@@ -216,7 +230,10 @@
                                 "type": "string"
                             }
                         }
-                    }
+                    },
+                    "required": [
+                        "param1"
+                    ]
                 }
             },
             {
@@ -232,7 +249,10 @@
                                 "type": "string"
                             }
                         }
-                    }
+                    },
+                    "required": [
+                        "param1"
+                    ]
                 }
             }
         ],
@@ -240,14 +260,14 @@
             {
                 "name": "funcA",
                 "arguments": {
-                    "param1": "1"
+                    "param1": 1
                 },
                 "result": "This is the output of funcA(1)"
             },
             {
                 "name": "funcB",
                 "arguments": {
-                    "param1": "2"
+                    "param1": 2
                 },
                 "result": "This is the output of funcB(2)"
             },
@@ -264,14 +284,14 @@
             {
                 "name": "funcD",
                 "arguments": {
-                    "param1": "3"
+                    "param1": 3
                 },
                 "result": "This is the output of funcD(3)"
             },
             {
                 "name": "funcE",
                 "arguments": {
-                    "param1": "4"
+                    "param1": 4
                 },
                 "result": "This is the output of funcE(4)"
             },
@@ -294,7 +314,11 @@
                     ]
                 },
                 "result": "This is the output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))"
+            },
+            {
+                "finish_reason": "stop"
             }
-        ]
+        ],
+        "final_answer_should": "The answer should indicate that the result of calling funcG is \"This is the output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))\""
     }
 ]
