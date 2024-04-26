@@ -17,7 +17,10 @@
               "type": "integer",
               "description": "Param 1"
             }
-          }
+          },
+          "required": [
+            "param1"
+          ]
         }
       }
     ],
@@ -25,7 +28,8 @@
       {
         "finish_reason": "stop"
       }
-    ]
+    ],
+    "final_answer_should": "The answer should indicate that it cannot complete the requested operation as specified"
   },
   {
     "description": "Doesn't call a function that is not available",
@@ -42,7 +46,7 @@
           "type": "object",
           "properties": {
             "param1": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 1"
             }
           }
@@ -53,10 +57,11 @@
       {
         "finish_reason": "stop"
       }
-    ]
+    ],
+    "final_answer_should": "The answer should indicate that it cannot complete the requested operation because funcB is not available"
   },
   {
-    "description": "Only calls available functions when some are not available",
+    "description": "Only calls available functions if some are not available",
     "categories": [
       "basic",
       "negative"
@@ -70,7 +75,7 @@
           "type": "object",
           "properties": {
             "param1": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 1"
             }
           }
@@ -79,8 +84,17 @@
     ],
     "expected_function_calls": [
       {
+        "name": "funcA",
+        "arguments": {
+          "param1": 1
+        },
+        "result": "This is the output of funcA(1)",
+        "optional": true
+      },
+      {
         "finish_reason": "stop"
       }
-    ]
+    ],
+    "final_answer_should": "The answer should indicate that it cannot complete the requested operation because funcB is not available"
   }
 ]

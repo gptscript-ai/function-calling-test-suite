@@ -4,7 +4,7 @@
     "categories": [
       "sequenced"
     ],
-    "prompt": "Call funcA with 1 and wait for the result, then call funcB with 2",
+    "prompt": "Call funcA with 1 and wait for the result, then call funcB with 2, then return the results for both",
     "available_functions": [
       {
         "name": "funcA",
@@ -13,7 +13,7 @@
           "type": "object",
           "properties": {
             "param1": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 1"
             }
           }
@@ -26,7 +26,7 @@
           "type": "object",
           "properties": {
             "param1": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 1"
             }
           }
@@ -37,17 +37,21 @@
       {
         "name": "funcA",
         "arguments": {
-          "param1": "1"
+          "param1": 1
         },
-        "result": "This is output of funcA(1)"
+        "result": "This is the output of funcA(1)"
       },
       {
         "name": "funcB",
         "arguments": {
-          "param1": "2"
+          "param1": 2
         },
-        "result": "This is output of funcB(2)"
+        "result": "This is the output of funcB(2)"
+      },
+      {
+        "finish_reason": "stop"
       }
-    ]
+    ],
+    "final_answer_should": "The answer should indicate that the result of calling funcA with 1 is \"This is the output of funcA(1)\" and that the result of calling funcB with 2 is \"This is the output of funcB(2)\""
   }
 ]

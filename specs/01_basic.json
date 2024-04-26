@@ -13,7 +13,7 @@
           "type": "object",
           "properties": {
             "param1": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 1"
             }
           }
@@ -24,7 +24,7 @@
       {
         "name": "funcA",
         "arguments": {
-          "param1": "1"
+          "param1": 1
         },
         "result": "This is the output of funcA(1)"
       },
@@ -39,7 +39,7 @@
     "categories": [
       "basic"
     ],
-    "prompt": "Call funcA with 1, 2, 3, 4, 5",
+    "prompt": "Call funcA with 1, 2, 3, 4, 5 and respond with the result",
     "available_functions": [
       {
         "name": "funcA",
@@ -48,23 +48,23 @@
           "type": "object",
           "properties": {
             "param1": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 1"
             },
             "param2": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 2"
             },
             "param3": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 3"
             },
             "param4": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 4"
             },
             "param5": {
-              "type": "string",
+              "type": "integer",
               "description": "Param 5"
             }
           }
@@ -75,14 +75,18 @@
       {
         "name": "funcA",
         "arguments": {
-          "param1": "1",
-          "param2": "2",
-          "param3": "3",
-          "param4": "4",
-          "param5": "5"
+          "param1": 1,
+          "param2": 2,
+          "param3": 3,
+          "param4": 4,
+          "param5": 5
         },
         "result": "This is output of funcA(1, 2, 3, 4, 5)"
+      },
+      {
+        "finish_reason": "stop"
       }
-    ]
+    ],
+    "final_answer_should": "The answer should indicate that the result of calling funcA with 1, 2, 3, 4, 5 is \"This is output of funcA(1, 2, 3, 4, 5)\""
   }
 ]

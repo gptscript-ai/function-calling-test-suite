@@ -5,31 +5,38 @@
             "basic",
             "semantic"
         ],
-        "prompt": "Get the current weather in San Francisco, CA",
+        "prompt": "Get the current weather for Cupertino, CA",
         "available_functions": [
             {
                 "name": "get_current_weather",
-                "description": "Get the current weather in a given location",
+                "description": "Returns the current weather for a given location",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "location": {
                             "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA"
+                            "description": "The city and state to get weather for, e.g. San Francisco, CA"
                         }
                     }
-                }
+                },
+                "required": [
+                    "location"
+                ]
             }
         ],
         "expected_function_calls": [
             {
                 "name": "get_current_weather",
                 "arguments": {
-                    "location": "San Francisco, CA"
+                    "location": "Cupertino, CA"
                 },
                 "result": "Sunny, 75 degrees"
+            },
+            {
+                "finish_reason": "stop"
             }
-        ]
+        ],
+        "final_answer_should": "The answer should indicate that the current weather for Cupertino, CA is Sunny and 75 degrees"
     },
     {
         "description": "Calls a function with multiple distinct parameter names given ordered arguments",
@@ -37,17 +44,17 @@
             "basic",
             "semantic"
         ],
-        "prompt": "Get the current weather in celsius for San Francisco, CA",
+        "prompt": "Get the current weather in celsius for Charleston, SC",
         "available_functions": [
             {
                 "name": "get_current_weather",
-                "description": "Get the current weather in a given location",
+                "description": "Get the current weather for a given location in celsius or fahrenheit",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "location": {
                             "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA"
+                            "description": "The city and state to get weather for, e.g. San Francisco, CA"
                         },
                         "unit": {
                             "type": "string",
@@ -56,7 +63,10 @@
                                 "fahrenheit"
                             ]
                         }
-                    }
+                    },
+                    "required": [
+                        "location"
+                    ]
                 }
             }
         ],
@@ -64,12 +74,16 @@
             {
                 "name": "get_current_weather",
                 "arguments": {
-                    "location": "San Francisco, CA",
+                    "location": "Charleston, SC",
                     "unit": "celsius"
                 },
                 "result": "Sunny, 24 degrees"
+            },
+            {
+                "finish_reason": "stop"
             }
-        ]
+        ],
+        "final_answer_should": "The answer should indicate that the current weather for Charleston, SC is Sunny and 24 degrees"
     },
     {
         "description": "Calls functions in the given order",
@@ -77,32 +91,38 @@
             "sequenced",
             "semantic"
         ],
-        "prompt": "Get the current weather in celsius for San Francisco, CA. Then get the current time in Phoenix, AZ.",
+        "prompt": "Get the current weather for Fort Myers, FL, then get the current time at Phoenix, AZ",
         "available_functions": [
             {
                 "name": "get_current_weather",
-                "description": "Get the current weather in a given location",
+                "description": "Get the current weather for a given location",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "location": {
                             "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA"
+                            "description": "The city and state to get weather for, e.g. San Francisco, CA"
                         }
-                    }
+                    },
+                    "required": [
+                        "location"
+                    ]
                 }
             },
             {
                 "name": "get_current_time",
-                "description": "Get the current time in a given location",
+                "description": "Get the current time at a given location",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "location": {
                             "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA"
+                            "description": "The city and state to get the current time at, e.g. San Francisco, CA"
                         }
-                    }
+                    },
+                    "required": [
+                        "location"
+                    ]
                 }
             }
         ],
@@ -110,7 +130,7 @@
             {
                 "name": "get_current_weather",
                 "arguments": {
-                    "location": "San Francisco, CA"
+                    "location": "Fort Myers, FL"
                 },
                 "result": "Sunny, 75 degrees"
             },
@@ -120,8 +140,12 @@
                     "location": "Phoenix, AZ"
                 },
                 "result": "14:30"
+            },
+            {
+                "finish_reason": "stop"
             }
-        ]
+        ],
+        "final_response_should": "The answer should indicate that the current weather in Fort Myers is Sunny, 75 degrees and that the current time at Phoenix is 14:30"
     },
     {
         "description": "Calls a function with the result of another function",
@@ -129,7 +153,7 @@
             "chained",
             "semantic"
         ],
-        "prompt": "Get the current weather for San Francisco, CA. Then tell me if the result is hot or cold.",
+        "prompt": "Get the current weather for Austin, TX and then tell me if that weather is hot",
         "available_functions": [
             {
                 "name": "get_current_weather",
@@ -139,22 +163,28 @@
                     "properties": {
                         "location": {
                             "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA"
+                            "description": "The city and state to get weather for, e.g. San Francisco, CA"
                         }
-                    }
+                    },
+                    "required": [
+                        "location"
+                    ]
                 }
             },
             {
                 "name": "is_it_hot",
-                "description": "Determines if the given weather conditions are hot or cold",
+                "description": "Determines if the given weather is hot or cold",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "weather": {
                             "type": "string",
-                            "description": "The current weather conditions, e.g. Cloudy, 40 degrees"
+                            "description": "The weather conditions to assess, e.g. Cloudy, 40 degrees"
                         }
-                    }
+                    },
+                    "required": [
+                        "weather"
+                    ]
                 }
             }
         ],
@@ -162,7 +192,7 @@
             {
                 "name": "get_current_weather",
                 "arguments": {
-                    "location": "San Francisco, CA"
+                    "location": "Austin, TX"
                 },
                 "result": "Sunny, 75 degrees"
             },
@@ -172,8 +202,12 @@
                     "weather": "Sunny, 75 degrees"
                 },
                 "result": "hot"
+            },
+            {
+                "finish_reason": "stop"
             }
-        ]
+        ],
+        "final_answer_should": "The answer should indicate that the current weather for Austin is Sunny, 75 degrees, and is hot"
     },
     {
         "description": "Calls a function with the result of two other functions",
@@ -181,17 +215,17 @@
             "chained",
             "semantic"
         ],
-        "prompt": "Get today's weather for Atlantic City, NJ. Then tell me if that weather is hot or cold.",
+        "prompt": "Get the current date at Atlantic City, NJ, then get the weather conditions there on the current date, then determine if those weather conditions are hot",
         "available_functions": [
             {
-                "name": "get_date",
-                "description": "Get the current date at the given location. Results are in ISO 8601 date format; e.g. 2024-04-25",
+                "name": "get_current_date",
+                "description": "Gets the current date at the given location. Results are in ISO 8601 date format; e.g. 2024-04-25",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "location": {
                             "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA"
+                            "description": "The city and state to get the current date at, e.g. San Francisco, CA"
                         }
                     },
                     "required": [
@@ -200,18 +234,18 @@
                 }
             },
             {
-                "name": "get_weather",
-                "description": "Get the weather for a location on a given date.",
+                "name": "get_weather_conditions",
+                "description": "Get the weather conditions for a given location on a given date",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "location": {
                             "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA"
+                            "description": "The city and state to get weather conditions for, e.g. San Francisco, CA"
                         },
                         "date": {
                             "type": "string",
-                            "description": "The date in ISO 8601 format to return the weather for; e.g. 2024-05-18"
+                            "description": "The date in ISO 8601 format to get weather conditions on; e.g. 2024-05-18"
                         }
                     },
                     "required": [
@@ -222,28 +256,31 @@
             },
             {
                 "name": "is_it_hot",
-                "description": "Determines if the given weather conditions are hot or cold",
+                "description": "Determines if the given weather conditions are hot. Results are either \"hot\" or \"cold\".",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "weather": {
+                        "weather_conditions": {
                             "type": "string",
-                            "description": "The current weather conditions, e.g. Cloudy, 40 degrees"
+                            "description": "The weather conditions to assess, e.g. Cloudy, 40 degrees"
                         }
-                    }
+                    },
+                    "required": [
+                        "weather_conditions"
+                    ]
                 }
             }
         ],
         "expected_function_calls": [
             {
-                "name": "get_date",
+                "name": "get_current_date",
                 "arguments": {
                     "location": "Atlantic City, NJ"
                 },
                 "result": "2024-05-18"
             },
             {
-                "name": "get_weather",
+                "name": "get_weather_conditions",
                 "arguments": {
                     "location": "Atlantic City, NJ",
                     "date": "2024-05-18"
@@ -253,10 +290,14 @@
             {
                 "name": "is_it_hot",
                 "arguments": {
-                    "weather": "Sunny, 75 degrees"
+                    "weather_conditions": "Sunny, 75 degrees"
                 },
                 "result": "hot"
+            },
+            {
+                "finish_reason": "stop"
             }
-        ]
+        ],
+        "final_answer_should": "The answer should indicate that weather conditions on the current date for Atlantic City, NJ are Sunny, 75 degrees, and hot. The answer can additionally indicate a single date of 2024-05-18, but no other specific dates may be mentioned"
     }
 ]
