@@ -1,6 +1,6 @@
 [
     {
-        "description": "Calls a function with a single parameter and provided input",
+        "description": "Asserts that the model can derive and make a function call with one argument from a prompt and conveys the result to the user",
         "categories": [
             "basic",
             "semantic"
@@ -36,7 +36,7 @@
         "final_answer_should": "The answer should indicate that the current weather for Cupertino, CA is Sunny and 75 degrees"
     },
     {
-        "description": "Calls a function with multiple distinct parameter names given ordered arguments",
+        "description": "Asserts that the model can derive and make a function call with two arguments from a prompt and conveys the result to the user",
         "categories": [
             "basic",
             "semantic"
@@ -80,7 +80,7 @@
         "final_answer_should": "The answer should indicate that the current weather for Charleston, SC is Sunny and 24 degrees"
     },
     {
-        "description": "Calls functions in the given order",
+        "description": "Asserts that the model can derive and make an ordered sequence of function calls from a prompt and conveys the results to the user",
         "categories": [
             "sequenced",
             "semantic"
@@ -139,7 +139,7 @@
         "final_response_should": "The answer should indicate that the current weather in Fort Myers is Sunny, 75 degrees and that the current time at Phoenix is 14:30"
     },
     {
-        "description": "Calls a function with the result of another function",
+        "description": "Asserts that the model can derive and make two function calls from the prompt, using the result of the first call as the argument for the second, and convey the result to the user",
         "categories": [
             "chained",
             "semantic"
@@ -198,7 +198,7 @@
         "final_answer_should": "The answer should indicate that the current weather for Austin is Sunny, 75 degrees, and is hot"
     },
     {
-        "description": "Calls a function with the result of two other functions",
+        "description": "Asserts that the model can derive and make a series of functions calls from a prompt, where the results of an initial group of calls are used as arguments for a final function call, and conveys the result to the user",
         "categories": [
             "chained",
             "semantic"

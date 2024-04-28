@@ -1,6 +1,6 @@
 [
   {
-    "description": "Doesn't call a function with a given argument if its type doesn't match the function's parameter",
+    "description": "Asserts that the model can determine when an argument specified by the prompt is invalid and conveys the problem to the user",
     "categories": [
       "basic",
       "negative"
@@ -28,7 +28,7 @@
     "final_answer_should": "The answer should indicate that it cannot complete the requested operation as specified"
   },
   {
-    "description": "Doesn't call a function that is not available",
+    "description": "Asserts that the model can determine when a function specified by the prompt is unavailable and conveys the problem to the user",
     "categories": [
       "basic",
       "negative"
@@ -53,7 +53,7 @@
     "final_answer_should": "The answer should indicate that it cannot complete the requested operation because funcB is not available"
   },
   {
-    "description": "Only calls available functions if some are not available",
+    "description": "Asserts that the model can distinguish between available and unavailable functions when both are specified by the prompt and conveys the problem to the user",
     "categories": [
       "basic",
       "negative"

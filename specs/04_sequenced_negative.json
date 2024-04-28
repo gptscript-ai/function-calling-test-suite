@@ -1,6 +1,6 @@
 [
   {
-    "description": "Doesn't call a function with a given argument of the wrong type after making a successful call to another function",
+    "description": "Asserts that the model can determine when the result of a function call cannot be used as the argument for a specified function and conveys the problem to the user",
     "categories": [
       "sequenced",
       "negative"
