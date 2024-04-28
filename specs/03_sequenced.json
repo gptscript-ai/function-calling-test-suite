@@ -1,6 +1,6 @@
 [
   {
-    "description": "Calls functions in the given order",
+    "description": "Asserts that the model can make a sequence of function calls in the correct order and conveys the results to the user",
     "categories": [
       "sequenced"
     ],
