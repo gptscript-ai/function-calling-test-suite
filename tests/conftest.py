@@ -17,11 +17,13 @@ def pytest_addoption(parser):
     parser.addoption("--aggregate-report-file", action="store", default="aggregate_benchmark_report.csv", help="Add benchmark results for the model to an aggregate CSV file")
     parser.addoption("--request-delay", action="store", default=0.0, help="Delay in seconds between chat completion requests")
 
+
 @pytest.fixture(scope="session")
 def model_client():
     api_key = os.getenv("BENCHMARK_API_KEY")
     base_url = os.getenv("BENCHMARK_BASE_URL")
     return OpenAI(base_url=base_url, api_key=api_key)
+
 
 @pytest.fixture(scope="session")
 def judge_client():
@@ -29,14 +31,21 @@ def judge_client():
     base_url = os.getenv("OPENAI_BASE_URL")
     return OpenAI(base_url=base_url, api_key=api_key)
 
+
 @pytest.fixture(scope="session")
 def model() -> str | None:
     return os.getenv("BENCHMARK_MODEL")
+
 
 # Assuming you have a fixture that receives `test_case` and `test_id` parameters
 @pytest.fixture(autouse=True)
 def attach_test_case_to_node(request, test_case):
     request.node.test_case = test_case
+
+
+def pytest_collection_modifyitems(session, config, items):
+    items.sort(key=lambda x: x.nodeid)
+
 
 def pytest_generate_tests(metafunc):
     if "test_case" in metafunc.fixturenames:
@@ -48,6 +57,7 @@ def pytest_generate_tests(metafunc):
         use_system_prompt = bool(metafunc.config.getoption("--use-system-prompt"))
         test_cases = load_test_cases(spec_run_count, spec_filter, spec_dir, request_delay, stream, use_system_prompt)
         metafunc.parametrize("test_id, request_delay, stream, use_system_prompt, test_case", test_cases, ids=[test_id for test_id, _, _, _, _ in test_cases])
+
 
 def load_test_cases(spec_run_count: int, spec_filter: str, spec_dir: str, request_delay: float, stream: bool, use_system_prompt: bool):
     suite_test_cases = []
@@ -73,64 +83,18 @@ def load_test_cases(spec_run_count: int, spec_filter: str, spec_dir: str, reques
 
     return suite_test_cases
 
-def pytest_terminal_summary(terminalreporter, exitstatus, config):
-    passed_tests = terminalreporter.stats.get('passed', [])
-    failed_tests = terminalreporter.stats.get('failed', [])
 
-    # Generate the summary data structure from test outcomes
-    summary = summarize_results(passed_tests, failed_tests)
-    
-    # Print the generated summary in the terminal report
-    terminalreporter.ensure_newline()
-    terminalreporter.section("Benchmark Summary", sep='=', blue=True, bold=True)
-    terminalreporter.line(f"total: {summary['passed']}/{summary['total']}")
+@pytest.hookimpl(optionalhook=True)
+def pytest_json_runtest_metadata(item, call):
+    if call.when != 'call':
+        return {}
 
-    for category, counts in sorted(summary["categories"].items()):
-        terminalreporter.line(f"{category}: {counts['passed']}/{counts['total']}")
-        terminalreporter.ensure_newline()
-
-def summarize_results(passed_tests, failed_tests):
-    summary = {
-        "total": len(passed_tests) + len(failed_tests),
-        "passed": len(passed_tests),
-        "failed": len(failed_tests),
-        "categories": {}
+    return {
+        'test_case': item.test_case.model_dump(mode='json'),
+        'start': call.start,
+        'stop': call.stop
     }
 
-    # Combine passed and failed tests for processing
-    all_tests = passed_tests + failed_tests
-
-    for test in all_tests:
-        if hasattr(test, 'test_case_data') and 'categories' in test.test_case_data:
-            data = test.test_case_data
-            for category in data["categories"]:
-                if category not in summary["categories"]:
-                    summary["categories"][category] = {"total": 0, "passed": 0, "failed": 0}
-                
-                # Determine the outcome for incrementing the appropriate counter
-                outcome = "passed" if test in passed_tests else "failed"
-                summary["categories"][category]["total"] += 1
-                summary["categories"][category][outcome] += 1
-
-    return summary
-
-def pytest_exception_interact(node, call, report):
-    if not (report.failed and hasattr(node, 'test_case')):
-        return
-
-    test_id = node.nodeid
-    test_case = node.test_case
-    available_functions = [available_function.model_dump() for available_function in test_case.available_functions]
-    report.longrepr.addsection(f"{test_id} (Available Functions)", json.dumps(available_functions, indent=4))
-
-    messages = [message.model_dump() if hasattr(message, 'model_dump') else message for message in test_case.actual.messages]
-    report.longrepr.addsection(f"{test_id} (Request Messages)", json.dumps(messages, indent=4))
-
-    responses = [response.model_dump() for response in test_case.actual.responses]
-    report.longrepr.addsection(f"{test_id} (Actual Responses)", json.dumps(responses, indent=4))
-
-    expected_calls = [expected_call.model_dump() for expected_call in test_case.expected_function_calls] 
-    report.longrepr.addsection(f"{test_id} (Expected Function Calls)", json.dumps(expected_calls, indent=4))
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
@@ -144,58 +108,87 @@ def pytest_runtest_makereport(item, call):
         return
 
     test_case = item.test_case
-    item.user_properties.append(("categories", test_case.categories))
+    test_id = item.nodeid
+
+    if report.failed:
+        if test_case.description:
+            report.longrepr.addsection('Test Description', test_case.description)
+
+        report.longrepr.addsection('Prompt', test_case.prompt)
+
+        if test_case.actual.judgment:
+            report.longrepr.addsection('Expected Answer', test_case.final_answer_should)
+            report.longrepr.addsection('Actual Answer', '. '.join(test_case.actual.answers))
+            report.longrepr.addsection('Judge Ruling', test_case.actual.judgment)
+
+        test_case_dict = item.test_case.model_dump(mode='json')
+
+        expected_calls = test_case_dict.get('expected_function_calls', [])
+        messages = test_case_dict.get('actual', {}).get('messages', [])
+        available_functions = test_case_dict.get('available_functions', [])
+        actual_calls = [
+            tool_call
+            for message in messages
+            if 'tool_calls' in message
+            for tool_call in message['tool_calls']
+        ]
+        responses = test_case_dict.get('actual', {}).get('responses', [])
+
+        report.longrepr.addsection('Expected Calls', json.dumps(expected_calls, indent=4))
+        report.longrepr.addsection('Actual Calls', json.dumps(actual_calls, indent=4))
+        report.longrepr.addsection('Available Functions', json.dumps(available_functions, indent=4))
+        report.longrepr.addsection('Request Messages', json.dumps(messages, indent=4))
+        report.longrepr.addsection('Raw Responses', json.dumps(responses, indent=4))
 
     # Pre-process results for aggregate CSV report
-    test_case = item.test_case
     model = item.funcargs.get('model', 'No model specified')
     result = "PASSED" if report.outcome == "passed" else "FAILED"
-    test_data = {
-        "test_id": item.nodeid,
+    run_result = {
+        "test_id": test_id,
         "categories": " ".join(test_case.categories),
         "description": getattr(test_case, 'description', 'No description'),
         "prompt": getattr(test_case, 'prompt', 'No prompt'),
         "result": result,
         "model": model,
     }
-        
-    # Store test data in session.config which is accessible across hooks
-    if not hasattr(item.session.config, '_test_results'):
-        item.session.config._test_results = {}
-    item.session.config._test_results[(item.nodeid, model)] = test_data
+
+    if not hasattr(item.session.config, 'run_results'):
+        item.session.config.run_results = {}
+    item.session.config.run_results[(item.nodeid, model)] = run_result
+
 
 def pytest_sessionfinish(session, exitstatus):
     csv_path = session.config.getoption("--aggregate-report-file")
-    test_results = {}
-    fieldnames = ['test_id', 'categories', 'description', 'prompt']  # Default fields
+    aggregate_results = {}
+    columns = ['test_id', 'categories', 'description', 'prompt']  # Default fields
     processed = set()  # Set to track processed test_id, model combinations
 
     # Check if the CSV exists and read existing data
     if os.path.exists(csv_path):
         with open(csv_path, mode='r', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
-            fieldnames = reader.fieldnames  # Capture all existing columns
+
+            columns = reader.fieldnames  # Capture all existing columns
             for row in reader:
-                test_results[row['test_id']] = row
+                aggregate_results[row['test_id']] = row
 
     # Update test_results with new data from the current session
-    if hasattr(session.config, '_test_results'):
-        for (nodeid, model), data in session.config._test_results.items():
-            model_column = model  # the column name for the model
-            if model_column not in fieldnames:
-                fieldnames.append(model_column)  # Add new model to fieldnames if it's not already there
-            
+    if hasattr(session.config, 'run_results'):
+        for (nodeid, model), run_result in session.config.run_results.items():
+            if model not in columns:
+                columns.append(model)  # Add new model to fieldnames if it's not already there
+
             # Extract the simplified test_id from nodeid
             match = re.search(r'\[(.*?)-\d+\]', nodeid)
             simplified_test_id = match.group(1) if match else nodeid
-            key = (simplified_test_id, model_column)
-            
-            if simplified_test_id not in test_results:
-                test_results[simplified_test_id] = {f: "" for f in fieldnames}
-                test_results[simplified_test_id]['test_id'] = simplified_test_id
-                test_results[simplified_test_id]['categories'] = data['categories']
-                test_results[simplified_test_id]['description'] = data['description']
-                test_results[simplified_test_id]['prompt'] = data['prompt']
+            key = (simplified_test_id, model)
+
+            if simplified_test_id not in aggregate_results:
+                aggregate_results[simplified_test_id] = {c: "" for c in columns}
+                aggregate_results[simplified_test_id]['test_id'] = simplified_test_id
+                aggregate_results[simplified_test_id]['categories'] = run_result['categories']
+                aggregate_results[simplified_test_id]['description'] = run_result['description']
+                aggregate_results[simplified_test_id]['prompt'] = run_result['prompt']
 
             # Check if this is the first run of this combination in the current session
             if key not in processed:
@@ -204,19 +197,19 @@ def pytest_sessionfinish(session, exitstatus):
                 processed.add(key)
             else:
                 # Get current counts if not the first run
-                passed, total_runs = map(int, test_results[simplified_test_id][model_column].split('/') if test_results[simplified_test_id][model_column] else (0, 0))
+                passed, total_runs = map(int, aggregate_results[simplified_test_id][model].split('/') if aggregate_results[simplified_test_id][model] else (0, 0))
 
             # Increment runs and update pass rate for test spec
             total_runs += 1
-            if data['result'] == 'PASSED':
+            if run_result['result'] == 'PASSED':
                 passed += 1
 
             # Update the fraction in the CSV
-            test_results[simplified_test_id][model_column] = f"{passed}/{total_runs}"
-    
+            aggregate_results[simplified_test_id][model] = f"{passed}/{total_runs}"
+
     # Write updated data back to CSV
     with open(csv_path, mode='w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer = csv.DictWriter(csvfile, fieldnames=columns)
         writer.writeheader()
-        for test_id in sorted(test_results.keys()):
-            writer.writerow(test_results[test_id])
+        for test_id in sorted(aggregate_results.keys()):
+            writer.writerow(aggregate_results[test_id])

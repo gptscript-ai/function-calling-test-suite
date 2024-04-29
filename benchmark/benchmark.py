@@ -1,3 +1,4 @@
+import json
 from pydantic import Field, BaseModel, field_validator
 from typing import Optional, Set, List, Dict, Any
 from openai.types.chat import ChatCompletion
@@ -17,10 +18,11 @@ class ExpectedFunctionCall(BaseModel):
 
 
 class Actual(BaseModel):
-    tools: Optional[List[Any]] = []
-    messages: Optional[List[Any]] = []
-    responses: Optional[List[ChatCompletion]] = []
-
+    tools: Optional[List[Dict[str, Any]]] = []
+    messages: Optional[List[Dict[str, Any]]] = []
+    responses: Optional[List[Dict[str, Any]]] = []
+    answers: Optional[List[str]] = []
+    judgment: Optional[str] = None
 
 class TestCase(BaseModel):
     __test__ = False
