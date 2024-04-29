@@ -13,7 +13,6 @@ requests = "^2.31.0"
 openai = "^1.16.1"
 pydantic = "2.6.4"
 pytest-html = "^4.1.1"
-pytest-json-report = "^1.5.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -21,4 +20,8 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 generate_report_on_test = true
-addopts = "-s --cache-clear -n auto --tb=short --self-contained-html --html=benchmark_report.html --json-report --json-report-file=benchmark_report.json --json-report-indent=4"
+addopts = """
+    --cache-clear -s --tb=short
+    --self-contained-html --html=benchmark_report.html
+    --json-report --json-report-file=benchmark_report.json --json-report-indent=4
+"""

@@ -581,21 +581,6 @@ docs = ["pip-tools (>=6.13.0)"]
 test = ["assertpy (>=1.1)", "beautifulsoup4 (>=4.11.1)", "black (>=22.1.0)", "flake8 (>=4.0.1)", "pre-commit (>=2.17.0)", "pytest-mock (>=3.7.0)", "pytest-rerunfailures (>=11.1.2)", "pytest-xdist (>=2.4.0)", "selenium (>=4.3.0)", "tox (>=3.24.5)"]
 
 [[package]]
-name = "pytest-json-report"
-version = "1.5.0"
-description = "A pytest plugin to report test results as JSON files"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pytest-json-report-1.5.0.tar.gz", hash = "sha256:2dde3c647851a19b5f3700729e8310a6e66efb2077d674f27ddea3d34dc615de"},
-    {file = "pytest_json_report-1.5.0-py3-none-any.whl", hash = "sha256:9897b68c910b12a2e48dd849f9a284b2c79a732a8a9cb398452ddd23d3c8c325"},
-]
-
-[package.dependencies]
-pytest = ">=3.8.0"
-pytest-metadata = "*"
-
-[[package]]
 name = "pytest-metadata"
 version = "3.1.1"
 description = "pytest plugin for test session metadata"
@@ -818,4 +803,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "1c3dd93d774b2ee62cf0a583045c9d2a9885a60c02ce72016cbccaeb99ac7b1d"
+content-hash = "6ae870b5979930e538eb992dff7718c2693283c79c319bd1532ec8c0f46896d3"
