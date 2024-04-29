@@ -27,9 +27,6 @@
           "param1": 1
         },
         "result": "This is the output of funcA(1)"
-      },
-      {
-        "finish_reason": "stop"
       }
     ],
     "final_answer_should": "The answer should indicate that the result of calling funcA with 1 is \"This is the output of funcA(1)\""
@@ -82,9 +79,6 @@
           "param5": 5
         },
         "result": "This is output of funcA(1, 2, 3, 4, 5)"
-      },
-      {
-        "finish_reason": "stop"
       }
     ],
     "final_answer_should": "The answer should indicate that the result of calling funcA with 1, 2, 3, 4, 5 is \"This is output of funcA(1, 2, 3, 4, 5)\""

@@ -50,9 +50,6 @@
                     "param1": "This is the output of funcA(1)"
                 },
                 "result": "This is the output of funcB(funcA(1))"
-            },
-            {
-                "finish_reason": "stop"
             }
         ],
         "final_answer_should": "The answer should indicate that the result of calling funcB is \"This is the output of funcB(funcA(1))\""
@@ -131,9 +128,6 @@
                     "param2": "This is the output of funcB(2)"
                 },
                 "result": "This is the output of funcC(funcA(1), funcB(2))"
-            },
-            {
-                "finish_reason": "stop"
             }
         ],
         "final_answer_should": "The answer should indicate that the result of calling funcC is \"This is the output of funcC(funcA(1), funcB(2))\""
@@ -314,9 +308,6 @@
                     ]
                 },
                 "result": "This is the output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))"
-            },
-            {
-                "finish_reason": "stop"
             }
         ],
         "final_answer_should": "The answer should indicate that the result of calling funcG is \"This is the output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))\""

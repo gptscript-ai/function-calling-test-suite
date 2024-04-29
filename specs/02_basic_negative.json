@@ -24,11 +24,7 @@
         }
       }
     ],
-    "expected_function_calls": [
-      {
-        "finish_reason": "stop"
-      }
-    ],
+    "expected_function_calls": [],
     "final_answer_should": "The answer should indicate that it cannot complete the requested operation as specified"
   },
   {
@@ -53,11 +49,7 @@
         }
       }
     ],
-    "expected_function_calls": [
-      {
-        "finish_reason": "stop"
-      }
-    ],
+    "expected_function_calls": [],
     "final_answer_should": "The answer should indicate that it cannot complete the requested operation because funcB is not available"
   },
   {
@@ -90,9 +82,6 @@
         },
         "result": "This is the output of funcA(1)",
         "optional": true
-      },
-      {
-        "finish_reason": "stop"
       }
     ],
     "final_answer_should": "The answer should indicate that it cannot complete the requested operation because funcB is not available"

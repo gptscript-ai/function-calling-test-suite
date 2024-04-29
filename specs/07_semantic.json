@@ -31,9 +31,6 @@
                     "location": "Cupertino, CA"
                 },
                 "result": "Sunny, 75 degrees"
-            },
-            {
-                "finish_reason": "stop"
             }
         ],
         "final_answer_should": "The answer should indicate that the current weather for Cupertino, CA is Sunny and 75 degrees"
@@ -78,9 +75,6 @@
                     "unit": "celsius"
                 },
                 "result": "Sunny, 24 degrees"
-            },
-            {
-                "finish_reason": "stop"
             }
         ],
         "final_answer_should": "The answer should indicate that the current weather for Charleston, SC is Sunny and 24 degrees"
@@ -140,9 +134,6 @@
                     "location": "Phoenix, AZ"
                 },
                 "result": "14:30"
-            },
-            {
-                "finish_reason": "stop"
             }
         ],
         "final_response_should": "The answer should indicate that the current weather in Fort Myers is Sunny, 75 degrees and that the current time at Phoenix is 14:30"
@@ -202,9 +193,6 @@
                     "weather": "Sunny, 75 degrees"
                 },
                 "result": "hot"
-            },
-            {
-                "finish_reason": "stop"
             }
         ],
         "final_answer_should": "The answer should indicate that the current weather for Austin is Sunny, 75 degrees, and is hot"
@@ -293,9 +281,6 @@
                     "weather_conditions": "Sunny, 75 degrees"
                 },
                 "result": "hot"
-            },
-            {
-                "finish_reason": "stop"
             }
         ],
         "final_answer_should": "The answer should indicate that weather conditions on the current date for Atlantic City, NJ are Sunny, 75 degrees, and hot. The answer can additionally indicate a single date of 2024-05-18, but no other specific dates may be mentioned"

@@ -22,11 +22,7 @@
         }
       }
     ],
-    "expected_function_calls": [
-      {
-        "finish_reason": "stop"
-      }
-    ],
+    "expected_function_calls": [],
     "final_answer_should": "The answer should indicate that the it's not possible to get the current time at Tokyo with the available resources"
   },
   {
@@ -55,11 +51,7 @@
         ]
       }
     ],
-    "expected_function_calls": [
-      {
-        "finish_reason": "stop"
-      }
-    ],
+    "expected_function_calls": [],
     "final_answer_should": "The answer should indicate that the operation cannot be completed because the given argument's type is incompatible with the target parameter type"
   },
   {
@@ -93,9 +85,6 @@
         },
         "result": "Sunny, 74 degrees",
         "optional": true
-      },
-      {
-        "finish_reason": "stop"
       }
     ],
     "final_answer_should": "The answer should indicate that the current weather in Buford is Sunny and 74 degrees but should not indicate a specific value for the current time"
@@ -147,9 +136,6 @@
         },
         "result": "Sunny, 80 degrees",
         "optional": true
-      },
-      {
-        "finish_reason": "stop"
       }
     ],
     "final_answer_should": "The answer should indicate that some portion of the requested operation can't be completed and may additionally indicate an issue about checking a lucky number"
@@ -204,9 +190,6 @@
         },
         "result": "temperate",
         "optional": true
-      },
-      {
-        "finish_reason": "stop"
       }
     ],
     "final_answer_should": "The answer should indicate that the operation can't be completed with the given information and may also request more information to continue"

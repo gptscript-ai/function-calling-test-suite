@@ -43,9 +43,6 @@
                 },
                 "result": "This is output of funcA(1)",
                 "optional": true
-            },
-            {
-                "finish_reason": "stop"
             }
         ],
         "final_answer_should": "The answer should indicate that the operation cannot be completed and may indicate a parameter type issue for funcB"
