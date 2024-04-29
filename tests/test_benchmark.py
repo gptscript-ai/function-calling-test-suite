@@ -1,13 +1,23 @@
 import json
 import time
+from typing import Optional, List
 from openai import OpenAI, Stream
 from openai.types.chat import ChatCompletion, ChatCompletionChunk
 from benchmark import TestCase, Actual
+from dataclasses import dataclass
 from collections import deque
 
 
-def test_benchmark(judge_client: OpenAI, model_client: OpenAI, model: str | None, test_id: str, request_delay: float,
-                   stream: bool, use_system_prompt: bool, test_case: TestCase):
+def test_benchmark(
+        judge_client: OpenAI,
+        model_client: OpenAI,
+        model: str | None,
+        test_id: str,
+        request_delay: float,
+        stream: bool,
+        use_system_prompt: bool,
+        test_case: TestCase
+):
     tools = []
     for function in test_case.available_functions:
         tools.append({
@@ -38,65 +48,70 @@ You never respond with content.
 
     call_index = 0
     answers = []
-    expected_calls = deque(test_case.expected_function_calls)
-    while expected_calls:
+
+    expected_calls = deque(test_case.expected_function_calls or [])
+    while True:
         if request_delay > 0.0:
             time.sleep(request_delay)
 
         model_response = to_chat_completion(model_client.chat.completions.create(
-            model=model,
             messages=messages,
+            model=model,
             tools=tools,
             tool_choice="auto",
             temperature=0,
-            stream=stream
+            stream=stream,
+            n=1,
+            timeout=300.0
         ))
         test_case.actual.responses.append(model_response)
 
         choices = model_response.choices
-        assert len(choices) > 0, f"Call {call_index}: Model returned no choices"
+        assert len(choices) == 1, f"Call {call_index}: Model returned unexpected number of choices"
 
         choice = choices[0]
-        content = choice.message.content
-        if content:
-            answers.append(choice.message.content)
+        message = choice.message
+        assert message.role == "assistant", f"Call {call_index}: Model returned unexpected role"
 
-        model_message = choice.message
-        messages.append(model_message)
-        assert model_message.role == "assistant", f"Call {call_index}: Model returned unexpected role"
+        messages.append(message)
+        if message.content:
+            answers.append(message.content)
 
-        expected_call = expected_calls[0]
-        if choice.finish_reason == "stop":
-            # This means the model has stopped requesting tool calls.
-            # Remove any optional calls from the expected deque
-            while expected_calls:
-                if not expected_call.optional:
-                    break
-                expected_call = expected_calls.popleft()
+        tool_calls = deque(message.tool_calls or [])
+        assert len(tool_calls) <= len(expected_calls), f"Call {call_index}: Model returned more tool calls than expected"
 
-        actual_calls = model_message.tool_calls
-        if expected_call.finish_reason == "stop":
-            assert len(actual_calls or []) == 0, f"Call {call_index}: Model returned tool calls when it should have stopped"
+        if len(expected_calls) == 0 or len(tool_calls) == 0:
+            assert choice.finish_reason == "stop", f"Call {call_index}: Model returned unexpected finish reason"
             break
 
-        assert choice.finish_reason == expected_call.finish_reason, f"Call {call_index}: Model returned unexpected finish_reason"
-
-        for actual_call in actual_calls:
+        while tool_calls and expected_calls:
+            tool_call = tool_calls.popleft()
             expected_call = expected_calls.popleft()
 
-            assert expected_call.finish_reason != "stop", f"Call {call_index}: Model returned tool call when expected to stop"
-            assert actual_call.function.name == expected_call.name, f"Call {call_index}: Model returned tool call unexpected function name"
-            assert actual_call.id != "", f"Call {call_index}: Model returned a tool call without a call ID"
-            assert json.loads(actual_call.function.arguments) == expected_call.arguments, f"Call {call_index}: Model returned a tool call with unexpected arguments"
+            # Skip optional calls
+            while expected_calls:
+                if expected_call.optional and expected_call.name != tool_call.function.name:
+                    expected_call = expected_calls.popleft()
+                    call_index += 1
+                break
+
+            assert tool_call.id != "", f"Call {call_index}: Model returned a tool call without a call id"
+            assert tool_call.function.name == expected_call.name, f"Call {call_index}: Model returned a tool call with an unexpected function name"
+            assert json.loads(tool_call.function.arguments) == expected_call.arguments, f"Call {call_index}: Model returned a tool call with unexpected arguments"
 
             messages.append({
-                "tool_call_id": actual_call.id,
+                "tool_call_id": tool_call.id,
                 "role": "tool",
                 "name": expected_call.name,
                 "content": expected_call.result
             })
             test_case.actual.messages = messages
             call_index += 1
+
+        assert len(tool_calls) == 0, f"Call {call_index}: Model returned unexpected tool calls"
+
+    remaining_required_calls = [call for call in expected_calls if not call.optional]
+    assert len(remaining_required_calls) == 0, f"Model did not make all required tool calls before stopping"
 
     if test_case.final_answer_should:
         final_answer = '\n'.join(answers)
