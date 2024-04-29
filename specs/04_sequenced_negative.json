@@ -45,9 +45,6 @@
         },
         "result": "This is output of funcA(1)",
         "optional": true
-      },
-      {
-        "finish_reason": "stop"
       }
     ],
     "final_answer_should": "The answer should indicate that the given operation cannot be completed or should ask for more information in order to continue. It may additionally indicate a typing issue related to the given parameters and arguments."
