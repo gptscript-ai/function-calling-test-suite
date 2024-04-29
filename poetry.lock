@@ -383,13 +383,13 @@ files = [
 
 [[package]]
 name = "openai"
-version = "1.23.6"
+version = "1.24.0"
 description = "The official Python library for the openai API"
 optional = false
 python-versions = ">=3.7.1"
 files = [
-    {file = "openai-1.23.6-py3-none-any.whl", hash = "sha256:f406c76ba279d16b9aca5a89cee0d968488e39f671f4dc6f0d690ac3c6f6fca1"},
-    {file = "openai-1.23.6.tar.gz", hash = "sha256:612de2d54cf580920a1156273f84aada6b3dca26d048f62eb5364a4314d7f449"},
+    {file = "openai-1.24.0-py3-none-any.whl", hash = "sha256:81eed0d850a35a170797d15d94144eb993459411ba56325891ab488708f1b612"},
+    {file = "openai-1.24.0.tar.gz", hash = "sha256:9cc6ac92bac9d57c8d4bc101e9e4c7201304c88efb89320d0f0348625fa8647d"},
 ]
 
 [package.dependencies]
@@ -542,23 +542,23 @@ typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
 name = "pytest"
-version = "8.1.1"
+version = "8.2.0"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pytest-8.1.1-py3-none-any.whl", hash = "sha256:2a8386cfc11fa9d2c50ee7b2a57e7d898ef90470a7a34c4b949ff59662bb78b7"},
-    {file = "pytest-8.1.1.tar.gz", hash = "sha256:ac978141a75948948817d360297b7aae0fcb9d6ff6bc9ec6d514b85d5a65c044"},
+    {file = "pytest-8.2.0-py3-none-any.whl", hash = "sha256:1733f0620f6cda4095bbf0d9ff8022486e91892245bb9e7d5542c018f612f233"},
+    {file = "pytest-8.2.0.tar.gz", hash = "sha256:d507d4482197eac0ba2bae2e9babf0672eb333017bcedaa5fb1a3d42c1174b3f"},
 ]
 
 [package.dependencies]
 colorama = {version = "*", markers = "sys_platform == \"win32\""}
 iniconfig = "*"
 packaging = "*"
-pluggy = ">=1.4,<2.0"
+pluggy = ">=1.5,<2.0"
 
 [package.extras]
-testing = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
+dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
 name = "pytest-html"
@@ -579,6 +579,21 @@ pytest-metadata = ">=2.0.0"
 [package.extras]
 docs = ["pip-tools (>=6.13.0)"]
 test = ["assertpy (>=1.1)", "beautifulsoup4 (>=4.11.1)", "black (>=22.1.0)", "flake8 (>=4.0.1)", "pre-commit (>=2.17.0)", "pytest-mock (>=3.7.0)", "pytest-rerunfailures (>=11.1.2)", "pytest-xdist (>=2.4.0)", "selenium (>=4.3.0)", "tox (>=3.24.5)"]
+
+[[package]]
+name = "pytest-json-report"
+version = "1.5.0"
+description = "A pytest plugin to report test results as JSON files"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pytest-json-report-1.5.0.tar.gz", hash = "sha256:2dde3c647851a19b5f3700729e8310a6e66efb2077d674f27ddea3d34dc615de"},
+    {file = "pytest_json_report-1.5.0-py3-none-any.whl", hash = "sha256:9897b68c910b12a2e48dd849f9a284b2c79a732a8a9cb398452ddd23d3c8c325"},
+]
+
+[package.dependencies]
+pytest = ">=3.8.0"
+pytest-metadata = "*"
 
 [[package]]
 name = "pytest-metadata"
@@ -803,4 +818,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "6ae870b5979930e538eb992dff7718c2693283c79c319bd1532ec8c0f46896d3"
+content-hash = "1c3dd93d774b2ee62cf0a583045c9d2a9885a60c02ce72016cbccaeb99ac7b1d"

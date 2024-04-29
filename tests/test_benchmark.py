@@ -64,7 +64,7 @@ You never respond with content.
             n=1,
             timeout=300.0
         ))
-        test_case.actual.responses.append(model_response)
+        test_case.actual.responses.append(model_response.model_dump(mode='json', exclude_unset=True, exclude_none=True))
 
         choices = model_response.choices
         assert len(choices) == 1, f"Call {call_index}: Model returned unexpected number of choices"
@@ -73,7 +73,7 @@ You never respond with content.
         message = choice.message
         assert message.role == "assistant", f"Call {call_index}: Model returned unexpected role"
 
-        messages.append(message)
+        messages.append(message.model_dump(mode='json', exclude_unset=True, exclude_none=True))
         if message.content:
             answers.append(message.content)
 
@@ -116,6 +116,9 @@ You never respond with content.
     if test_case.final_answer_should:
         final_answer = '\n'.join(answers)
         correct, reasoning = judge_final_answer(judge_client, stream, final_answer, test_case.final_answer_should)
+        test_case.actual.answers = answers
+        test_case.actual.judgment = reasoning
+
         assert correct, f"Model's final answer ruled incorrect by judge: \"{reasoning}\""
 
 
