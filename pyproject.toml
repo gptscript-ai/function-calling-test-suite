@@ -15,6 +15,12 @@ pydantic = "2.6.4"
 pytest-html = "^4.1.1"
 pytest-json-report = "^1.5.0"
 pytest-order = "^1.2.1"
+pandas = "^2.2.2"
+plotly = "^5.22.0"
+kaleido = "0.2.1"
+
+[tool.poetry.scripts]
+plot-results = "benchmark.plot_results:main"
 
 [build-system]
 requires = ["poetry-core"]
@@ -23,8 +29,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.pytest.ini_options]
 generate_report_on_test = true
 addopts = """
-    --cache-clear -s --tb=short
+    --cache-clear -v -s --tb=short
     --order-scope=session --order-dependencies
-    --self-contained-html --html=benchmark_report.html
-    --json-report --json-report-file=benchmark_report.json --json-report-indent=4
+    --self-contained-html --html=reports/benchmark_report.html
+    --json-report --json-report-file=none --json-report-indent=4
 """
