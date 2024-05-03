@@ -17,9 +17,15 @@ class ExpectedFunctionCall(BaseModel):
     optional: Optional[bool] = False
 
 
+class ActualFunctionCall(BaseModel):
+    name: Optional[str] = None
+    arguments: Optional[Dict[str, Any]] = None
+
+
 class Actual(BaseModel):
     tools: Optional[List[Dict[str, Any]]] = []
     messages: Optional[List[Dict[str, Any]]] = []
+    function_calls: Optional[List[ActualFunctionCall]] = []
     responses: Optional[List[Dict[str, Any]]] = []
     answers: Optional[List[str]] = []
     judgment: Optional[str] = None

@@ -30,4 +30,4 @@ pip-log.txt
 Thumbs.db
 
 # Default benchmark reports
-benchmark_report.*
+*benchmark_report.*
