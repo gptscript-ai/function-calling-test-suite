@@ -14,7 +14,7 @@ def pytest_addoption(parser):
     parser.addoption("--spec-dir", action="store", default="specs", help="Directory containing JSON test spec files")
     parser.addoption("--stream", action="store", default=False, help="Enables streaming for all chat completion requests")
     parser.addoption("--use-system-prompt", action="store", default=False, help="Adds a default system prompt for all chat completion requests")
-    parser.addoption("--aggregate-report-file", action="store", default="aggregate_benchmark_report.csv", help="Add benchmark results for the model to an aggregate CSV file")
+    parser.addoption("--aggregate-summary-file", action="store", default="reports/aggregate_summary.csv", help="Add benchmark results for the model to an aggregate CSV file")
     parser.addoption("--request-delay", action="store", default=0.0, help="Delay in seconds between chat completion requests")
 
 
@@ -90,6 +90,7 @@ def pytest_json_runtest_metadata(item, call):
         return {}
 
     return {
+        'model': item.funcargs.get('model', 'N/A'),
         'test_case': item.test_case.model_dump(mode='json'),
         'start': call.start,
         'stop': call.stop
@@ -124,15 +125,11 @@ def pytest_runtest_makereport(item, call):
         test_case_dict = item.test_case.model_dump(mode='json')
 
         expected_calls = test_case_dict.get('expected_function_calls', [])
-        messages = test_case_dict.get('actual', {}).get('messages', [])
         available_functions = test_case_dict.get('available_functions', [])
-        actual_calls = [
-            tool_call
-            for message in messages
-            if 'tool_calls' in message
-            for tool_call in message['tool_calls']
-        ]
-        responses = test_case_dict.get('actual', {}).get('responses', [])
+        actual = test_case_dict.get('actual', {})
+        messages = actual.get('messages', [])
+        actual_calls = actual.get('function_calls', [])
+        responses = actual.get('responses', [])
 
         report.longrepr.addsection('Expected Calls', json.dumps(expected_calls, indent=4))
         report.longrepr.addsection('Actual Calls', json.dumps(actual_calls, indent=4))
@@ -141,7 +138,7 @@ def pytest_runtest_makereport(item, call):
         report.longrepr.addsection('Raw Responses', json.dumps(responses, indent=4))
 
     # Pre-process results for aggregate CSV report
-    model = item.funcargs.get('model', 'No model specified')
+    model = item.funcargs.get('model', 'N/A')
     result = "PASSED" if report.outcome == "passed" else "FAILED"
     run_result = {
         "test_id": test_id,
@@ -158,7 +155,7 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    csv_path = session.config.getoption("--aggregate-report-file")
+    csv_path = session.config.getoption("--aggregate-summary-file")
     aggregate_results = {}
     columns = ['test_id', 'categories', 'description', 'prompt']  # Default fields
     processed = set()  # Set to track processed test_id, model combinations
@@ -173,8 +170,12 @@ def pytest_sessionfinish(session, exitstatus):
                 aggregate_results[row['test_id']] = row
 
     # Update test_results with new data from the current session
+    json_report_path = None
     if hasattr(session.config, 'run_results'):
         for (nodeid, model), run_result in session.config.run_results.items():
+            if not json_report_path:
+                json_report_path = f"reports/{model}_benchmark_report.json"
+
             if model not in columns:
                 columns.append(model)  # Add new model to fieldnames if it's not already there
 
@@ -206,6 +207,11 @@ def pytest_sessionfinish(session, exitstatus):
 
             # Update the fraction in the CSV
             aggregate_results[simplified_test_id][model] = f"{passed}/{total_runs}"
+
+    # Write the model's benchmark report
+    if json_report_path:
+        plugin = session.config._json_report
+        plugin.save_report(json_report_path)
 
     # Write updated data back to CSV
     with open(csv_path, mode='w', newline='') as csvfile:

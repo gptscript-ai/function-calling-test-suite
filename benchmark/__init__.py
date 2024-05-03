@@ -1,1 +1,1 @@
-from .benchmark import FunctionDefinition, ExpectedFunctionCall, Actual, TestCase
+from .benchmark import FunctionDefinition, ExpectedFunctionCall, Actual, ActualFunctionCall, TestCase

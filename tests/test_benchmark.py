@@ -3,7 +3,7 @@ import time
 from typing import Optional, List
 from openai import OpenAI, Stream
 from openai.types.chat import ChatCompletion, ChatCompletionChunk
-from benchmark import TestCase, Actual
+from benchmark import TestCase, Actual, ActualFunctionCall
 from dataclasses import dataclass
 from collections import deque
 
@@ -78,6 +78,16 @@ You never respond with content.
             answers.append(message.content)
 
         tool_calls = deque(message.tool_calls or [])
+        for tool_call in tool_calls:
+            function_call = tool_call.function
+            if not function_call:
+                continue
+
+            test_case.actual.function_calls.append(ActualFunctionCall(
+                name=function_call.name,
+                arguments=json.loads(function_call.arguments)
+            ))
+
         assert len(tool_calls) <= len(expected_calls), f"Call {call_index}: Model returned more tool calls than expected"
 
         if len(expected_calls) == 0 or len(tool_calls) == 0:
@@ -219,7 +229,7 @@ def to_chat_completion(response: ChatCompletion | Stream[ChatCompletionChunk]) -
         model = model or chunk.model
         system_fingerprint = system_fingerprint or chunk.system_fingerprint
 
-        for choice in chunk.choices:
+        for choice in chunk.choices or []:
             if choice is None or choice.delta is None:
                 continue
 
@@ -275,13 +285,11 @@ def to_chat_completion(response: ChatCompletion | Stream[ChatCompletionChunk]) -
         choices[index]["message"]["tool_calls"] = [tool_calls[index][call_index] for call_index in
                                                    sorted(tool_calls[index].keys())]
 
-    completion = {
-        "id": id,
-        "created": int(time.time()),
-        "object": "chat.completion",
-        "model": model,
-        "choices": [choices[index] for index in sorted(choices.keys())],
-        "system_fingerprint": system_fingerprint
-    }
-
-    return ChatCompletion.model_validate(completion)
+    return ChatCompletion(
+        id=id,
+        created=int(time.time()),
+        object="chat.completion",
+        model=model,
+        choices=[choices[index] for index in sorted(choices.keys())] if choices is not None else [],
+        system_fingerprint=system_fingerprint
+    )
