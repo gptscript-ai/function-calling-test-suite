@@ -152,6 +152,39 @@ def generate_bar_charts(model_scores):
     fig.write_image("reports/aggregate_summary_bar.svg")
 
 
+def generate_pie_charts(model_scores):
+    for model, model_score in model_scores.items():
+        test_ids = []
+        failures = []
+        for test_id, test_case_score in model_score['test_case_scores'].items():
+            failed = test_case_score.get('failed', 0)
+            if failed > 0:
+                test_ids.append(test_id)
+                failures.append(failed)
+
+        if len(failures) < 1:
+            continue
+
+        fig = go.Figure(go.Pie(
+            labels=test_ids,
+            values=failures,
+            textposition='auto',
+            insidetextorientation='horizontal',
+            texttemplate="%{label} <br> %{value} (%{percent})",
+            # automargin=True,
+            showlegend=False,
+            hole=.8,
+        ))
+        fig.update_layout(
+            title_text=f"{model}",
+            uniformtext_minsize=13,
+            uniformtext_mode='hide',
+            template='plotly_dark'
+        )
+        fig.show()
+        fig.write_image(f"reports/{model}_failed_pie.svg")
+
+
 def plot_results(csv_path: str):
     df = pd.read_csv(csv_path, quotechar='"', delimiter=",")
 
@@ -166,14 +199,29 @@ def plot_results(csv_path: str):
             if model not in model_scores:
                 model_scores[model] = {
                     'total_score': {
+                        'runs': 0,
                         'passed': 0,
-                        'runs': 0
+                        'failed': 0
                     },
-                    'category_scores': {}
+                    'category_scores': {},
+                    'test_case_scores': {}
                 }
 
-            model_scores[model]['total_score']['passed'] += passed
+            # Add to total score
             model_scores[model]['total_score']['runs'] += runs
+            model_scores[model]['total_score']['passed'] += passed
+            model_scores[model]['total_score']['failed'] = model_scores[model]['total_score']['runs'] - \
+                                                           model_scores[model]['total_score']['passed']
+
+            # Set test case score
+            test_id = row.get('test_id', None)
+            if test_id and test_id not in model_scores[model]['test_case_scores']:
+                model_scores[model]['test_case_scores'][test_id] = {
+                    'runs': runs,
+                    'passed': passed,
+                    'failed': runs - passed,
+                }
+
 
             categories = row['categories'].split(' ')
             for category in categories:
@@ -204,6 +252,7 @@ def plot_results(csv_path: str):
     print(f"{json.dumps(model_scores, indent=4)}")
     generate_radar_plots(model_scores)
     generate_bar_charts(model_scores)
+    generate_pie_charts(model_scores)
 
 
 def main():
