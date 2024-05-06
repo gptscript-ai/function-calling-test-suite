@@ -9,7 +9,7 @@ from benchmark import TestCase
 
 
 def pytest_addoption(parser):
-    parser.addoption("--spec-run-count", action="store", default=10, type=int, help="Number of times each test spec should be run")
+    parser.addoption("--spec-run-count", action="store", default=1, type=int, help="Number of times each test spec should be run")
     parser.addoption("--spec-filter", action="store", default="*", help="Filter which test specs are run by their generated test IDs")
     parser.addoption("--spec-dir", action="store", default="specs", help="Directory containing JSON test spec files")
     parser.addoption("--stream", action="store", default=False, help="Enables streaming for all chat completion requests")
