@@ -5,7 +5,7 @@
             "chained",
             "negative"
         ],
-        "prompt": "Call funcA with 1, then call funcB with its result",
+        "prompt": "Call funcA with 1 and then call funcB with the result",
         "available_functions": [
             {
                 "name": "funcA",

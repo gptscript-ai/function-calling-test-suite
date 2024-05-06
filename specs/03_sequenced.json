@@ -4,7 +4,7 @@
     "categories": [
       "sequenced"
     ],
-    "prompt": "Call funcA with 1 and wait for the result, then call funcB with 2, then return the results for both",
+    "prompt": "Call funcA with 1, then call funcB with 2, then respond with the results of both calls",
     "available_functions": [
       {
         "name": "funcA",

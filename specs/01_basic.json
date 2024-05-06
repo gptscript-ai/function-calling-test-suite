@@ -4,7 +4,7 @@
     "categories": [
       "basic"
     ],
-    "prompt": "Call funcA with 1 and respond with the result",
+    "prompt": "Call funcA with 1 and respond with the result of the call",
     "available_functions": [
       {
         "name": "funcA",
@@ -36,7 +36,7 @@
     "categories": [
       "basic"
     ],
-    "prompt": "Call funcA with 1, 2, 3, 4, 5 and respond with the result",
+    "prompt": "Call funcA with 1, 2, 3, 4, 5 and respond with the result of the call",
     "available_functions": [
       {
         "name": "funcA",

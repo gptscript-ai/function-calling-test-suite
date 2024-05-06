@@ -4,7 +4,7 @@
         "categories": [
             "chained"
         ],
-        "prompt": "Call funcA with 1, then funcB with the result, the return the result of calling funcB",
+        "prompt": "Call funcA with 1, then funcB with the result, then return the result of calling funcB",
         "available_functions": [
             {
                 "name": "funcA",
@@ -138,7 +138,7 @@
             "chained",
             "grouped"
         ],
-        "prompt": "Call funcA with 1 and funcB with 2, then call funcC with their results. Wait for the result of funcC, then call funcD with 3 and funcE with 4, then call funcF with their result and finally call funcG with the result of funcC and funcF",
+        "prompt": "Call funcA with 1 and funcB with 2, then call funcC with their results. Next call funcD with 3 and funcE with 4, then call funcF with their result. Finally call funcG with the result of funcC and funcF",
         "available_functions": [
             {
                 "name": "funcA",

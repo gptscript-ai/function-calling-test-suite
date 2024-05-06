@@ -5,7 +5,7 @@
       "sequenced",
       "negative"
     ],
-    "prompt": "Call funcA with 1 and wait for the result, then call funcB with 'foo'",
+    "prompt": "Call funcA with 1, then call funcB with 'foo'",
     "available_functions": [
       {
         "name": "funcA",
