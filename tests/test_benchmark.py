@@ -30,16 +30,21 @@ def test_benchmark(
         messages.append({
             "role": "system",
             "content": """
-Make the necessary tool calls to execute the available functions in the order specified by the given prompt as correctly and efficiently as possible.
-You never explain yourself or provide additional commentary.
-You never respond with content.
+            You are task oriented system.
+            You receive input from a user, process the input from the given instructions, and then output the result.
+            Your objective is to provide consistent and correct results.
+            You do not need to explain the steps taken, only provide the result to the given instructions.
+            You are referred to as a tool.
+            You don't move to the next step until you have a result.
+            
+            Find all *.go files and count the lines of code in each file, add the result and print it
 """.replace("\n", "")
         })
 
-    messages.append({
-        "role": "user",
-        "content": test_case.prompt,
-    })
+    # messages.append({
+    #     "role": "user",
+    #     "content": test_case.prompt,
+    # })
 
     test_case.actual = Actual(
         tools=tools,
@@ -58,7 +63,7 @@ You never respond with content.
             messages=messages,
             model=model,
             tools=tools,
-            tool_choice="auto",
+            # tool_choice="auto",
             temperature=0,
             stream=stream,
             n=1,
