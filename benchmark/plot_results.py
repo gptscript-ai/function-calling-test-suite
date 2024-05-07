@@ -156,11 +156,14 @@ def generate_pie_charts(model_scores):
     for model, model_score in model_scores.items():
         test_ids = []
         failures = []
+        test_categories = []
+
         for test_id, test_case_score in model_score['test_case_scores'].items():
             failed = test_case_score.get('failed', 0)
             if failed > 0:
                 test_ids.append(test_id)
                 failures.append(failed)
+                test_categories.append(f"{', '.join(test_case_score['categories'])}")
 
         if len(failures) < 1:
             continue
@@ -170,17 +173,42 @@ def generate_pie_charts(model_scores):
             values=failures,
             textposition='auto',
             insidetextorientation='horizontal',
-            texttemplate="%{label} <br> %{value} (%{percent})",
-            # automargin=True,
+            text=test_categories,
+            texttemplate='%{label}<br>%{text}<br>%{percent} (%{value})',
             showlegend=False,
-            hole=.8,
+            hole=.8
         ))
+
+        total_failed = model_score['total_score']['failed']
+        total_runs = model_score['total_score']['runs']
+        total_fail_rate = '{0:.2f}'.format(100 * (total_failed/total_runs))
+
+        fig.add_annotation(
+            x=0.5,
+            y=0.5,
+            text=f"Failed/Runs: {total_failed}/{total_runs} ({total_fail_rate}%)",
+            align='center',
+            xref='paper',
+            yref='paper'
+        )
+
         fig.update_layout(
             title_text=f"{model}",
+            annotations=[{
+                'x': 0.5,
+                'y': 0.5,
+                'xref': 'paper',
+                'yref': 'paper',
+                'showarrow': False,
+                "font": {
+                    "size": 20
+                }
+            }],
             uniformtext_minsize=13,
             uniformtext_mode='hide',
             template='plotly_dark'
         )
+
         fig.show()
         fig.write_image(f"reports/{model}_failed_pie.svg")
 
@@ -215,15 +243,15 @@ def plot_results(csv_path: str):
 
             # Set test case score
             test_id = row.get('test_id', None)
+            categories = row['categories'].split(', ')
             if test_id and test_id not in model_scores[model]['test_case_scores']:
                 model_scores[model]['test_case_scores'][test_id] = {
+                    'categories': categories,
                     'runs': runs,
                     'passed': passed,
                     'failed': runs - passed,
                 }
 
-
-            categories = row['categories'].split(' ')
             for category in categories:
                 if category not in model_scores[model]['category_scores']:
                     model_scores[model]['category_scores'][category] = {
