@@ -284,5 +284,92 @@
             }
         ],
         "final_answer_should": "The answer should indicate that weather conditions on the current date for Atlantic City, NJ are Sunny, 75 degrees, and hot. The answer can additionally indicate a single date of 2024-05-18, but no other specific dates may be mentioned"
+    },
+    {
+        "description": "Asserts that the model can use the results of a group of function calls as arguments for successive groups of function calls and conveys the result to the user",
+        "categories": [
+            "chained",
+            "grouped"
+        ],
+        "prompt": "Find all *.py files and count the lines of code in each file, add the result and print it",
+        "available_functions": [
+            {
+                "name": "findFiles",
+                "description": "Traverse the current directory looking for files that match a pattern in the style of the unix find command",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "pattern": {
+                            "type": "string",
+                            "description": "The file pattern to look for. The pattern is a traditional unix glob format with * matching any character and ? matching a single character"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "count",
+                "description": "Count the lines of code",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "file": {
+                            "type": "string",
+                            "description": "The file to read and count"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "add",
+                "description": "Sum a bunch of numbers",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "nums": {
+                            "type": "string",
+                            "description": "A comma separated list of numbers"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "findFiles",
+                "arguments": {
+                    "pattern": "*.py"
+                },
+                "result": "data_processor_01.py\ndata_scraper_02.py\nmachine_learning_model_03.py\napi_connector_04.py\nfile_handler_05.py\nimage_analyzer_06.py\nsecurity_checker_07.py\ndatabase_manager_08.py\nuser_interface_09.py\nnetwork_simulator_10.py\nemail_parser_11.py\nlog_analyzer_12.py\npayment_gateway_13.py\ncrypto_miner_14.py\ntraffic_monitor_15.py\ndocument_classifier_16.py\nrecipe_generator_17.py\nchatbot_engine_18.py\nstock_predictor_19.py\nweather_forecaster_20.py\ntravel_planner_21.py\nfitness_tracker_22.py\nvideo_editor_23.py\nmusic_composer_24.py\nevent_scheduler_25.py\nhardware_controller_26.py\nsurvey_analyzer_27.py\norder_tracker_28.py\nreservation_system_29.py\nad_manager_30.py\nseo_optimizer_31.py\nbug_tracker_32.py\nproject_manager_33.py\ncontent_aggregator_34.py\ngame_engine_35.py\nphoto_filter_36.py\nnews_collector_37.py\nhealth_monitor_38.py\ntask_manager_39.py\ncoupon_generator_40.py\nshipping_calculator_41.py\nvirtual_assistant_42.py\nalarm_system_43.py\ntime_tracker_44.py\ninvestment_analyzer_45.py\ndiet_planner_46.py\npet_care_47.py\nlibrary_system_48.py\nauction_tool_49.py\nsession_logger_50.py\nuser_authenticator_51.py\nproduct_recommender_52.py\nvirtual_tour_53.py\nlearning_management_54.py\npoll_creator_55.py\nfeedback_collector_56.py\nmemes_generator_57.py\ntutorial_builder_58.py\nsports_analyzer_59.py\npersonal_finance_60.py\nquiz_engine_61.py\nremote_control_62.py\nblockchain_viewer_63.py\napp_installer_64.py\nlanguage_translator_65.py\ncoupon_verifier_66.py\nmusic_library_67.py\nvideo_streamer_68.py\nhome_automation_69.py\nfriend_finder_70.py\nenergy_manager_71.py\ncustomer_support_72.py\ninventory_manager_73.py\ndisaster_alert_74.py\ncode_compiler_75.py\nwedding_planner_76.py\ncareer_advisor_77.py\nticket_system_78.py\nvehicle_tracker_79.py\nworkout_builder_80.py\nessay_helper_81.py\nmeeting_organizer_82.py\nexpense_tracker_83.py\nacademic_research_84.py\nlife_coach_85.py\nmusic_practice_86.py\nart_gallery_87.py\nfood_delivery_88.py\nhomework_reminder_89.py\ncloud_sync_90.py\npet_finder_91.py\njob_searcher_92.py\nconference_helper_93.py\nrental_service_94.py\nmeal_planner_95.py\ntravel_advisor_96.py\nstudy_buddy_97.py\nparental_control_98.py\nvirtual_decorator_99.py\nsmart_alarm_100.py\""
+            },
+            {
+                "name": "count",
+                "arguments": {
+                    "file": "foo.py"
+                },
+                "result": "5"
+            },
+            {
+                "name": "count",
+                "arguments": {
+                    "file": "bar.py"
+                },
+                "result": "6"
+            },
+            {
+                "name": "count",
+                "arguments": {
+                    "file": "baz.py"
+                },
+                "result": "4"
+            },
+            {
+                "name": "add",
+                "arguments": {
+                    "nums": "5,6,4"
+                },
+                "result": "15"
+            }
+        ],
+        "final_answer_should": "The answer should indicate that the total number of lines is 15"
     }
 ]
