@@ -36,6 +36,7 @@ class TestCase(BaseModel):
     description: Optional[str] = None
     categories: Set[str]
 
+    system_prompt: Optional[str] = None
     prompt: str
     available_functions: List[FunctionDefinition]
     expected_function_calls: List[ExpectedFunctionCall]

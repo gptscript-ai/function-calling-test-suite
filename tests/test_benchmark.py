@@ -26,7 +26,12 @@ def test_benchmark(
         })
 
     messages = []
-    if use_system_prompt:
+    if test_case.system_prompt:
+        messages.append({
+            "role": "system",
+            "content": test_case.system_prompt,
+        })
+    elif use_system_prompt:
         messages.append({
             "role": "system",
             "content": """
@@ -263,7 +268,6 @@ def to_chat_completion(response: ChatCompletion | Stream[ChatCompletionChunk]) -
                     name = response_call.function.name or ""
 
                 if response_call.index not in tool_calls[choice.index]:
-
                     tool_calls[choice.index][response_call.index] = {
                         "id": response_call.id,
                         "type": response_call.type,
