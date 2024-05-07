@@ -28,7 +28,7 @@ class Actual(BaseModel):
     function_calls: Optional[List[ActualFunctionCall]] = []
     responses: Optional[List[Dict[str, Any]]] = []
     answers: Optional[List[str]] = []
-    judgment: Optional[str] = None
+    judge_ruling: Optional[str] = None
 
 class TestCase(BaseModel):
     __test__ = False

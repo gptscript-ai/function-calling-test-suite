@@ -127,7 +127,7 @@ You never respond with content.
         final_answer = '\n'.join(answers)
         correct, reasoning = judge_final_answer(judge_client, stream, final_answer, test_case.final_answer_should)
         test_case.actual.answers = answers
-        test_case.actual.judgment = reasoning
+        test_case.actual.judge_ruling = reasoning
 
         assert correct, f"Model's final answer ruled incorrect by judge: \"{reasoning}\""
 
@@ -169,7 +169,7 @@ Determine if `final_answer` completely satisfies the constraints described by `f
 After making a determination, respond with a JSON object that conforms to the following JSONSchema:
 
 {
-    "name": "judgment",
+    "name": "ruling",
     "type": "object",
     "properties": {
         "correct": {
@@ -202,10 +202,10 @@ Your responses are concise and include only the json object described above.
 
     judge_completion = to_chat_completion(judge_response)
     judge_message = judge_completion.choices[0].message.content
-    judgment = json.loads(judge_message)
+    judge_ruling = json.loads(judge_message)
 
     try:
-        return judgment['correct'], judgment['reasoning']
+        return judge_ruling['correct'], judge_ruling['reasoning']
     except KeyError as e:
         raise ValueError(f"Failed to judge final answer. Judge response missing key: {e}")
 

@@ -117,10 +117,10 @@ def pytest_runtest_makereport(item, call):
 
         report.longrepr.addsection('Prompt', test_case.prompt)
 
-        if test_case.actual.judgment:
+        if test_case.actual.judge_ruling:
             report.longrepr.addsection('Expected Answer', test_case.final_answer_should)
             report.longrepr.addsection('Actual Answer', '. '.join(test_case.actual.answers))
-            report.longrepr.addsection('Judge Ruling', test_case.actual.judgment)
+            report.longrepr.addsection('Judge Ruling', test_case.actual.judge_ruling)
 
         test_case_dict = item.test_case.model_dump(mode='json')
 
@@ -142,9 +142,9 @@ def pytest_runtest_makereport(item, call):
     result = "PASSED" if report.outcome == "passed" else "FAILED"
     run_result = {
         "test_id": test_id,
-        "categories": " ".join(test_case.categories),
-        "description": getattr(test_case, 'description', 'No description'),
-        "prompt": getattr(test_case, 'prompt', 'No prompt'),
+        "categories": test_case.categories,
+        "description": getattr(test_case, 'description', 'N/A'),
+        "prompt": getattr(test_case, 'prompt', 'N/A'),
         "result": result,
         "model": model,
     }
