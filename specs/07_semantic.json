@@ -398,7 +398,7 @@
             "chained",
             "semantic"
         ],
-        "prompt": "Retrieve the list of potential sales leads and for each add them to our system.",
+        "prompt": "Retrieve the list of potential sales leads and for each add them to our system. Then, for each send an initial contact email. Then, for each assign a sales rep",
         "available_functions": [
             {
                 "name": "sales_leads",
@@ -421,6 +421,36 @@
                         "name": {
                             "type": "string",
                             "description": "The name of the contact to add to our system"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "send_initial_email",
+                "description": "Send an initial contact email to the specified contact.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string",
+                            "description": "The email address to add to our system"
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the contact to add to our system"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "assign_sales_rep",
+                "description": "Assign a sales rep to the contact specified by the email.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string",
+                            "description": "The email address to add to our system"
                         }
                     }
                 }
