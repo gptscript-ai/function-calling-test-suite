@@ -76,7 +76,7 @@ You never respond with content.
 
         choice = choices[0]
         message = choice.message
-        assert message.role == "assistant", f"Call {call_index}: Model returned unexpected role"
+        assert message.role == "assistant", f"Call {call_index}: Model returned unexpected role: {message.role}"
 
         messages.append(message.model_dump(mode='json', exclude_unset=True, exclude_none=True))
         if message.content:
@@ -111,7 +111,7 @@ You never respond with content.
                 break
 
             assert tool_call.id != "", f"Call {call_index}: Model returned a tool call without a call id"
-            assert tool_call.function.name == expected_call.name, f"Call {call_index}: Model returned a tool call with an unexpected function name"
+            assert tool_call.function.name == expected_call.name, f"Call {call_index}: Model returned a tool call with an unexpected function name: {tool_call.function.name}"
             assert json.loads(tool_call.function.arguments) == expected_call.arguments, f"Call {call_index}: Model returned a tool call with unexpected arguments"
 
             messages.append({
