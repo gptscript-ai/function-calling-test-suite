@@ -270,7 +270,7 @@ def to_chat_completion(response: ChatCompletion | Stream[ChatCompletionChunk]) -
                 if response_call.index not in tool_calls[choice.index]:
                     tool_calls[choice.index][response_call.index] = {
                         "id": response_call.id,
-                        "type": response_call.type,
+                        "type": "function",
                         "function": {
                             "arguments": arguments,
                             "name": name,
