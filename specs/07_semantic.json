@@ -391,5 +391,86 @@
         }
     ],
     "final_answer_should": "The answer should indicate that the task was completed successfully."
-}
+},
+    {
+        "description": "Asserts that the model can parse a large csv style response and make subsequent calls for each row in the csv",
+        "categories": [
+            "chained",
+            "semantic"
+        ],
+        "prompt": "Retrieve the list of potential sales leads and for each add them to our system.",
+        "available_functions": [
+            {
+                "name": "sales_leads",
+                "description": "Returns a list of potential sales leads",
+                "parameters": {
+                    "type": "object",
+                    "properties": {}
+                }
+            },
+            {
+                "name": "add_to_system",
+                "description": "Add the contact to our system.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string",
+                            "description": "The email address to add to our system"
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the contact to add to our system"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "sales_leads",
+                "arguments": {},
+                "result": "John Doe,johndoe@example.com\nJane Smith,janesmith@example.com\nAlice Johnson,alicej@example.com\nBob Brown,bobb@example.com\nChris Green,chrisg@example.com\nNancy White,nancyw@example.com\nDavid Hill,davidh@example.com\nSara Miller,saram@example.com\nMike Wilson,mikew@example.com\nCarla Gomez,carlag@example.com\nLucas Martin,lucasm@example.com\nEva Brown,evab@example.com\nOscar Davis,oscars@example.com\nGrace Lee,gracel@example.com\nSamuel White,samuelw@example.com\nLinda Black,lindab@example.com\nGeorge King,georgek@example.com\nEmma Scott,emmas@example.com\nJames Taylor,jamest@example.com\nSophia Hill,sophiah@example.com\nBenjamin Clark,benjaminc@example.com\nMia Turner,miaT@example.com\nMason Lewis,masonl@example.com\nChloe King,chloek@example.com\nEthan Hall,ethanh@example.com\nIsabella Scott,isabellas@example.com\nNoah Allen,noaha@example.com\nAmelia Carter,ameliac@example.com\nWilliam Moore,williamm@example.com\nOlivia Lee,olivial@example.com\nLiam Wilson,liamw@example.com\nEmily Jones,emilyj@example.com\nJacob White,jacobw@example.com\nAva Perez,avap@example.com\nMichael Brown,michaelb@example.com\nHarper Garcia,harpert@example.com\nDaniel Davis,danield@example.com\nElla Martin,ellam@example.com\nAiden Lee,aidenl@example.com\nCharlotte Green,charlotteg@example.com\nMatthew Thomas,matthewt@example.com\nAbigail Lopez,abigaill@example.com\nHenry Harris,henryh@example.com\nElizabeth Lewis,elizabethl@example.com\nLogan Clark,loganc@example.com\nMadison Nelson,madisonn@example.com\nAlexander Young,alexandery@example.com\nEleanor Walker,eleanorw@example.com\nRyan Taylor,ryant@example.com\nZoe Robinson,zoer@example.com\nJohn Doe,johndoe@example.com\nJane Smith,janesmith@example.com\nAlice Johnson,alicej@example.com\nBob Brown,bobb@example.com\nChris Green,chrisg@example.com\nNancy White,nancyw@example.com\nDavid Hill,davidh@example.com\nSara Miller,saram@example.com\nMike Wilson,mikew@example.com\nCarla Gomez,carlag@example.com\nLucas Martin,lucasm@example.com\nEva Brown,evab@example.com\nOscar Davis,oscars@example.com\nGrace Lee,gracel@example.com\nSamuel White,samuelw@example.com\nLinda Black,lindab@example.com\nGeorge King,georgek@example.com\nEmma Scott,emmas@example.com\nJames Taylor,jamest@example.com\nSophia Hill,sophiah@example.com\nBenjamin Clark,benjaminc@example.com\nMia Turner,miaT@example.com\nMason Lewis,masonl@example.com\nChloe King,chloek@example.com\nEthan Hall,ethanh@example.com\nIsabella Scott,isabellas@example.com\nNoah Allen,noaha@example.com\nAmelia Carter,ameliac@example.com\nWilliam Moore,williamm@example.com\nOlivia Lee,olivial@example.com\nLiam Wilson,liamw@example.com\nEmily Jones,emilyj@example.com\nJacob White,jacobw@example.com\nAva Perez,avap@example.com\nMichael Brown,michaelb@example.com\nHarper Garcia,harpert@example.com\nDaniel Davis,danield@example.com\nElla Martin,ellam@example.com\nAiden Lee,aidenl@example.com\nCharlotte Green,charlotteg@example.com\nMatthew Thomas,matthewt@example.com\nAbigail Lopez,abigaill@example.com\nHenry Harris,henryh@example.com\nElizabeth Lewis,elizabethl@example.com\nLogan Clark,loganc@example.com\nMadison Nelson,madisonn@example.com\nAlexander Young,alexandery@example.com\nEleanor Walker,eleanorw@example.com\nRyan Taylor,ryant@example.com\nZoe Robinson,zoer@example.com\nJohn Doe,johndoe@example.com\nJane Smith,janesmith@example.com\nAlice Johnson,alicej@example.com\nBob Brown,bobb@example.com\nChris Green,chrisg@example.com\nNancy White,nancyw@example.com\nDavid Hill,davidh@example.com\nSara Miller,saram@example.com\nMike Wilson,mikew@example.com\nCarla Gomez,carlag@example.com\nLucas Martin,lucasm@example.com\nEva Brown,evab@example.com\nOscar Davis,oscars@example.com\nGrace Lee,gracel@example.com\nSamuel White,samuelw@example.com\nLinda Black,lindab@example.com\nGeorge King,georgek@example.com\nEmma Scott,emmas@example.com\nJames Taylor,jamest@example.com\nSophia Hill,sophiah@example.com\nBenjamin Clark,benjaminc@example.com\nMia Turner,miaT@example.com\nMason Lewis,masonl@example.com\nChloe King,chloek@example.com\nEthan Hall,ethanh@example.com\nIsabella Scott,isabellas@example.com\nNoah Allen,noaha@example.com\nAmelia Carter,ameliac@example.com\nWilliam Moore,williamm@example.com\nOlivia Lee,olivial@example.com\nLiam Wilson,liamw@example.com\nEmily Jones,emilyj@example.com\nJacob White,jacobw@example.com\nAva Perez,avap@example.com\nMichael Brown,michaelb@example.com\nHarper Garcia,harpert@example.com\nDaniel Davis,danield@example.com\nElla Martin,ellam@example.com\nAiden Lee,aidenl@example.com\nCharlotte Green,charlotteg@example.com\nMatthew Thomas,matthewt@example.com\nAbigail Lopez,abigaill@example.com\nHenry Harris,henryh@example.com\nElizabeth Lewis,elizabethl@example.com\nLogan Clark,loganc@example.com\nMadison Nelson,madisonn@example.com\nAlexander Young,alexandery@example.com\nEleanor Walker,eleanorw@example.com\nRyan Taylor,ryant@example.com\nZoe Robinson,zoer@example.com\nJohn Doe,johndoe@example.com\nJane Smith,janesmith@example.com\nAlice Johnson,alicej@example.com\nBob Brown,bobb@example.com\nChris Green,chrisg@example.com\nNancy White,nancyw@example.com\nDavid Hill,davidh@example.com\nSara Miller,saram@example.com\nMike Wilson,mikew@example.com\nCarla Gomez,carlag@example.com\nLucas Martin,lucasm@example.com\nEva Brown,evab@example.com\nOscar Davis,oscars@example.com\nGrace Lee,gracel@example.com\nSamuel White,samuelw@example.com\nLinda Black,lindab@example.com\nGeorge King,georgek@example.com\nEmma Scott,emmas@example.com\nJames Taylor,jamest@example.com\nSophia Hill,sophiah@example.com\nBenjamin Clark,benjaminc@example.com\nMia Turner,miaT@example.com\nMason Lewis,masonl@example.com\nChloe King,chloek@example.com\nEthan Hall,ethanh@example.com\nIsabella Scott,isabellas@example.com\nNoah Allen,noaha@example.com\nAmelia Carter,ameliac@example.com\nWilliam Moore,williamm@example.com\nOlivia Lee,olivial@example.com\nLiam Wilson,liamw@example.com\nEmily Jones,emilyj@example.com\nJacob White,jacobw@example.com\nAva Perez,avap@example.com\nMichael Brown,michaelb@example.com\nHarper Garcia,harpert@example.com\nDaniel Davis,danield@example.com\nElla Martin,ellam@example.com\nAiden Lee,aidenl@example.com\nCharlotte Green,charlotteg@example.com\nMatthew Thomas,matthewt@example.com\nAbigail Lopez,abigaill@example.com\nHenry Harris,henryh@example.com\nElizabeth Lewis,elizabethl@example.com\nLogan Clark,loganc@example.com\nMadison Nelson,madisonn@example.com\nAlexander Young,alexandery@example.com\nEleanor Walker,eleanorw@example.com\nRyan Taylor,ryant@example.com\nZoe Robinson,zoer@example.com\nJohn Doe,johndoe@example.com\nJane Smith,janesmith@example.com\nAlice Johnson,alicej@example.com\nBob Brown,bobb@example.com\nChris Green,chrisg@example.com\nNancy White,nancyw@example.com\nDavid Hill,davidh@example.com\nSara Miller,saram@example.com\nMike Wilson,mikew@example.com\nCarla Gomez,carlag@example.com\nLucas Martin,lucasm@example.com\nEva Brown,evab@example.com\nOscar Davis,oscars@example.com\nGrace Lee,gracel@example.com\nSamuel White,samuelw@example.com\nLinda Black,lindab@example.com\nGeorge King,georgek@example.com\nEmma Scott,emmas@example.com\nJames Taylor,jamest@example.com\nSophia Hill,sophiah@example.com\nBenjamin Clark,benjaminc@example.com\nMia Turner,miaT@example.com\nMason Lewis,masonl@example.com\nChloe King,chloek@example.com\nEthan Hall,ethanh@example.com\nIsabella Scott,isabellas@example.com\nNoah Allen,noaha@example.com\nAmelia Carter,ameliac@example.com\nWilliam Moore,williamm@example.com\nOlivia Lee,olivial@example.com\nLiam Wilson,liamw@example.com\nEmily Jones,emilyj@example.com\nJacob White,jacobw@example.com\nAva Perez,avap@example.com\nMichael Brown,michaelb@example.com\nHarper Garcia,harpert@example.com\nDaniel Davis,danield@example.com\nElla Martin,ellam@example.com\nAiden Lee,aidenl@example.com\nCharlotte Green,charlotteg@example.com\nMatthew Thomas,matthewt@example.com\nAbigail Lopez,abigaill@example.com\nHenry Harris,henryh@example.com\nElizabeth Lewis,elizabethl@example.com\nLogan Clark,loganc@example.com\nMadison Nelson,madisonn@example.com\nAlexander Young,alexandery@example.com\nEleanor Walker,eleanorw@example.com\nRyan Taylor,ryant@example.com\nZoe Robinson,zoer@example.com\nJohn Doe,johndoe@example.com\nJane Smith,janesmith@example.com\nAlice Johnson,alicej@example.com\nBob Brown,bobb@example.com\nChris Green,chrisg@example.com\nNancy White,nancyw@example.com\nDavid Hill,davidh@example.com\nSara Miller,saram@example.com\nMike Wilson,mikew@example.com\nCarla Gomez,carlag@example.com\nLucas Martin,lucasm@example.com\nEva Brown,evab@example.com\nOscar Davis,oscars@example.com\nGrace Lee,gracel@example.com\nSamuel White,samuelw@example.com\nLinda Black,lindab@example.com\nGeorge King,georgek@example.com\nEmma Scott,emmas@example.com\nJames Taylor,jamest@example.com\nSophia Hill,sophiah@example.com\nBenjamin Clark,benjaminc@example.com\nMia Turner,miaT@example.com\nMason Lewis,masonl@example.com\nChloe King,chloek@example.com\nEthan Hall,ethanh@example.com\nIsabella Scott,isabellas@example.com\nNoah Allen,noaha@example.com\nAmelia Carter,ameliac@example.com\nWilliam Moore,williamm@example.com\nOlivia Lee,olivial@example.com\nLiam Wilson,liamw@example.com\nEmily Jones,emilyj@example.com\nJacob White,jacobw@example.com\nAva Perez,avap@example.com\nMichael Brown,michaelb@example.com\nHarper Garcia,harpert@example.com\nDaniel Davis,danield@example.com\nElla Martin,ellam@example.com\nAiden Lee,aidenl@example.com\nCharlotte Green,charlotteg@example.com\nMatthew Thomas,matthewt@example.com\nAbigail Lopez,abigaill@example.com\nHenry Harris,henryh@example.com\nElizabeth Lewis,elizabethl@example.com\nLogan Clark,loganc@example.com\nMadison Nelson,madisonn@example.com\nAlexander Young,alexandery@example.com\nEleanor Walker,eleanorw@example.com\nRyan Taylor,ryant@example.com\nZoe Robinson,zoer@example.com"
+            },
+            {
+                "name": "add_to_system",
+                "arguments": {
+                    "email": "johndoe@example.com",
+                    "name": "John Doe"
+                },
+                "result": ""
+            },
+            {
+                "name": "check_in_system",
+                "arguments": {
+                    "email": "jsmith@companyy.com"
+                },
+                "result": "false"
+            },
+            {
+                "name": "add_to_system",
+                "arguments": {
+                    "email": "jsmith@companyy.com",
+                    "name": "Jane Smith"
+                },
+                "result": ""
+            },
+            {
+                "name": "check_in_system",
+                "arguments": {
+                    "email": "jjackson@companyz.com"
+                },
+                "result": "false"
+            },
+            {
+                "name": "add_to_system",
+                "arguments": {
+                    "email": "jjackson@companyz.com",
+                    "name": "Joe Jackson"
+                },
+                "result": ""
+            }
+        ],
+        "final_answer_should": "The answer should indicate that the operation was completed."
+    }
 ]
