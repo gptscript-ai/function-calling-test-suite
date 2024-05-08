@@ -284,5 +284,112 @@
             }
         ],
         "final_answer_should": "The answer should indicate that weather conditions on the current date for Atlantic City, NJ are Sunny, 75 degrees, and hot. The answer can additionally indicate a single date of 2024-05-18, but no other specific dates may be mentioned"
-    }
+    },
+    {
+    "description": "Asserts that the model can interpret and execute a complex series of chained steps related to creating a database and creating entries in it.",
+    "categories": [
+        "chained",
+        "semantic"
+    ],
+    "prompt": "Perform the following actions in order. Do not move on to the next step until you've completed the previous.\n\n1. Start the database.\n2. Create a collection called `headlines` in the database.\n3. Read the file headlines.md\n4. Write each headline into the database collection that you created earlier called `headlines`. Write each one using a separate call to the  database_create_entry tool.",
+    "available_functions": [
+        {
+            "name": "database_start",
+            "description": "Starts the database",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        },
+        {
+            "name": "database_create_collection",
+            "description": "Create a collection in the database",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "collection": {
+                        "type": "string",
+                        "description": "The name of the collection"
+                    }
+                }
+            }
+        },
+        {
+            "name": "database_create_entry",
+            "description": "Create an entry in the specified collection in the database",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "collectionName": {
+                        "type": "string",
+                        "description": "The name of the collection to add the entry to"
+                    },
+                    "entryValue": {
+                        "type": "string",
+                        "description": "The entry to insert into the collection"
+                    }
+                }
+            }
+        },
+        {
+            "name": "read_file",
+            "description": "Reads the contents of a file",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "filename": {
+                        "type": "string",
+                        "description": "The name of the file to read"
+                    }
+                }
+            }
+        }
+    ],
+    "expected_function_calls": [
+        {
+            "name": "database_start",
+            "arguments": {},
+            "result": ""
+        },
+        {
+            "name": "database_create_collection",
+            "arguments": {
+                "collection": "headlines"
+            },
+            "result": ""
+        },
+        {
+            "name": "read_file",
+            "arguments": {
+                "filename": "headlines.md"
+            },
+            "result": "Lighting the Way: Thomas Edison Patents the Electric Light Bulb in 1879\nBreaking Barriers: The Wright Brothers Achieve First Powered Flight in 1903\nConnecting the World: Alexander Graham Bell Invents the Telephone in 1876"
+        },
+        {
+            "name": "database_create_entry",
+            "arguments": {
+                "collectionName": "headlines",
+                "entryValue": "Lighting the Way: Thomas Edison Patents the Electric Light Bulb in 1879"
+            },
+            "result": ""
+        },
+        {
+            "name": "database_create_entry",
+            "arguments": {
+                "collectionName": "headlines",
+                "entryValue": "Breaking Barriers: The Wright Brothers Achieve First Powered Flight in 1903"
+            },
+            "result": ""
+        },
+        {
+            "name": "database_create_entry",
+            "arguments": {
+                "collectionName": "headlines",
+                "entryValue": "Connecting the World: Alexander Graham Bell Invents the Telephone in 1876"
+            },
+            "result": ""
+        }
+    ],
+    "final_answer_should": "The answer should indicate that the task was completed successfully."
+}
 ]
