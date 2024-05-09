@@ -170,7 +170,7 @@
                     "properties": {
                         "weather": {
                             "type": "string",
-                            "description": "The weather conditions to assess, e.g. Cloudy, 40 degrees"
+                            "description": "The weather conditions to assess, e.g. 'Cloudy, 40 degrees'"
                         }
                     },
                     "required": [
@@ -250,7 +250,7 @@
                     "properties": {
                         "weather_conditions": {
                             "type": "string",
-                            "description": "The weather conditions to assess, e.g. Cloudy, 40 degrees"
+                            "description": "The weather conditions to assess, e.g. 'Cloudy, 40 degrees'"
                         }
                     },
                     "required": [
