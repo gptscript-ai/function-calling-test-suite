@@ -74,7 +74,7 @@ def load_test_cases(spec_run_count: int, spec_filter: str, spec_dir: str, reques
                 if not fnmatch.fnmatch(test_id, spec_filter):
                     continue
 
-                test_case = TestCase.model_validate(item)
+                test_case = TestCase.parse_json(item)
                 for run in range(spec_run_count):
                     suite_test_cases.append((f"{test_id}-{run}", request_delay, stream, use_system_prompt, test_case.model_copy(deep=True)))
 
