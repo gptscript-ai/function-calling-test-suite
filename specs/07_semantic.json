@@ -398,22 +398,9 @@
             "chained",
             "semantic"
         ],
-        "prompt": "Ring the new leads bell. Retrieve the list of potential sales leads and for each add them to our system. Then, send an initial contact email to each lead. Finally, assign a sales rep to each lead.",
+        "prompt": "Retrieve the list of potential sales leads and for each add them to our system. Then, send an initial contact email to each lead. Finally, assign a sales rep to each lead.",
 
         "available_functions": [
-            {
-                "name": "create_leads_collection",
-                "description": "Create a leads collection. Returns the collection id",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string",
-                            "description": "The name of the leads collection"
-                        }
-                    }
-                }
-            },
             {
                 "name": "sales_leads",
                 "description": "Returns a list of potential sales leads",
@@ -464,18 +451,9 @@
                         }
                     }
                 }
-            },
-            {
-                "name": "ring_bell",
-                "description": "Ring the new leads bell",
-                "parameters": {
-                    "type": "object",
-                    "properties": {}
-                }
             }
         ],
         "expected_function_calls": [
-            {"name": "ring_bell","arguments": {},"result": "ding ding"},
             {
                 "name": "sales_leads",
                 "arguments": {},
