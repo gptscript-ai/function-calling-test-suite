@@ -398,17 +398,9 @@
             "chained",
             "semantic"
         ],
-        "prompt": "perform the following steps in order:\n 1. Start the sales system\n 2. Create a leads collection named `new leads` and remember the id for future steps. \n 3. Retrieve the list of potential sales leads\n4. For each add them to our system.\n5. For each send an initial contact email.\n6. For each assign a sales rep",
+        "prompt": "perform the following steps in order:\n1. Create a leads collection named `new leads` and remember the id for future steps.\n2. Retrieve the list of potential sales leads\n3. For each add them to our system.\n4. For each send an initial contact email.\n5. For each assign a sales rep\n6.Ring the new leads bell",
 
         "available_functions": [
-            {
-                "name": "start_sales_system",
-                "description": "Start the sales system",
-                "parameters": {
-                    "type": "object",
-                    "properties": {}
-                }
-            },
             {
                 "name": "create_leads_collection",
                 "description": "Create a leads collection. Returns the collection id",
@@ -476,10 +468,17 @@
                         }
                     }
                 }
+            },
+            {
+                "name": "ring_bell",
+                "description": "Ring the new leads bell",
+                "parameters": {
+                    "type": "object",
+                    "properties": {}
+                }
             }
         ],
         "expected_function_calls": [
-            {"name": "start_sales_system","arguments": {},"result": ""},
             {"name": "create_leads_collection","arguments": {"name": "new leads"},"result": "c1"},
             {
                 "name": "sales_leads",
@@ -517,7 +516,9 @@
             {"name": "assign_sales_rep","arguments": {"contactId": "7asd"},"result": ""},
             {"name": "assign_sales_rep","arguments": {"contactId": "8asd"},"result": ""},
             {"name": "assign_sales_rep","arguments": {"contactId": "9asd"},"result": ""},
-            {"name": "assign_sales_rep","arguments": {"contactId": "10asd"},"result": ""}
+            {"name": "assign_sales_rep","arguments": {"contactId": "10asd"},"result": ""},
+
+            {"name": "ring_bell","arguments": {},"result": "ding ding"}
 
         ],
         "final_answer_should": "The final answer doesn't need to say anything in particular."
