@@ -3,7 +3,7 @@ import time
 from typing import Optional, List
 from openai import OpenAI, Stream
 from openai.types.chat import ChatCompletion, ChatCompletionChunk
-from benchmark import TestCase, Actual, ActualFunctionCall
+from benchmark import TestCase, ExpectedFunctionCallGroup, Actual, ActualFunctionCall
 from dataclasses import dataclass
 from collections import deque
 
@@ -93,7 +93,15 @@ You never respond with content.
                 arguments=json.loads(function_call.arguments)
             ))
 
-        assert len(tool_calls) <= len(expected_calls), f"Call {call_index}: Model returned more tool calls than expected"
+        remaining_expected_calls = 0
+        for call in expected_calls:
+            if hasattr(call, 'any_order'):
+                remaining_expected_calls += len(call.any_order)
+                continue
+
+            remaining_expected_calls += 1
+
+        assert len(tool_calls) <= remaining_expected_calls, f"Call {call_index}: Model returned more tool calls than expected"
 
         if len(expected_calls) == 0 or len(tool_calls) == 0:
             assert choice.finish_reason == "stop", f"Call {call_index}: Model returned unexpected finish reason"
@@ -101,14 +109,29 @@ You never respond with content.
 
         while tool_calls and expected_calls:
             tool_call = tool_calls.popleft()
-            expected_call = expected_calls.popleft()
+            next_expected_call = expected_calls.popleft()
+            expected_call = None
 
-            # Skip optional calls
-            while expected_calls:
-                if expected_call.optional and expected_call.name != tool_call.function.name:
-                    expected_call = expected_calls.popleft()
-                    call_index += 1
-                break
+            if hasattr(next_expected_call, 'any_order'):
+                for index, call in enumerate(next_expected_call.any_order):
+                    if call.name == tool_call.function.name \
+                            and json.loads(tool_call.function.arguments) == call.arguments:
+                        expected_call = next_expected_call.any_order.pop(index)
+                        break
+
+                assert expected_call is not None, f"Call {call_index}: Tool call not found in expected call group"
+                if len(next_expected_call.any_order) > 0:
+                    expected_calls.appendleft(next_expected_call)
+            else:
+                expected_call = next_expected_call
+                # Skip optional calls
+                while expected_calls:
+                    if not hasattr(expected_call, 'any_order') and expected_call.optional \
+                            and expected_call.name != tool_call.function.name \
+                            and json.loads(tool_call.function.arguments) != expected_call.arguments:
+                        expected_call = expected_calls.popleft()
+                        call_index += 1
+                    break
 
             assert tool_call.id != "", f"Call {call_index}: Model returned a tool call without a call id"
             assert tool_call.function.name == expected_call.name, f"Call {call_index}: Model returned a tool call with an unexpected function name: {tool_call.function.name}"
@@ -125,8 +148,14 @@ You never respond with content.
 
         assert len(tool_calls) == 0, f"Call {call_index}: Model returned unexpected tool calls"
 
-    remaining_required_calls = [call for call in expected_calls if not call.optional]
-    assert len(remaining_required_calls) == 0, f"Model did not make all required tool calls before stopping"
+    remaining_required_calls = 0
+    for call in expected_calls:
+        if hasattr(call, 'any_order'):
+            remaining_expected_calls += len([c for c in call.any_order if not c.optional])
+        elif not call.optional:
+            remaining_expected_calls += 1
+
+    assert remaining_required_calls == 0, f"Model did not make all required tool calls before stopping"
 
     if test_case.final_answer_should:
         final_answer = '\n'.join(answers)

@@ -50,5 +50,123 @@
       }
     ],
     "final_answer_should": "The answer should indicate that the result of calling funcA with 1 is \"This is the output of funcA(1)\" and that the result of calling funcB with 2 is \"This is the output of funcB(2)\""
+  },
+  {
+    "description": "Asserts that the model can make a mix of ordered an unordered function calls and conveys the result to the user",
+    "categories": [
+      "sequenced",
+      "unordered"
+    ],
+    "prompt": "First funcA with 1 and wait for the result, then call funcB with 2, funcC with 3, and funcD with 4 in any order before finally calling funcE with 5, then respond with the result of each call",
+    "available_functions": [
+      {
+        "name": "funcA",
+        "description": "Performs funcA",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "integer",
+              "description": "Param 1"
+            }
+          }
+        }
+      },
+      {
+        "name": "funcB",
+        "description": "Performs funcA",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "integer",
+              "description": "Param 1"
+            }
+          }
+        }
+      },
+      {
+        "name": "funcC",
+        "description": "Performs funcA",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "integer",
+              "description": "Param 1"
+            }
+          }
+        }
+      },
+      {
+        "name": "funcD",
+        "description": "Performs funcD",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "integer",
+              "description": "Param 1"
+            }
+          }
+        }
+      },
+      {
+        "name": "funcE",
+        "description": "Performs funcE",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "integer",
+              "description": "Param 1"
+            }
+          }
+        }
+      }
+
+    ],
+    "expected_function_calls": [
+      {
+        "name": "funcA",
+        "arguments": {
+          "param1": 1
+        },
+        "result": "This is the output of funcA(1)"
+      },
+      {
+        "any_order": [
+          {
+            "name": "funcD",
+            "arguments": {
+              "param1": 4
+            },
+            "result": "This is the output of funcD(4)"
+          },
+          {
+            "name": "funcC",
+            "arguments": {
+              "param1": 3
+            },
+            "result": "This is the output of funcC(3)"
+          },
+          {
+            "name": "funcB",
+            "arguments": {
+              "param1": 2
+            },
+            "result": "This is the output of funcB(2)"
+          }
+        ]
+      },
+      {
+        "name": "funcE",
+        "arguments": {
+          "param1": 5
+        },
+        "result": "This is the output of funcE(5)"
+      }
+    ],
+    "final_answer_should": "The answer should indicate that the result of calling funcA with 1 is \"This is the output of funcA(1)\", funcB with 2 is \"This is the output of funcB(2)\", funcC with 3 is \"This is the output of funcC(3)\", funcD with 4 is \"This is the output of funcD(4)\", funcE with 5 is \"This is the output of funcE(5)\""
   }
 ]
