@@ -398,17 +398,9 @@
             "chained",
             "semantic"
         ],
-        "prompt": "perform the following steps in order:\n1. Start the sales system\n2. Create a leads collection named `new leads` and remember the id for future steps.\n3. Retrieve the list of potential sales leads\n4. For each add them to our system.\n5. For each send an initial contact email.\n6. For each assign a sales rep",
+        "prompt": "Ring the new leads bell. Retrieve the list of potential sales leads and for each add them to our system. Then, send an initial contact email to each lead. Finally, assign a sales rep to each lead.",
 
         "available_functions": [
-            {
-                "name": "start_sales_system",
-                "description": "Start the sales system",
-                "parameters": {
-                    "type": "object",
-                    "properties": {}
-                }
-            },
             {
                 "name": "create_leads_collection",
                 "description": "Create a leads collection. Returns the collection id",
@@ -436,10 +428,6 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "collection_id": {
-                            "type": "string",
-                            "description": "The id of the leads collection to add this contact to"
-                        },
                         "email": {
                             "type": "string",
                             "description": "The email address to add to our system"
@@ -487,24 +475,22 @@
             }
         ],
         "expected_function_calls": [
-            {"name": "start_sales_system","arguments": {},"result": ""},
-            {"name": "create_leads_collection","arguments": {"name": "new leads"},"result": "c1"},
+            {"name": "ring_bell","arguments": {},"result": "ding ding"},
             {
                 "name": "sales_leads",
                 "arguments": {},
                 "result": "John Doe,johndoe@example.com\nJane Smith,janesmith@example.com\nAlice Johnson,alicej@example.com\nBob Brown,bobb@example.com\nChris Green,chrisg@example.com\nNancy White,nancyw@example.com\nDavid Hill,davidh@example.com\nSara Miller,saram@example.com\nMike Wilson,mikew@example.com\nCarla Gomez,carlag@example.com"
             },
-            {"name": "add_to_system","arguments": {"collection_id":"c1", "email": "johndoe@example.com","name": "John Doe"},"result": "1asd"},
-{"name": "add_to_system","arguments": {"collection_id":"c1", "email": "janesmith@example.com","name": "Jane Smith"},"result": "2asd"},
-{"name": "add_to_system","arguments": {"collection_id":"c1", "email": "alicej@example.com","name": "Alice Johnson"},"result": "3asd"},
-{"name": "add_to_system","arguments": {"collection_id":"c1", "email": "bobb@example.com","name": "Bob Brown"},"result": "4asd"},
-{"name": "add_to_system","arguments": {"collection_id":"c1", "email": "chrisg@example.com","name": "Chris Green"},"result": "5asd"},
-{"name": "add_to_system","arguments": {"collection_id":"c1", "email": "nancyw@example.com","name": "Nancy White"},"result": "6asd"},
-{"name": "add_to_system","arguments": {"collection_id":"c1", "email": "davidh@example.com","name": "David Hill"},"result": "7asd"},
-{"name": "add_to_system","arguments": {"collection_id":"c1", "email": "saram@example.com","name": "Sara Miller"},"result": "8asd"},
-{"name": "add_to_system","arguments": {"collection_id":"c1", "email": "mikew@example.com","name": "Mike Wilson"},"result": "9asd"},
-{"name": "add_to_system","arguments": {"collection_id":"c1", "email": "carlag@example.com","name": "Carla Gomez"},"result": "10asd"},
-
+            {"name": "add_to_system","arguments": {"email": "johndoe@example.com","name": "John Doe"},"result": "1asd"},
+            {"name": "add_to_system","arguments": {"email": "janesmith@example.com","name": "Jane Smith"},"result": "2asd"},
+            {"name": "add_to_system","arguments": {"email": "alicej@example.com","name": "Alice Johnson"},"result": "3asd"},
+            {"name": "add_to_system","arguments": {"email": "bobb@example.com","name": "Bob Brown"},"result": "4asd"},
+            {"name": "add_to_system","arguments": {"email": "chrisg@example.com","name": "Chris Green"},"result": "5asd"},
+            {"name": "add_to_system","arguments": {"email": "nancyw@example.com","name": "Nancy White"},"result": "6asd"},
+            {"name": "add_to_system","arguments": {"email": "davidh@example.com","name": "David Hill"},"result": "7asd"},
+            {"name": "add_to_system","arguments": {"email": "saram@example.com","name": "Sara Miller"},"result": "8asd"},
+            {"name": "add_to_system","arguments": {"email": "mikew@example.com","name": "Mike Wilson"},"result": "9asd"},
+            {"name": "add_to_system","arguments": {"email": "carlag@example.com","name": "Carla Gomez"},"result": "10asd"},
             {"name": "send_initial_email","arguments": {"contactId": "1asd"},"result": ""},
             {"name": "send_initial_email","arguments": {"contactId": "2asd"},"result": ""},
             {"name": "send_initial_email","arguments": {"contactId": "3asd"},"result": ""},
@@ -515,7 +501,6 @@
             {"name": "send_initial_email","arguments": {"contactId": "8asd"},"result": ""},
             {"name": "send_initial_email","arguments": {"contactId": "9asd"},"result": ""},
             {"name": "send_initial_email","arguments": {"contactId": "10asd"},"result": ""},
-
             {"name": "assign_sales_rep","arguments": {"contactId": "1asd"},"result": ""},
             {"name": "assign_sales_rep","arguments": {"contactId": "2asd"},"result": ""},
             {"name": "assign_sales_rep","arguments": {"contactId": "3asd"},"result": ""},
