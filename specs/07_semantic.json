@@ -391,5 +391,76 @@
             }
         ],
         "final_answer_should": "The answer should indicate that the task was completed successfully."
+    },
+    {
+        "description": "Asserts that the model can infer arguments from tool results and make a chain of tool calls using them",
+        "categories": [
+            "basic",
+            "chained"
+        ],
+        "prompt": "Search the internet for 'vacation spots in Florida', download the first 3 results, then give name and description for those results.",
+        "available_functions": [
+            {
+                "name": "search",
+                "description": "Searches the internet for content and returns a list of HTTP URLs with results",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "The query to search for"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "download_url",
+                "description": "Download the contents of a http or https URL returning the content as rendered text converted from HTML",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "url": {
+                            "type": "string",
+                            "description": "The URL to download"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "search",
+                "arguments": {
+                    "query": "vacation spots in Florida"
+                },
+                "result": "Miami: https://www.miami.gov\nCaptiva: https://sanibel-captiva.org\nKey West: https://cityofkeywest-fl.gov\nFort Myers: https://www.visitfortmyers.com"
+            },
+            {
+                "any_order": [
+                    {
+                        "name": "download_url",
+                        "arguments": {
+                            "url": "https://www.miami.gov"
+                        },
+                        "result": "Miami is a city that has it all"
+                    },
+                    {
+                        "name": "download_url",
+                        "arguments": {
+                            "url": "https://sanibel-captiva.org"
+                        },
+                        "result": "Captiva is the hottest cool place on the west coast of Florida"
+                    },
+                    {
+                        "name": "download_url",
+                        "arguments": {
+                            "url": "https://cityofkeywest-fl.gov"
+                        },
+                        "result": "Key West is a historic town and the premier destination for surf, sun, and fishing"
+                    }
+                ]
+            }
+        ],
+        "final_answer_should": "The final answer should include the names and descriptions of exactly three destinations"
     }
 ]
