@@ -391,5 +391,126 @@
             }
         ],
         "final_answer_should": "The answer should indicate that the task was completed successfully."
+    },
+    {
+        "description": "Asserts that the model can parse a comma delimited list from one function, pass each entry to a second function, and send the gathered results of those calls to a third function.",
+        "categories": [
+            "chained",
+            "grouped",
+            "semantic"
+        ],
+        "prompt": "Find all *.go files and count the lines of code in each file, add the result and print it",
+        "available_functions": [
+            {
+                "name": "find",
+                "description": "Traverse a directory looking for files that match a pattern in the style of the unix find command",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "pattern": {
+                            "type": "string",
+                            "description": "The file pattern to look for. The pattern is a traditional unix glob format with * matching any character and ? matching a single character"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "count",
+                "description": "Count the lines of code",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "file": {
+                            "type": "string",
+                            "description": "The file to read and count"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "add",
+                "description": "Sum up a series of comma separated numbers",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "nums": {
+                            "type": "string",
+                            "description": "A comma separated list of numbers"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "find",
+                "arguments": {
+                    "pattern": "*.go"
+                },
+                "result": "main.go\npkg/assemble/assemble.go\npkg/builtin/builtin.go\npkg/builtin/defaults.go\npkg/builtin/log.go\npkg/cache/cache.go\npkg/chat/chat.go\npkg/chat/readline.go\npkg/cli/credential.go\npkg/cli/credential_delete.go\npkg/cli/eval.go\npkg/cli/fmt.go\npkg/cli/gptscript.go\npkg/cli/log.go\npkg/cli/parse.go\npkg/config/cliconfig.go\npkg/confirm/confirm.go\npkg/context/context.go\npkg/credentials/credential.go\npkg/credentials/helper.go\npkg/credentials/store.go\npkg/daemon/daemon.go\npkg/debugcmd/debug.go\npkg/debugcmd/log.go\npkg/engine/cmd.go\npkg/engine/daemon.go\npkg/engine/engine.go\npkg/engine/http.go\npkg/engine/log.go\npkg/engine/openapi.go\npkg/engine/openapi_test.go\npkg/engine/print.go\npkg/engine/self.go\npkg/engine/self_linux.go\npkg/env/env.go\npkg/env/log.go\npkg/gptscript/gptscript.go\npkg/hash/seed.go\npkg/hash/sha256.go\npkg/input/input.go\npkg/input/log.go\npkg/llm/registry.go\npkg/loader/github/github.go\npkg/loader/loader.go\npkg/loader/loader_test.go\npkg/loader/log.go\npkg/loader/openapi.go\npkg/loader/url.go\npkg/loader/vcs/init.go\npkg/monitor/display.go"
+            },
+            {
+                "any_order": [
+                    {"arguments": {"file": "main.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/assemble/assemble.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/builtin/builtin.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/builtin/defaults.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/builtin/log.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/cache/cache.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/chat/chat.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/chat/readline.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/cli/credential.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/cli/credential_delete.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/cli/eval.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/cli/fmt.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/cli/gptscript.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/cli/log.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/cli/parse.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/config/cliconfig.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/confirm/confirm.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/context/context.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/credentials/credential.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/credentials/helper.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/credentials/store.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/daemon/daemon.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/debugcmd/debug.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/debugcmd/log.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/engine/cmd.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/engine/daemon.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/engine/engine.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/engine/http.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/engine/log.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/engine/openapi.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/engine/openapi_test.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/engine/print.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/engine/self.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/engine/self_linux.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/env/env.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/env/log.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/gptscript/gptscript.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/hash/seed.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/hash/sha256.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/input/input.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/input/log.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/llm/registry.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/loader/github/github.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/loader/loader.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/loader/loader_test.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/loader/log.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/loader/openapi.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/loader/url.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/loader/vcs/init.go"}, "name": "count", "result": "10"},
+                    {"arguments": {"file": "pkg/monitor/display.go"}, "name": "count", "result": "10"}
+                ]
+            },
+            {
+                "name": "add",
+                "arguments": {
+                    "nums": "10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10"
+                },
+                "result": "50"
+            }
+        ],
+        "final_answer_should": "The answer should indicate that the total number of lines is 50"
     }
 ]
