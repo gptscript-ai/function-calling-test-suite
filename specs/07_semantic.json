@@ -291,7 +291,7 @@
             "chained",
             "semantic"
         ],
-        "prompt": "Perform the following actions in order. Do not move on to the next step until you've completed the previous.\n\n1. Start the database.\n2. Create a collection called `headlines` in the database.\n3. Read the file headlines.md\n4. Write each headline into the database collection that you created earlier called `headlines`. Write each one using a separate call to the  database_create_entry tool.",
+        "prompt": "Perform the following actions in order. Do not move on to the next step until you've completed the previous.\n\n1. Start the database.\n2. Create a collection called `headlines` in the database.\n3. Read the file headlines.md\n4. Write each headline into the database collection that you created earlier called `headlines`. Write each one using a separate call to the  database_create_entry tool. Let me know when you've finished and if you were successful.",
         "available_functions": [
             {
                 "name": "database_start",
