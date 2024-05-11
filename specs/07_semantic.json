@@ -512,5 +512,108 @@
             }
         ],
         "final_answer_should": "The answer should indicate that the total number of lines is 50"
+    },
+    {
+        "description": "Asserts that the model can parse a large csv style response and make a series of chained calls for each row in the csv",
+        "categories": [
+            "chained",
+            "semantic"
+        ],
+        "prompt": "Retrieve the list of potential sales leads and for each add them to our system. Then, send an initial contact email to each lead. Finally, assign a sales rep to each lead.",
+
+        "available_functions": [
+            {
+                "name": "sales_leads",
+                "description": "Returns a list of potential sales leads",
+                "parameters": {
+                    "type": "object",
+                    "properties": {}
+                }
+            },
+            {
+                "name": "add_to_system",
+                "description": "Add the contact to our system.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string",
+                            "description": "The email address to add to our system"
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the contact to add to our system"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "send_initial_email",
+                "description": "Send an initial contact email to the specified contact.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "contactId": {
+                            "type": "string",
+                            "description": "The id of the contact to send the initial email to"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "assign_sales_rep",
+                "description": "Assign a sales rep to the contact specified by the email.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "contactId": {
+                            "type": "string",
+                            "description": "The id of the contact to assign the sales rep to"
+                        }
+                    }
+                }
+            }
+        ],
+        "expected_function_calls": [
+            {
+                "name": "sales_leads",
+                "arguments": {},
+                "result": "John Doe,johndoe@example.com\nJane Smith,janesmith@example.com\nAlice Johnson,alicej@example.com\nBob Brown,bobb@example.com\nChris Green,chrisg@example.com\nNancy White,nancyw@example.com\nDavid Hill,davidh@example.com\nSara Miller,saram@example.com\nMike Wilson,mikew@example.com\nCarla Gomez,carlag@example.com"
+            },
+            {
+                "any_order": [
+                    {"name": "add_to_system","arguments": {"email": "johndoe@example.com","name": "John Doe"},"result": "1asd"},
+                    {"name": "add_to_system","arguments": {"email": "janesmith@example.com","name": "Jane Smith"},"result": "2asd"},
+                    {"name": "add_to_system","arguments": {"email": "alicej@example.com","name": "Alice Johnson"},"result": "3asd"},
+                    {"name": "add_to_system","arguments": {"email": "bobb@example.com","name": "Bob Brown"},"result": "4asd"},
+                    {"name": "add_to_system","arguments": {"email": "chrisg@example.com","name": "Chris Green"},"result": "5asd"},
+                    {"name": "add_to_system","arguments": {"email": "nancyw@example.com","name": "Nancy White"},"result": "6asd"},
+                    {"name": "add_to_system","arguments": {"email": "davidh@example.com","name": "David Hill"},"result": "7asd"},
+                    {"name": "add_to_system","arguments": {"email": "saram@example.com","name": "Sara Miller"},"result": "8asd"},
+                    {"name": "add_to_system","arguments": {"email": "mikew@example.com","name": "Mike Wilson"},"result": "9asd"},
+                    {"name": "add_to_system","arguments": {"email": "carlag@example.com","name": "Carla Gomez"},"result": "10asd"},
+                    {"name": "send_initial_email","arguments": {"contactId": "1asd"},"result": ""},
+                    {"name": "send_initial_email","arguments": {"contactId": "2asd"},"result": ""},
+                    {"name": "send_initial_email","arguments": {"contactId": "3asd"},"result": ""},
+                    {"name": "send_initial_email","arguments": {"contactId": "4asd"},"result": ""},
+                    {"name": "send_initial_email","arguments": {"contactId": "5asd"},"result": ""},
+                    {"name": "send_initial_email","arguments": {"contactId": "6asd"},"result": ""},
+                    {"name": "send_initial_email","arguments": {"contactId": "7asd"},"result": ""},
+                    {"name": "send_initial_email","arguments": {"contactId": "8asd"},"result": ""},
+                    {"name": "send_initial_email","arguments": {"contactId": "9asd"},"result": ""},
+                    {"name": "send_initial_email","arguments": {"contactId": "10asd"},"result": ""},
+                    {"name": "assign_sales_rep","arguments": {"contactId": "1asd"},"result": ""},
+                    {"name": "assign_sales_rep","arguments": {"contactId": "2asd"},"result": ""},
+                    {"name": "assign_sales_rep","arguments": {"contactId": "3asd"},"result": ""},
+                    {"name": "assign_sales_rep","arguments": {"contactId": "4asd"},"result": ""},
+                    {"name": "assign_sales_rep","arguments": {"contactId": "5asd"},"result": ""},
+                    {"name": "assign_sales_rep","arguments": {"contactId": "6asd"},"result": ""},
+                    {"name": "assign_sales_rep","arguments": {"contactId": "7asd"},"result": ""},
+                    {"name": "assign_sales_rep","arguments": {"contactId": "8asd"},"result": ""},
+                    {"name": "assign_sales_rep","arguments": {"contactId": "9asd"},"result": ""},
+                    {"name": "assign_sales_rep","arguments": {"contactId": "10asd"},"result": ""}
+                ]
+            }
+        ]
     }
 ]
