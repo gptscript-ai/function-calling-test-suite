@@ -148,14 +148,14 @@ You never respond with content.
 
         assert len(tool_calls) == 0, f"Call {call_index}: Model returned unexpected tool calls"
 
-    remaining_required_calls = 0
+    remaining_expected_calls = 0
     for call in expected_calls:
         if hasattr(call, 'any_order'):
             remaining_expected_calls += len([c for c in call.any_order if not c.optional])
         elif not call.optional:
             remaining_expected_calls += 1
 
-    assert remaining_required_calls == 0, f"Model did not make all required tool calls before stopping"
+    assert remaining_expected_calls == 0, f"Model did not make all required tool calls before stopping"
 
     if test_case.final_answer_should:
         final_answer = '\n'.join(answers)
