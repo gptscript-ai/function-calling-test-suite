@@ -508,10 +508,10 @@
                 "arguments": {
                     "nums": "10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10"
                 },
-                "result": "50"
+                "result": "500"
             }
         ],
-        "final_answer_should": "The answer should indicate that the total number of lines is 50"
+        "final_answer_should": "The answer should indicate that the total number of lines is 500"
     },
     {
         "description": "Asserts that the model can parse a large csv style response and make a series of chained calls for each row in the csv",
