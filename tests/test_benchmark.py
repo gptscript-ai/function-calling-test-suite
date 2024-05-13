@@ -197,8 +197,8 @@ def judge_final_answer(judge_client: OpenAI, stream: bool, final_answer: str, fi
     ]
 }
 
-Determine if `final_answer` completely satisfies the constraints described by `final_answer_should`.
-`final_answer` is considered correct if and only if it completely satisfies the constraints described by `final_answer_should`.
+Determine if `final_answer` satisfies the constraints described by `final_answer_should`.
+`final_answer` is considered correct if and only if it satisfies the constraints described by `final_answer_should`.
 
 After making a determination, respond with a JSON object that conforms to the following JSONSchema:
 
