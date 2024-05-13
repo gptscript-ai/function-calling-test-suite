@@ -87,7 +87,7 @@
         "optional": true
       }
     ],
-    "final_answer_should": "The answer should indicate that the current weather in Buford is Sunny and 74 degrees but should not indicate a specific value for the current time"
+    "final_answer_should": "The answer should indicate that the current weather in Buford is Sunny and 74 degrees but should not indicate a specific value for the current time. It may suggest a method for determining the time as long as it doesn't give a specific time as an answer."
   },
   {
     "description": "Asserts that the model can identify an invalid argument in a sequence of otherwise valid function calls derived from a prompt and conveys the problem to the user",
