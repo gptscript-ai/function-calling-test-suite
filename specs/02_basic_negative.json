@@ -25,7 +25,7 @@
       }
     ],
     "expected_function_calls": [],
-    "final_answer_should": "The answer should indicate that it cannot complete the requested operation as specified"
+    "final_answer_should": "The answer should indicate that something went wrong or that it cannot complete the requested operation as specified"
   },
   {
     "description": "Asserts that the model can determine when a function specified by the prompt is unavailable and conveys the problem to the user",
@@ -50,7 +50,7 @@
       }
     ],
     "expected_function_calls": [],
-    "final_answer_should": "The answer should indicate that it cannot complete the requested operation because funcB is not available"
+    "final_answer_should": "The answer should indicate that something went wrong or that it cannot complete the requested operation because funcB is not available"
   },
   {
     "description": "Asserts that the model can distinguish between available and unavailable functions when both are specified by the prompt and conveys the problem to the user",
@@ -84,6 +84,6 @@
         "optional": true
       }
     ],
-    "final_answer_should": "The answer should indicate that it cannot complete the requested operation because funcB is not available"
+    "final_answer_should": "The answer should indicate that something went wrong or that it cannot complete the requested operation because funcB is not available"
   }
 ]
