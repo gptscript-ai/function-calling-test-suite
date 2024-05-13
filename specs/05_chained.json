@@ -252,62 +252,66 @@
         ],
         "expected_function_calls": [
             {
-                "name": "funcA",
-                "arguments": {
-                    "param1": 1
-                },
-                "result": "This is the output of funcA(1)"
-            },
-            {
-                "name": "funcB",
-                "arguments": {
-                    "param1": 2
-                },
-                "result": "This is the output of funcB(2)"
-            },
-            {
-                "name": "funcC",
-                "arguments": {
-                    "param1": [
-                        "This is the output of funcA(1)",
-                        "This is the output of funcB(2)"
-                    ]
-                },
-                "result": "This is the output of funcC(funcA(1), funcB(2))"
-            },
-            {
-                "name": "funcD",
-                "arguments": {
-                    "param1": 3
-                },
-                "result": "This is the output of funcD(3)"
-            },
-            {
-                "name": "funcE",
-                "arguments": {
-                    "param1": 4
-                },
-                "result": "This is the output of funcE(4)"
-            },
-            {
-                "name": "funcF",
-                "arguments": {
-                    "param1": [
-                        "This is the output of funcD(3)",
-                        "This is the output of funcE(4)"
-                    ]
-                },
-                "result": "This is the output of funcF(funcD(3), funcE(4))"
-            },
-            {
-                "name": "funcG",
-                "arguments": {
-                    "param1": [
-                        "This is the output of funcC(funcA(1), funcB(2))",
-                        "This is the output of funcF(funcD(3), funcE(4))"
-                    ]
-                },
-                "result": "This is the output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))"
+                "any_order": [
+                    {
+                        "name": "funcA",
+                        "arguments": {
+                            "param1": 1
+                        },
+                        "result": "This is the output of funcA(1)"
+                    },
+                    {
+                        "name": "funcB",
+                        "arguments": {
+                            "param1": 2
+                        },
+                        "result": "This is the output of funcB(2)"
+                    },
+                    {
+                        "name": "funcC",
+                        "arguments": {
+                            "param1": [
+                                "This is the output of funcA(1)",
+                                "This is the output of funcB(2)"
+                            ]
+                        },
+                        "result": "This is the output of funcC(funcA(1), funcB(2))"
+                    },
+                    {
+                        "name": "funcD",
+                        "arguments": {
+                            "param1": 3
+                        },
+                        "result": "This is the output of funcD(3)"
+                    },
+                    {
+                        "name": "funcE",
+                        "arguments": {
+                            "param1": 4
+                        },
+                        "result": "This is the output of funcE(4)"
+                    },
+                    {
+                        "name": "funcF",
+                        "arguments": {
+                            "param1": [
+                                "This is the output of funcD(3)",
+                                "This is the output of funcE(4)"
+                            ]
+                        },
+                        "result": "This is the output of funcF(funcD(3), funcE(4))"
+                    },
+                    {
+                        "name": "funcG",
+                        "arguments": {
+                            "param1": [
+                                "This is the output of funcC(funcA(1), funcB(2))",
+                                "This is the output of funcF(funcD(3), funcE(4))"
+                            ]
+                        },
+                        "result": "This is the output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))"
+                    }
+                ]
             }
         ],
         "final_answer_should": "The answer should indicate that the result of calling funcG is \"This is the output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))\""
