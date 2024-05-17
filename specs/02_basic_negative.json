@@ -84,6 +84,6 @@
         "optional": true
       }
     ],
-    "final_answer_should": "The answer should indicate that something went wrong or that it cannot complete the requested operation because funcB is not available"
+    "final_answer_should": "The answer should indicate that something went wrong or that funcB is not available. The answer should not provide a result for funcB."
   }
 ]
