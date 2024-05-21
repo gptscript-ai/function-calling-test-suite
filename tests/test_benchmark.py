@@ -72,7 +72,7 @@ You never respond with content.
         test_case.actual.responses.append(model_response.model_dump(mode='json', exclude_unset=True, exclude_none=True))
 
         choices = model_response.choices
-        assert len(choices) == 1, f"Call {call_index}: Model returned unexpected number of choices"
+        assert choices is not None and len(choices) == 1, f"Call {call_index}: Model returned unexpected number of choices"
 
         choice = choices[0]
         message = choice.message
