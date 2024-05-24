@@ -1,0 +1,30 @@
+---
+description: Asserts that the model can determine when the result of a function cannot be used as the argument for a specified function and conveys the problem to the user
+categories:
+  - chained
+  - negative
+prompt: Call funcA with 1 and then call funcB with the result
+available_functions:
+  - name: funcA
+    description: Performs funcA
+    parameters:
+      type: object
+      properties:
+        param1:
+          type: integer
+  - name: funcB
+    description: Performs funcB
+    parameters:
+      type: object
+      properties:
+        param2:
+          type: integer
+      required:
+        - param2
+expected_function_calls:
+  - name: funcA
+    arguments:
+      param1: 1
+    result: This is output of funcA(1)
+    optional: true
+final_answer_should: The answer should indicate that the operation cannot be completed and may indicate a parameter type issue for funcB

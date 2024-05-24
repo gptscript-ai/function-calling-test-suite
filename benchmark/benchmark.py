@@ -56,7 +56,7 @@ class TestCase(BaseModel):
         return categories
 
     @classmethod
-    def parse_json(cls, obj: Dict[str, Any]):
+    def parse_yaml(cls, obj: Dict[str, Any]):
         # Preprocess expected_function_calls to handle mixed content
         function_calls = []
         for call in obj['expected_function_calls']:
