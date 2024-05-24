@@ -4,6 +4,7 @@ import json
 import fnmatch
 import csv
 import re
+import yaml
 from openai import OpenAI
 from benchmark import TestCase
 
@@ -61,20 +62,20 @@ def pytest_generate_tests(metafunc):
 
 def load_test_cases(spec_run_count: int, spec_filter: str, spec_dir: str, request_delay: float, stream: bool, use_system_prompt: bool):
     suite_test_cases = []
-    test_case_files = [f for f in os.listdir(spec_dir) if f.endswith('.json')]
+    test_case_files = [f for f in os.listdir(spec_dir) if f.endswith('.yaml') or f.endswith('.yml')]
 
     for test_case_file in test_case_files:
         file_path = os.path.join(spec_dir, test_case_file)
         with open(file_path, 'r') as file:
-            json_data = json.load(file)
+            yaml_data = list(yaml.safe_load_all(file))
         
-        for index, item in enumerate(json_data):
+        for index, item in enumerate(yaml_data):
             try:
                 test_id = f"{test_case_file}-{index}"
                 if not fnmatch.fnmatch(test_id, spec_filter):
                     continue
 
-                test_case = TestCase.parse_json(item)
+                test_case = TestCase.parse_yaml(item)
                 for run in range(spec_run_count):
                     suite_test_cases.append((f"{test_id}-{run}", request_delay, stream, use_system_prompt, test_case.model_copy(deep=True)))
 
