@@ -188,7 +188,7 @@ def pytest_sessionfinish(session, exitstatus):
             if simplified_test_id not in aggregate_results:
                 aggregate_results[simplified_test_id] = {c: "" for c in columns}
                 aggregate_results[simplified_test_id]['test_id'] = simplified_test_id
-                aggregate_results[simplified_test_id]['categories'] = run_result['categories']
+                aggregate_results[simplified_test_id]['categories'] = ', '.join(run_result['categories'])
                 aggregate_results[simplified_test_id]['description'] = run_result['description']
                 aggregate_results[simplified_test_id]['prompt'] = run_result['prompt']
 
