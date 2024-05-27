@@ -1,8 +1,10 @@
 ---
-description: Asserts that the model can derive and make a function call with one argument from a prompt and conveys the result to the user
 categories:
   - basic
   - semantic
+description: >-
+  Asserts that the model can derive and make a function call with one argument
+  from a prompt and conveys the result to the user
 prompt: Get the current weather for Cupertino, CA
 available_functions:
   - name: get_current_weather
@@ -22,10 +24,12 @@ expected_function_calls:
     result: Sunny, 75 degrees
 final_answer_should: The answer should indicate that the current weather for Cupertino, CA is Sunny and 75 degrees
 ---
-description: Asserts that the model can derive and make a function call with two arguments from a prompt and conveys the result to the user
 categories:
   - basic
   - semantic
+description: >-
+  Asserts that the model can derive and make a function call with two arguments
+  from a prompt and conveys the result to the user
 prompt: Get the current weather in celsius for Charleston, SC
 available_functions:
   - name: get_current_weather
@@ -51,10 +55,12 @@ expected_function_calls:
     result: Sunny, 24 degrees
 final_answer_should: The answer should indicate that the current weather for Charleston, SC is Sunny and 24 degrees
 ---
-description: Asserts that the model can derive and make an ordered sequence of function calls from a prompt and conveys the results to the user
 categories:
   - sequenced
   - semantic
+description: >-
+  Asserts that the model can derive and make an ordered sequence of function
+  calls from a prompt and conveys the results to the user
 prompt: Get the current weather for Fort Myers, FL, then get the current time at Phoenix, AZ
 available_functions:
   - name: get_current_weather
@@ -85,13 +91,18 @@ expected_function_calls:
   - name: get_current_time
     arguments:
       location: Phoenix, AZ
-    result: 14:30
-final_response_should: The answer should indicate that the current weather in Fort Myers is Sunny, 75 degrees and that the current time at Phoenix is 14:30
+    result: "14:30"
+final_answer_should: >-
+  The answer should indicate that the current weather in Fort Myers is Sunny, 75
+  degrees and that the current time at Phoenix is 14:30
 ---
-description: Asserts that the model can derive and make two function calls from the prompt, using the result of the first call as the argument for the second, and convey the result to the user
 categories:
   - chained
   - semantic
+description: >-
+  Asserts that the model can derive and make two function calls from the prompt,
+  using the result of the first call as the argument for the second, and convey
+  the result to the user
 prompt: Get the current weather for Austin, TX and then tell me if that weather is hot
 available_functions:
   - name: get_current_weather
@@ -125,11 +136,16 @@ expected_function_calls:
     result: hot
 final_answer_should: The answer should indicate that the current weather for Austin is Sunny, 75 degrees, and is hot
 ---
-description: Asserts that the model can derive and make a series of functions calls from a prompt, where the results of an initial group of calls are used as arguments for a final function call, and conveys the result to the user
 categories:
   - chained
   - semantic
-prompt: Get the current date at Atlantic City, NJ, then get the weather conditions there on the current date, then determine if those weather conditions are hot
+description: >-
+  Asserts that the model can derive and make a series of functions calls from a
+  prompt, where the results of an initial group of calls are used as arguments
+  for a final function call, and conveys the result to the user
+prompt: >-
+  Get the current date at Atlantic City, NJ, then get the weather conditions
+  there on the current date, then determine if those weather conditions are hot
 available_functions:
   - name: get_current_date
     description: Gets the current date at the given location. Results are in ISO 8601 date format; e.g. 2024-04-25
@@ -179,15 +195,26 @@ expected_function_calls:
     arguments:
       weather_conditions: Sunny, 75 degrees
     result: hot
-final_answer_should: The answer should indicate that weather conditions on the current date for Atlantic City, NJ are Sunny, 75 degrees, and hot. The answer can additionally indicate a single date of 2024-05-18, but no other specific dates may be mentioned
+final_answer_should: >-
+  The answer should indicate that weather conditions on the current date for
+  Atlantic City, NJ are Sunny, 75 degrees, and hot. The answer can additionally
+  indicate a single date of 2024-05-18, but no other specific dates may be
+  mentioned
 ---
-description: Asserts that the model can interpret and execute a complex series of chained steps related to creating a database and creating entries in it.
 categories:
   - chained
   - semantic
+description: >-
+  Asserts that the model can interpret and execute a complex series of chained
+  steps related to creating a database and creating entries in it.
 prompt: |-
   Perform the following actions in order. Do not move on to the next step until you've completed the previous.
-  1. Start the database. 2. Create a collection called `headlines` in the database. 3. Read the file headlines.md 4. Write each headline into the database collection that you created earlier called `headlines`. Write each one using a separate call to the  database_create_entry tool. Let me know when you've finished and if you were successful.
+  1. Start the database 
+  2. Create a collection called `headlines` in the database
+  3. Read the file headlines.md
+  4. Write each headline into the database collection that you created earlier called `headlines`. Write each one using a separate call to the  database_create_entry too.
+
+  Let me know when you've finished and if you were successful.
 available_functions:
   - name: database_start
     description: Starts the database
@@ -250,11 +277,14 @@ expected_function_calls:
     result: ""
 final_answer_should: The answer should indicate that the task was completed successfully.
 ---
-description: Asserts that the model can parse a comma delimited list from one function, pass each entry to a second function, and send the gathered results of those calls to a third function.
 categories:
   - chained
   - grouped
   - semantic
+description: >-
+  Asserts that the model can parse a comma delimited list from one function, pass
+  each entry to a second function, and send the gathered results of those calls
+  to a third function.
 prompt: Find all *.go files and count the lines of code in each file, add the result and print it
 available_functions:
   - name: find
@@ -264,7 +294,9 @@ available_functions:
       properties:
         pattern:
           type: string
-          description: The file pattern to look for. The pattern is a traditional unix glob format with * matching any character and ? matching a single character
+          description: >
+            The file pattern to look for. The pattern is a traditional unix glob format with * matching any character
+            and ? matching a single character
   - name: count
     description: Count the lines of code
     parameters:
@@ -285,7 +317,17 @@ expected_function_calls:
   - name: find
     arguments:
       pattern: '*.go'
-    result: main.go pkg/assemble/assemble.go pkg/builtin/builtin.go pkg/builtin/defaults.go pkg/builtin/log.go pkg/cache/cache.go pkg/chat/chat.go pkg/chat/readline.go pkg/cli/credential.go pkg/cli/credential_delete.go pkg/cli/eval.go pkg/cli/fmt.go pkg/cli/gptscript.go pkg/cli/log.go pkg/cli/parse.go pkg/config/cliconfig.go pkg/confirm/confirm.go pkg/context/context.go pkg/credentials/credential.go pkg/credentials/helper.go pkg/credentials/store.go pkg/daemon/daemon.go pkg/debugcmd/debug.go pkg/debugcmd/log.go pkg/engine/cmd.go pkg/engine/daemon.go pkg/engine/engine.go pkg/engine/http.go pkg/engine/log.go pkg/engine/openapi.go pkg/engine/openapi_test.go pkg/engine/print.go pkg/engine/self.go pkg/engine/self_linux.go pkg/env/env.go pkg/env/log.go pkg/gptscript/gptscript.go pkg/hash/seed.go pkg/hash/sha256.go pkg/input/input.go pkg/input/log.go pkg/llm/registry.go pkg/loader/github/github.go pkg/loader/loader.go pkg/loader/loader_test.go pkg/loader/log.go pkg/loader/openapi.go pkg/loader/url.go pkg/loader/vcs/init.go pkg/monitor/display.go
+    result: >-
+      main.go pkg/assemble/assemble.go pkg/builtin/builtin.go pkg/builtin/defaults.go pkg/builtin/log.go
+      pkg/cache/cache.go pkg/chat/chat.go pkg/chat/readline.go pkg/cli/credential.go pkg/cli/credential_delete.go
+      pkg/cli/eval.go pkg/cli/fmt.go pkg/cli/gptscript.go pkg/cli/log.go pkg/cli/parse.go pkg/config/cliconfig.go
+      pkg/confirm/confirm.go pkg/context/context.go pkg/credentials/credential.go pkg/credentials/helper.go
+      pkg/credentials/store.go pkg/daemon/daemon.go pkg/debugcmd/debug.go pkg/debugcmd/log.go pkg/engine/cmd.go
+      pkg/engine/daemon.go pkg/engine/engine.go pkg/engine/http.go pkg/engine/log.go pkg/engine/openapi.go
+      pkg/engine/openapi_test.go pkg/engine/print.go pkg/engine/self.go pkg/engine/self_linux.go pkg/env/env.go
+      pkg/env/log.go pkg/gptscript/gptscript.go pkg/hash/seed.go pkg/hash/sha256.go pkg/input/input.go pkg/input/log.go
+      pkg/llm/registry.go pkg/loader/github/github.go pkg/loader/loader.go pkg/loader/loader_test.go pkg/loader/log.go
+      pkg/loader/openapi.go pkg/loader/url.go pkg/loader/vcs/init.go pkg/monitor/display.go
   - any_order:
       - arguments:
           file: main.go
@@ -489,15 +531,20 @@ expected_function_calls:
         result: "10"
   - name: add
     arguments:
-      nums: 10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10
+      nums: "10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10"
     result: "500"
 final_answer_should: The answer should indicate that the total number of lines is 500
 ---
-description: Asserts that the model can parse a large csv style response and make a series of chained calls for each row in the csv
 categories:
   - chained
   - semantic
-prompt: Retrieve the list of potential sales leads and for each add them to our system. Then, send an initial contact email to each lead. Finally, assign a sales rep to each lead.
+description: >-
+  Asserts that the model can parse a large csv style response and make a series
+  of chained calls for each row in the csv
+prompt: >-
+  Retrieve the list of potential sales leads and for each add them to our system.
+  Then, send an initial contact email to each lead. Finally, assign a sales rep
+  to each lead.
 available_functions:
   - name: sales_leads
     description: Returns a list of potential sales leads

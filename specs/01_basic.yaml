@@ -1,7 +1,9 @@
 ---
-description: Asserts that the model can make a function call with a given argument and conveys the result to the user
 categories:
   - basic
+description: >-
+  Asserts that the model can make a function call with a given argument and
+  conveys the result to the user
 prompt: Call funcA with 1 and respond with the result of the call
 available_functions:
   - name: funcA
@@ -17,11 +19,15 @@ expected_function_calls:
     arguments:
       param1: 1
     result: This is the output of funcA(1)
-final_answer_should: The answer should indicate that the result of calling funcA with 1 is "This is the output of funcA(1)"
+final_answer_should: >-
+  The answer should indicate that the result of calling funcA with 1 is "This is
+  the output of funcA(1)"
 ---
-description: Asserts that the model can make a function call with an ordered set of arguments and conveys the result to the user
 categories:
   - basic
+description: >-
+  Asserts that the model can make a function call with an ordered set of
+  arguments and conveys the result to the user
 prompt: Call funcA with 1, 2, 3, 4, 5 and respond with the result of the call
 available_functions:
   - name: funcA
@@ -53,4 +59,6 @@ expected_function_calls:
       param4: 4
       param5: 5
     result: This is output of funcA(1, 2, 3, 4, 5)
-final_answer_should: The answer should indicate that the result of calling funcA with 1, 2, 3, 4, 5 is "This is output of funcA(1, 2, 3, 4, 5)"
+final_answer_should: >-
+  The answer should indicate that the result of calling funcA with 1, 2, 3, 4, 5
+  is "This is output of funcA(1, 2, 3, 4, 5)"

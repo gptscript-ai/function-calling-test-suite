@@ -1,8 +1,11 @@
 ---
-description: Asserts that the model can determine when the result of a function call cannot be used as the argument for a specified function and conveys the problem to the user
 categories:
   - sequenced
   - negative
+description: >-
+  Asserts that the model can determine when the result of a function call cannot
+  be used as the argument for a specified function and conveys the problem to the
+  user
 prompt: Call funcA with 1, then call funcB with 'foo'
 available_functions:
   - name: funcA
@@ -29,4 +32,7 @@ expected_function_calls:
       param1: 1
     result: This is output of funcA(1)
     optional: true
-final_answer_should: The answer should indicate that the given operation cannot be completed or should ask for more information in order to continue. It may additionally indicate a typing issue related to the given parameters and arguments.
+final_answer_should: >-
+  The answer should indicate that the given operation cannot be completed or
+  should ask for more information in order to continue. It may additionally
+  indicate a typing issue related to the given parameters and arguments.
