@@ -6,7 +6,7 @@ import csv
 import re
 import yaml
 from openai import OpenAI
-from benchmark import TestCase
+from function_benchmark import TestCase
 
 
 def pytest_addoption(parser):
