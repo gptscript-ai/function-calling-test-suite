@@ -1,10 +1,8 @@
 import json
 import time
-from typing import Optional, List
 from openai import OpenAI, Stream
 from openai.types.chat import ChatCompletion, ChatCompletionChunk
-from benchmark import TestCase, ExpectedFunctionCallGroup, Actual, ActualFunctionCall
-from dataclasses import dataclass
+from function_benchmark import TestCase, ExpectedFunctionCallGroup, Actual, ActualFunctionCall
 from collections import deque
 
 

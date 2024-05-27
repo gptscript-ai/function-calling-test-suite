@@ -1,11 +1,10 @@
 import json
-
+import copy
+import sys
 import pandas as pd
 import plotly.graph_objs as go
 import plotly.express as px
 from plotly.subplots import make_subplots
-import sys
-import copy
 
 
 def hex_to_rgba(hex, alpha=0.4):
