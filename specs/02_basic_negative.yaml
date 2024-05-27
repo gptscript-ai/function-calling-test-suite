@@ -1,8 +1,10 @@
 ---
-description: Asserts that the model can determine when an argument specified by the prompt is invalid and conveys the problem to the user
 categories:
   - basic
   - negative
+description: >-
+  Asserts that the model can determine when an argument specified by the prompt
+  is invalid and conveys the problem to the user
 prompt: Call funcA with 'foo'
 available_functions:
   - name: funcA
@@ -16,12 +18,16 @@ available_functions:
       required:
         - param1
 expected_function_calls: []
-final_answer_should: The answer should indicate that something went wrong or that it cannot complete the requested operation as specified
+final_answer_should: >-
+  The answer should indicate that something went wrong or that the provided argument is invalid.
+  It can also ask for more information to complete the operation.
 ---
-description: Asserts that the model can determine when a function specified by the prompt is unavailable and conveys the problem to the user
 categories:
   - basic
   - negative
+description: >-
+  Asserts that the model can determine when a function specified by the prompt is
+  unavailable and conveys the problem to the user
 prompt: Call funcB with 1
 available_functions:
   - name: funcA
@@ -33,12 +39,15 @@ available_functions:
           type: integer
           description: Param 1
 expected_function_calls: []
-final_answer_should: The answer should indicate that something went wrong or that it cannot complete the requested operation because funcB is not available
+final_answer_should: The answer can indicate that funcB is not available or suggest a call to funcA instead.
 ---
-description: Asserts that the model can distinguish between available and unavailable functions when both are specified by the prompt and conveys the problem to the user
 categories:
   - basic
   - negative
+description: >-
+  Asserts that the model can distinguish between available and unavailable
+  functions when both are specified by the prompt and conveys the problem to the
+  user
 prompt: Call funcA with 1 and funcB with 2
 available_functions:
   - name: funcA
@@ -55,4 +64,6 @@ expected_function_calls:
       param1: 1
     result: This is the output of funcA(1)
     optional: true
-final_answer_should: The answer should indicate that something went wrong or that funcB is not available. The answer should not provide a result for funcB.
+final_answer_should: >-
+  The answer should indicate that funcB is not available and may suggest calling funcA instead.
+  The answer should not provide a result for funcB.

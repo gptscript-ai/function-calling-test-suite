@@ -1,7 +1,9 @@
 ---
-description: Asserts that the model can use the result of a function call as the argument for a specified function and conveys the result to the user
 categories:
   - chained
+description: >-
+  Asserts that the model can use the result of a function call as the argument
+  for a specified function and conveys the result to the user
 prompt: Call funcA with 1, then funcB with the result, then return the result of calling funcB
 available_functions:
   - name: funcA
@@ -31,13 +33,19 @@ expected_function_calls:
     arguments:
       param1: This is the output of funcA(1)
     result: This is the output of funcB(funcA(1))
-final_answer_should: The answer should indicate that the result of calling funcB is "This is the output of funcB(funcA(1))"
+final_answer_should: >-
+  The answer should indicate that the result of calling funcB is "This is the
+  output of funcB(funcA(1))"
 ---
-description: Asserts that the model can use the results of a group of function calls as arguments for a single function call and conveys the result to the user
 categories:
   - chained
   - grouped
-prompt: Call funcA with 1 and funcB with 2, then return the result of calling funcC with results of the previous calls
+description: >-
+  Asserts that the model can use the results of a group of function calls as
+  arguments for a single function call and conveys the result to the user
+prompt: >-
+  Call funcA with 1 and funcB with 2, then return the result of calling funcC
+  with results of the previous calls
 available_functions:
   - name: funcA
     description: Performs funcA
@@ -80,13 +88,21 @@ expected_function_calls:
       param1: This is the output of funcA(1)
       param2: This is the output of funcB(2)
     result: This is the output of funcC(funcA(1), funcB(2))
-final_answer_should: The answer should indicate that the result of calling funcC is "This is the output of funcC(funcA(1), funcB(2))"
+final_answer_should: >-
+  The answer should indicate that the result of calling funcC is "This is the
+  output of funcC(funcA(1), funcB(2))"
 ---
-description: Asserts that the model can use the results of a group of function calls as arguments for successive groups of function calls and conveys the result to the user
 categories:
   - chained
   - grouped
-prompt: Call funcA with 1 and funcB with 2, then call funcC with their results. Next call funcD with 3 and funcE with 4, then call funcF with their result. Finally call funcG with the result of funcC and funcF
+description: >-
+  Asserts that the model can use the results of a group of function calls as
+  arguments for successive groups of function calls and conveys the result to the
+  user
+prompt: >-
+  Call funcA with 1 and funcB with 2, then call funcC with their results. Next
+  call funcD with 3 and funcE with 4, then call funcF with their result. Finally
+  call funcG with the result of funcC and funcF
 available_functions:
   - name: funcA
     description: Performs funcA
@@ -192,4 +208,6 @@ expected_function_calls:
             - This is the output of funcC(funcA(1), funcB(2))
             - This is the output of funcF(funcD(3), funcE(4))
         result: This is the output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))
-final_answer_should: The answer should indicate that the result of calling funcG is "This is the output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))"
+final_answer_should: >-
+  The answer should indicate that the result of calling funcG is "This is the
+  output of funcG(funcC(funcA(1), funcB(2)), funcF(funcD(3), funcE(4)))"

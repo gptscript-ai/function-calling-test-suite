@@ -1,9 +1,12 @@
 ---
-description: Asserts that the model can determine when the capabilities of the available functions are not sufficient to answer a prompt and conveys the problem to the user
 categories:
   - basic
   - semantic
   - negative
+description: >-
+  Asserts that the model can determine when the capabilities of the available
+  functions are not sufficient to answer a prompt and conveys the problem to the
+  user
 prompt: Get the current time at Tokyo
 available_functions:
   - name: get_current_weather
@@ -15,13 +18,17 @@ available_functions:
           type: string
           description: The city and state, e.g. San Francisco, CA
 expected_function_calls: []
-final_answer_should: The answer should indicate that the it's not possible to get the current time at Tokyo with the available resources
+final_answer_should: >-
+  The answer should indicate that the it's not possible to get the current time
+  at Tokyo with the available resources
 ---
-description: Asserts that the model can determine when a prompt provides an invalid argument for a function and conveys the problem to the user
 categories:
   - basic
   - semantic
   - negative
+description: >-
+  Asserts that the model can determine when a prompt provides an invalid argument
+  for a function and conveys the problem to the user
 prompt: Determine if 'foo' is a lucky number
 available_functions:
   - name: is_lucky
@@ -35,13 +42,17 @@ available_functions:
     required:
       - number
 expected_function_calls: []
-final_answer_should: The answer should indicate that the operation cannot be completed because the given argument's type is incompatible with the target parameter type
+final_answer_should: >-
+  The answer should indicate that the operation cannot be completed because the
+  given argument's type is incompatible with the target parameter type
 ---
-description: Asserts that the model can determine when the available functions are insufficient to answer a prompt and conveys the problem to the user
 categories:
   - basic
   - semantic
   - negative
+description: >-
+  Asserts that the model can determine when the available functions are
+  insufficient to answer a prompt and conveys the problem to the user
 prompt: Get the current weather for Buford, GA then get the current time there.
 available_functions:
   - name: get_current_weather
@@ -58,14 +69,23 @@ expected_function_calls:
       location: Buford, GA
     result: Sunny, 74 degrees
     optional: true
-final_answer_should: The answer should indicate that the current weather in Buford is Sunny and 74 degrees but should not indicate a specific value for the current time. It may suggest a method for determining the time as long as it doesn't give a specific time as an answer.
+final_answer_should: >-
+  The answer should indicate that the current weather in Buford is Sunny and 74
+  degrees but should not indicate a specific value for the current time. It may
+  suggest a method for determining the time as long as it doesn't give a specific
+  time as an answer.
 ---
-description: Asserts that the model can identify an invalid argument in a sequence of otherwise valid function calls derived from a prompt and conveys the problem to the user
 categories:
   - sequenced
   - semantic
   - negative
-prompt: Get the current weather in Cape Coral, FL and wait for the result, then determine if 'foo' is a lucky number
+description: >-
+  Asserts that the model can identify an invalid argument in a sequence of
+  otherwise valid function calls derived from a prompt and conveys the problem to
+  the user
+prompt: >-
+  Get the current weather in Cape Coral, FL and wait for the result, then
+  determine if 'foo' is a lucky number
 available_functions:
   - name: get_current_weather
     description: Get the current weather in a given location
@@ -91,14 +111,22 @@ expected_function_calls:
       location: Cape Coral, FL
     result: Sunny, 80 degrees
     optional: true
-final_answer_should: The answer should indicate that some portion of the requested operation can't be completed and may additionally indicate an issue about checking a lucky number
+final_answer_should: >-
+  The answer should indicate that some portion of the requested operation can't
+  be completed and may additionally indicate an issue about checking a lucky
+  number
 ---
-description: Asserts that the model can determine when the result of a function call derived from the prompt cannot be used as an argument for another function call and conveys the problem to the user
 categories:
   - chained
   - semantic
   - negative
-prompt: Get the current weather conditions for Phoenix, AZ, then determine if those weather conditions are hot or cold
+description: >-
+  Asserts that the model can determine when the result of a function call derived
+  from the prompt cannot be used as an argument for another function call and
+  conveys the problem to the user
+prompt: >-
+  Get the current weather conditions for Phoenix, AZ, then determine if those
+  weather conditions are hot or cold
 available_functions:
   - name: get_current_weather
     description: Gets the current weather conditions for a given location
@@ -126,4 +154,6 @@ expected_function_calls:
       location: Phoenix, AZ
     result: temperate
     optional: true
-final_answer_should: The answer should indicate that the operation can't be completed with the given information and may also request more information to continue
+final_answer_should: >-
+  The answer should indicate that the operation can't be completed with the given
+  information and may also request more information to continue
