@@ -814,4 +814,188 @@ final_answer_should: >-
   The final answer should indicate that the tweet's sentiments are positive.
   It can additionally describe the following text in any amount of detail:
   "Wow, my first post. Awesome!".
-
+---
+# This test is derived from https://github.com/gptscript-ai/gptscript/blob/9e33525220e198fc12b64034c8131de4e652a252/examples/describe-code.gpt
+categories:
+  - grouped
+  - sequenced
+  - chained
+  - semantic
+  - gptscript
+description: >-
+  Asserts that the model can build chain of grouped function calls.
+prompt: Get the summaries of the 3 txt files that contain the most lines of text.
+available_functions:
+  - name: find
+    description: >-
+      Find available files.
+      Returns a list of file names.
+    parameters:
+      type: object
+      properties:
+        filter:
+          type: string
+          description: A glob pattern to filter results with
+  - name: read
+    description: Get the raw content of a file.
+    parameters:
+      type: object
+      properties:
+        filename:
+          type: string
+          description: Name of a file to read
+  - name: count
+    description: Get the number of lines in a text.
+    parameters:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Text to count lines for.
+  - name: summarize
+    description: Get a summary of a text.
+    parameters:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Text to get sentiments for
+expected_function_calls:
+  - name: find
+    arguments:
+      filter: '*.txt'
+    result: |-
+      apples.txt
+      bananas.txt
+      clementines.txt
+      durians.txt
+      figs.txt
+  - any_order:
+      - name: read
+        arguments:
+          filename: apples.txt
+        result: |-
+          Apples are one of the most popular and widely cultivated fruits in the world.
+          They come in various colors, including red, green, and yellow, and have a crisp texture with a sweet to tart flavor.
+          Apples are rich in dietary fiber, vitamin C, and various antioxidants, making them a nutritious and healthy snack.
+          They can be eaten fresh, cooked, or used in a variety of dishes such as pies, sauces, and salads.
+          The fruit is also known for its long shelf life and versatility.
+      - name: read
+        arguments:
+          filename: bananas.txt
+        result: |-
+          Bananas are a tropical fruit that is enjoyed worldwide for its sweet flavor and soft, creamy texture.
+          They are an excellent source of potassium, vitamin B6, and vitamin C, and provide a quick energy boost due to their natural sugars.
+          Bananas can be eaten on their own, added to cereals and smoothies, or used in baking recipes such as banana bread.
+          They are also known for their convenience, as they come in their own natural packaging that makes them easy to carry and eat on the go.
+          Bananas are grown in many tropical regions and are a staple food in many cultures.
+          The versatility of bananas in culinary applications is unmatched.
+      - name: read
+        arguments:
+          filename: clementines.txt
+        result: |-
+          Clementines are a type of small, sweet, and seedless citrus fruit that is easy to peel and divide into segments.
+          They are a hybrid between a mandarin orange and a sweet orange, offering a bright, tangy flavor.
+          Clementines are rich in vitamin C, fiber, and antioxidants, which contribute to their numerous health benefits.
+          They are typically in season from November to January, making them a popular choice for holiday fruit baskets and festive dishes.
+      - name: read
+        arguments:
+          filename: durians.txt
+        result:
+          Durians are a tropical fruit known for their distinctive smell, which is often described as strong and pungent.
+          They are highly prized in many Southeast Asian countries.
+          The fruit is large, covered in a thorny husk, and can weigh several pounds.
+      - name: read
+        arguments:
+          filename: figs.txt
+        result: |-
+          Figs are a unique fruit with a sweet, honey-like flavor and a soft, chewy texture, punctuated by tiny crunchy seeds.
+          They can be enjoyed fresh or dried, and are often used in baking, cooking, and as a natural sweetener in various dishes.
+          Fresh figs are highly perishable and are usually available in the late summer to early fall.
+          Figs are an excellent source of dietary fiber, vitamins A and K, and several essential minerals.
+          Historically, figs have been a staple food in many cultures and hold significant cultural and religious importance.
+          The versatile nature of figs makes them a delightful addition to both sweet and savory recipes.
+          Figs can also be made into delicious preserves and jams, adding a unique flavor to your meals.
+      - name: count
+        arguments:
+          text: |-
+            Apples are one of the most popular and widely cultivated fruits in the world.
+            They come in various colors, including red, green, and yellow, and have a crisp texture with a sweet to tart flavor.
+            Apples are rich in dietary fiber, vitamin C, and various antioxidants, making them a nutritious and healthy snack.
+            They can be eaten fresh, cooked, or used in a variety of dishes such as pies, sauces, and salads.
+            The fruit is also known for its long shelf life and versatility.
+        result: '5'
+      - name: count
+        arguments:
+          text: |-
+            Bananas are a tropical fruit that is enjoyed worldwide for its sweet flavor and soft, creamy texture.
+            They are an excellent source of potassium, vitamin B6, and vitamin C, and provide a quick energy boost due to their natural sugars.
+            Bananas can be eaten on their own, added to cereals and smoothies, or used in baking recipes such as banana bread.
+            They are also known for their convenience, as they come in their own natural packaging that makes them easy to carry and eat on the go.
+            Bananas are grown in many tropical regions and are a staple food in many cultures.
+            The versatility of bananas in culinary applications is unmatched.
+        result: '6'
+      - name: count
+        arguments:
+          text: |-
+            Clementines are a type of small, sweet, and seedless citrus fruit that is easy to peel and divide into segments.
+            They are a hybrid between a mandarin orange and a sweet orange, offering a bright, tangy flavor.
+            Clementines are rich in vitamin C, fiber, and antioxidants, which contribute to their numerous health benefits.
+            They are typically in season from November to January, making them a popular choice for holiday fruit baskets and festive dishes.
+        result: '4'
+      - name: count
+        arguments:
+          text:
+            Durians are a tropical fruit known for their distinctive smell, which is often described as strong and pungent.
+            They are highly prized in many Southeast Asian countries.
+            The fruit is large, covered in a thorny husk, and can weigh several pounds.
+        result: '3'
+      - name: count
+        arguments:
+          text: |-
+            Figs are a unique fruit with a sweet, honey-like flavor and a soft, chewy texture, punctuated by tiny crunchy seeds.
+            They can be enjoyed fresh or dried, and are often used in baking, cooking, and as a natural sweetener in various dishes.
+            Fresh figs are highly perishable and are usually available in the late summer to early fall.
+            Figs are an excellent source of dietary fiber, vitamins A and K, and several essential minerals.
+            Historically, figs have been a staple food in many cultures and hold significant cultural and religious importance.
+            The versatile nature of figs makes them a delightful addition to both sweet and savory recipes.
+            Figs can also be made into delicious preserves and jams, adding a unique flavor to your meals.
+        result: '7'
+      - name: summarize
+        arguments:
+          text: |-
+            Apples are one of the most popular and widely cultivated fruits in the world.
+            They come in various colors, including red, green, and yellow, and have a crisp texture with a sweet to tart flavor.
+            Apples are rich in dietary fiber, vitamin C, and various antioxidants, making them a nutritious and healthy snack.
+            They can be eaten fresh, cooked, or used in a variety of dishes such as pies, sauces, and salads.
+            The fruit is also known for its long shelf life and versatility.
+        result: >-
+          Apples are versatile, widely cultivated fruits available in various colors, rich in fiber and antioxidants.
+      - name: summarize
+        arguments:
+          text: |-
+            Bananas are a tropical fruit that is enjoyed worldwide for its sweet flavor and soft, creamy texture.
+            They are an excellent source of potassium, vitamin B6, and vitamin C, and provide a quick energy boost due to their natural sugars.
+            Bananas can be eaten on their own, added to cereals and smoothies, or used in baking recipes such as banana bread.
+            They are also known for their convenience, as they come in their own natural packaging that makes them easy to carry and eat on the go.
+            Bananas are grown in many tropical regions and are a staple food in many cultures.
+            The versatility of bananas in culinary applications is unmatched.
+        result: >-
+          Bananas are tropical fruits known for their sweet, creamy texture and high potassium content.
+      - name: summarize
+        arguments:
+          text: |-
+            Figs are a unique fruit with a sweet, honey-like flavor and a soft, chewy texture, punctuated by tiny crunchy seeds.
+            They can be enjoyed fresh or dried, and are often used in baking, cooking, and as a natural sweetener in various dishes.
+            Fresh figs are highly perishable and are usually available in the late summer to early fall.
+            Figs are an excellent source of dietary fiber, vitamins A and K, and several essential minerals.
+            Historically, figs have been a staple food in many cultures and hold significant cultural and religious importance.
+            The versatile nature of figs makes them a delightful addition to both sweet and savory recipes.
+            Figs can also be made into delicious preserves and jams, adding a unique flavor to your meals.
+        result: >-
+          Figs are sweet, honey-flavored fruits with a chewy texture and crunchy seeds, enjoyed fresh or dried.
+final_answer_should: |-
+  The final answer should summarize only apples, bananas, and figs and must contain the following information:
+  - Apples are versatile, widely cultivated fruits available in various colors, rich in fiber and antioxidants
+  - Bananas are tropical fruits known for their sweet, creamy texture and high potassium content
+  - Figs are sweet, honey-flavored fruits with a chewy texture and crunchy seeds, enjoyed fresh or dried
