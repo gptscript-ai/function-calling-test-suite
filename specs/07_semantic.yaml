@@ -713,3 +713,105 @@ expected_function_calls:
         arguments:
           contactId: 10asd
         result: ""
+---
+# This test is derived from https://github.com/gptscript-ai/gptscript/blob/9e33525220e198fc12b64034c8131de4e652a252/examples/sentiments.gpt
+# and mimics the way GPTScript constructs completion requests for natural language tool calls.
+# The tool body is appended to the first system message in the request, and the arguments are passed as JSON text
+# in the following user message.
+categories:
+  - sequenced
+  - chained
+  - semantic
+  - gptscript
+description: >-
+  Asserts that the model can parse and transform user input based on the instructions in its system prompt.
+system_prompt: Get the sentiments of the tweet at ${url}.
+prompt: '{"url": "https://x.com/acornfcts/status/1807836879619862893"}'
+available_functions:
+  - name: browse
+    description: >-
+      Navigates to a website in a new tab and returns the tab ID.
+      Does not return the content of the page.
+    parameters:
+      type: object
+      properties:
+        website:
+          type: string
+          description: >-
+            An HTTPS URL of the website to visit.
+            Must be an HTTPS URL.
+  - name: get_tab_content
+    description: >-
+      Gets the content of the website open in a tab.
+      Returns content in Markdown format.
+    parameters:
+      type: object
+      properties:
+        tab_id:
+          type: string
+          description: The ID of the tab
+  - name: get_sentiments
+    description: Gets the sentiments of a text's author
+    parameters:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Text to get sentiments for
+expected_function_calls:
+  - name: browse
+    arguments:
+      website: https://x.com/acornfcts/status/1807836879619862893
+    result: 4e1364506ec4b787
+  - name: get_tab_content
+    arguments:
+      tab_id: 4e1364506ec4b787
+    result: |-
+      Don’t miss what’s happening
+      People on X are the first to know.
+      =======
+      [
+      Settings
+      ](/settings)
+      Post
+      ----
+      See new posts
+      Conversation
+      ============
+      [
+      ](/acorn_fcts)
+      [
+      fcts
+      ](/acorn_fcts)
+      [
+      @acorn_fcts
+      ](/acorn_fcts)
+      Wow, my first post. Awesome!
+      [7:20 PM · May 20, 2024](/acorn_fcts/status/1807836879619862893)
+      ·
+      1,180
+      Views
+      [
+      3
+      Likes](/acorn_fcts/status/1807836879619862893/likes)
+      Relevant people
+      -------------------
+      [
+      ](/acorn_fcts)
+      [
+      fcts 
+      ](/acorn_fcts)
+      [
+      @acorn_fcts
+      ](/acorn_fcts)
+      Follow
+      Click to Follow acorn_fcts
+  - name: get_sentiments
+    arguments:
+      text: Wow, my first post. Awesome!
+    result: positive
+final_answer_should: >-
+  The final answer should indicate that the tweet's sentiments are positive.
+  It can additionally describe the following text in any amount of detail:
+  "Wow, my first post. Awesome!".
+
