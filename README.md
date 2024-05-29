@@ -1,37 +1,172 @@
 # function-benchmark
 
-## Usage 
+`function-benchmark` is a pragmatic test framework for assessing the function calling capabilities of large language models (LLMs).
 
-Set environment variables to target model
+## Test spec overview
 
-```sh
-export BENCHMARK_API_KEY='...'
-export BENCHMARK_BASE_URL='https://api.openai.com/v1'
-export BENCHMARK_MODEL='gpt-4-turbo-2024-04-09'
+Test specs files contain YAML streams that define the metadata, input, and expected output for a set of test cases.
+
+e.g.
+
+```yaml
+---
+categories:
+  - basic
+description: >-
+  Asserts that the model can make a function call with a given argument and
+  conveys the result to the user
+prompt: Call funcA with 1 and respond with the result of the call
+available_functions:
+  - name: funcA
+    description: Performs funcA
+    parameters:
+      type: object
+      properties:
+        param1:
+          type: integer
+          description: Param 1
+expected_function_calls:
+  - name: funcA
+    arguments:
+      param1: 1
+    result: This is the output of funcA(1)
+final_answer_should: >-
+  The answer should indicate that the result of calling funcA with 1 is "This is
+  the output of funcA(1)"
+---
+# ...
 ```
 
-Run `function-benchmark` in verbose mode using for spec files in `./specs` with streaming enabled.
+### Spec anatomy
+
+Every test spec has three primary components:
+
+#### 1. Test metadata
+
+Each test spec must include a `description` and `categories`. The `description` outlines the test's goal, while
+`categories` tag the capabilities being tested. Categorizing test cases helps identify the model's strengths and weaknesses.
+
+#### 2. Functions definitions and expected calls
+When executed, the framework uses the `prompt` and `available_functions` to generate an initial request.
+It compares the model’s response to `expected_function_calls`. If they match, the framework continues making requests
+with the `result` field until all expected calls are completed or a call fails.
+
+#### 3. Answer criteria
+
+Even if a model completes all expected function calls, the final response still needs to be verified.
+To this end, specs can optionally include a `final_answer_should` field to describe valid answers using natural language.
+
+### Default test suite
+
+The default suite of spec files can be found in the [specs](./specs) directory.
+
+## Basic usage
+
+Initialize test environment
 
 ```sh
 poetry shell
 poetry install
-poetry run pytest -vvv -s --stream=true
 ```
 
-## Testing models without chat completion API support
+Configure benchmarks to judge model responses with `gpt-4-turbo`
 
-`gptscript's` [alternative model providers](https://docs.gptscript.ai/alternative-model-providers) can be used to
-test models that don't support OpenAI's chat completion API. Providers act as a shim layer between `function-benchmark`
-and the model.
+```sh
+export OPENAI_API_KEY='<openai-api-key>'
+```
 
-## Testing `gemini-1.5` with the `gemini-vertexai-provider`
+Target a model to benchmark
 
-### Requirements
+```sh
+export BENCHMARK_API_KEY='<model-provider-api-key>'
+export BENCHMARK_BASE_URL='<model-provider-api-base-url>'
+export BENCHMARK_MODEL='<model-name>'
+```
+
+Run the [default test suite](./specs) with verbose output enabled:
+
+```sh
+poetry run pytest -vvv
+```
+
+### Run options
+
+```sh
+$ poetry run pytest -h
+usage: pytest [options] [file_or_dir] [file_or_dir] [...]
+...
+Custom options:
+  --spec-run-count=SPEC_RUN_COUNT                   Number of times each test spec should be run
+  --spec-filter=SPEC_FILTER                         Filter which test specs are run by their generated test IDs
+  --spec-dir=SPEC_DIR                               Directory containing JSON test spec files
+  --stream=STREAM                                   Enables streaming for all chat completion requests
+  --use-system-prompt=USE_SYSTEM_PROMPT             Add a default system prompt to all chat completion requests
+  --aggregate-summary-file=AGGREGATE_SUMMARY_FILE   Add benchmark results for the model to an aggregate CSV file
+  --request-delay=REQUEST_DELAY                     Delay in seconds between chat completion requests
+...
+```
+
+## Benchmarking models without chat completion API support
+
+GPTScript's [alternative model provider shims](https://docs.gptscript.ai/alternative-model-providers) can be used to test models that don't support OpenAI's chat
+completion API.
+
+### claude3-opus
+
+Set an Anthopic key:
+
+```shell
+export ANTHROPIC_API_KEY='<anthropic-key>'
+```
+
+Clone the [claude3-anthropic-provider](https://github.com/gptscript-ai/claude3-anthropic-provider):
+
+```sh
+git clone https://github.com/gptscript-ai/claude3-anthropic-provider
+```
+
+Follow the `Development` instructions in the repo's `README.md`:
+
+```sh
+cd claude3-anthropic-provider
+export GPTSCRIPT_DEBUG=true
+python -m venv .venv
+source ./.venv/bin/activate
+pip install -r requirements.txt
+```
+
+Run the shim:
+
+```sh
+./run.sh
+```
+
+In another terminal, target the provider shim:
+
+```sh
+export BENCHMARK_MODEL='claude-3-opus-20240229'
+export BENCHMARK_BASE_URL='http://127.0.0.1:8000/v1'
+export BENCHMARK_API_KEY='foo'
+```
+
+> **Note:** The API key can be set to any arbitrary value, but must be set
+
+Run the tests:
+
+```shell
+poetry shell
+poetry install
+poetry run pytest --stream=true
+```
+
+> **Note: Streaming must be enabled because the `claude3-anthropic-provider` doesn't support non-streaming responses**
+
+### gemini-1.5
+
+Ensure the following requirements are met:
 
 - [gcloud CLI](https://cloud.google.com/sdk/docs/install-sdk)
 - [VertexAI](https://cloud.google.com/vertex-ai) access
-
-### Setup
 
 Configure `gcloud` CLI to use your VertexAI project and account:
 
@@ -78,15 +213,12 @@ source ./.venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Run the provider server:
+Run the shim:
 
 ```sh
 ./run.sh
 ```
-
-### Running the tests
-
-In another terminal, set the `function-benchmark` environment variables to target the provider shim:
+In another terminal, target the provider shim:
 
 ```sh
 export BENCHMARK_MODEL='gemini-1.5-pro-preview-0409'
@@ -94,14 +226,14 @@ export BENCHMARK_BASE_URL='http://127.0.0.1:8081/v1'
 export BENCHMARK_API_KEY='foo'
 ```
 
- > **Note: The API key can be set to any arbitrary value, but must be set**
+> **Note: The API key can be set to any arbitrary value, but must be set**
 
 Run the tests:
 
 ```shell
 poetry shell
 poetry install
-poetry run pytest -s -vvv --stream=true --spec-run-count=10
+poetry run pytest --stream=true
 ```
 
-> **Note: The `gemini-vertexai-provider` doesn't support non-streaming responses, so `function-benchmark` streaming must be enabled**
+> **Note:** Streaming must be enabled because the `gemini-1.5-pro-preview-0409` doesn't support non-streaming responses
