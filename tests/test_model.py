@@ -2,11 +2,11 @@ import json
 import time
 from openai import OpenAI, Stream
 from openai.types.chat import ChatCompletion, ChatCompletionChunk
-from function_benchmark import TestCase, ExpectedFunctionCallGroup, Actual, ActualFunctionCall
+from function_calling_test_suite import TestCase, ExpectedFunctionCallGroup, Actual, ActualFunctionCall
 from collections import deque
 
 
-def test_benchmark(
+def test_model(
         judge_client: OpenAI,
         model_client: OpenAI,
         model: str | None,
