@@ -29,5 +29,5 @@ pip-log.txt
 .DS_Store
 Thumbs.db
 
-# Default benchmark reports
-*benchmark_report.*
+# Default test reports
+*fcts_report.*

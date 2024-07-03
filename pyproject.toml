@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "function-benchmark"
+name = "function-calling-test-suite"
 version = "0.1.0"
 description = ""
 authors = ["Nick Hale <nick@acorn.io>"]
@@ -21,7 +21,7 @@ kaleido = "0.2.1"
 pyyaml = "^6.0.1"
 
 [tool.poetry.scripts]
-plot-results = "function_benchmark.plot_results:main"
+plot-results = "function_calling_test_suite.plot_results:main"
 
 [build-system]
 requires = ["poetry-core"]
@@ -32,6 +32,6 @@ generate_report_on_test = true
 addopts = """
     --cache-clear -v -s --tb=short
     --order-scope=session --order-dependencies
-    --self-contained-html --html=reports/benchmark_report.html
+    --self-contained-html --html=reports/fcts_report.html
     --json-report --json-report-file=none --json-report-indent=4
 """

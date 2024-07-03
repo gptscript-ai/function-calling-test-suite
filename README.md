@@ -1,6 +1,6 @@
-# function-benchmark
+# function-calling-test-suite
 
-`function-benchmark` is a pragmatic test framework for assessing the function calling capabilities of large language models (LLMs).
+`function-calling-test-suite` (`FCTS`) is a pragmatic test framework for assessing the function calling capabilities of large language models (LLMs).
 
 ## Test spec overview
 
@@ -69,18 +69,18 @@ poetry shell
 poetry install
 ```
 
-Configure benchmarks to judge model responses with `gpt-4-turbo`
+Configure FCTS to judge model responses with `gpt-4-turbo`
 
 ```sh
 export OPENAI_API_KEY='<openai-api-key>'
 ```
 
-Target a model to benchmark
+Target a model to test 
 
 ```sh
-export BENCHMARK_API_KEY='<model-provider-api-key>'
-export BENCHMARK_BASE_URL='<model-provider-api-base-url>'
-export BENCHMARK_MODEL='<model-name>'
+export FCTS_API_KEY='<model-provider-api-key>'
+export FCTS_BASE_URL='<model-provider-api-base-url>'
+export FCTS_MODEL='<model-name>'
 ```
 
 Run the [default test suite](./specs) with verbose output enabled:
@@ -101,17 +101,17 @@ Custom options:
   --spec-dir=SPEC_DIR                               Directory containing JSON test spec files
   --stream=STREAM                                   Enables streaming for all chat completion requests
   --use-system-prompt=USE_SYSTEM_PROMPT             Add a default system prompt to all chat completion requests
-  --aggregate-summary-file=AGGREGATE_SUMMARY_FILE   Add benchmark results for the model to an aggregate CSV file
+  --aggregate-summary-file=AGGREGATE_SUMMARY_FILE   Add results for the model to an aggregate CSV file
   --request-delay=REQUEST_DELAY                     Delay in seconds between chat completion requests
 ...
 ```
 
-## Benchmarking models without chat completion API support
+## Testing models without chat completion API support
 
 GPTScript's [alternative model provider shims](https://docs.gptscript.ai/alternative-model-providers) can be used to test models that don't support OpenAI's chat
 completion API.
 
-### claude3-opus
+### claude-3.5-sonnet
 
 Set an Anthopic key:
 
@@ -144,9 +144,9 @@ Run the shim:
 In another terminal, target the provider shim:
 
 ```sh
-export BENCHMARK_MODEL='claude-3-opus-20240229'
-export BENCHMARK_BASE_URL='http://127.0.0.1:8000/v1'
-export BENCHMARK_API_KEY='foo'
+export FCTS_MODEL='claude-3-5-sonnet-20240620'
+export FCTS_BASE_URL='http://127.0.0.1:8000/v1'
+export FCTS_API_KEY='foo'
 ```
 
 > **Note:** The API key can be set to any arbitrary value, but must be set
@@ -221,12 +221,12 @@ Run the shim:
 In another terminal, target the provider shim:
 
 ```sh
-export BENCHMARK_MODEL='gemini-1.5-pro-preview-0409'
-export BENCHMARK_BASE_URL='http://127.0.0.1:8081/v1'
-export BENCHMARK_API_KEY='foo'
+export FCTS_MODEL='gemini-1.5-pro-preview-0409'
+export FCTS_BASE_URL='http://127.0.0.1:8081/v1'
+export FCTS_API_KEY='foo'
 ```
 
-> **Note: The API key can be set to any arbitrary value, but must be set**
+> **Note:** The API key can be set to any arbitrary value, but must be set
 
 Run the tests:
 
