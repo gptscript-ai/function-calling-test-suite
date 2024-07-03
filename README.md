@@ -47,6 +47,7 @@ Each test spec must include a `description` and `categories`. The `description` 
 `categories` tag the capabilities being tested. Categorizing test cases helps identify the model's strengths and weaknesses.
 
 #### 2. Functions definitions and expected calls
+
 When executed, the framework uses the `prompt` and `available_functions` to generate an initial request.
 It compares the model’s response to `expected_function_calls`. If they match, the framework continues making requests
 with the `result` field until all expected calls are completed or a call fails.
@@ -75,7 +76,7 @@ Configure FCTS to judge model responses with `gpt-4-turbo`
 export OPENAI_API_KEY='<openai-api-key>'
 ```
 
-Target a model to test 
+Target a model to test
 
 ```sh
 export FCTS_API_KEY='<model-provider-api-key>'
@@ -111,7 +112,32 @@ Custom options:
 GPTScript's [alternative model provider shims](https://docs.gptscript.ai/alternative-model-providers) can be used to test models that don't support OpenAI's chat
 completion API.
 
-### claude-3.5-sonnet
+### Using the test script (Automated)
+
+The `test.sh` script automates the configuration and deployment of provider shims for a few popular models:
+
+- claude-3.5-sonnet
+- gemini-1.5-pro
+- mistral-large-latest
+
+Before using `test.sh`, ensure the `OPENAI_API_KEY` environment variable is set and the following CLIs are installed on your system:
+
+- [gptscript](https://docs.gptscript.ai/#getting-started)
+- [gcloud](https://cloud.google.com/sdk/docs/install-sdk)
+
+To run the test suite, just pass the name of the model to the script, followed by the desired pytest arguments.
+
+e.g.
+
+```shell
+./test.sh gemini-1.5-pro --spec-run-count=10 --spec-filter='*basic.yaml-0*'
+```
+
+> **Note:** The script will prompt for auth tokens if necessary
+
+You can also run the provider shims and configure the test suite manually. See the sections below for some examples.
+
+### claude-3.5-sonnet (Manual)
 
 Set an Anthopic key:
 
@@ -161,7 +187,7 @@ poetry run pytest --stream=true
 
 > **Note: Streaming must be enabled because the `claude3-anthropic-provider` doesn't support non-streaming responses**
 
-### gemini-1.5
+### gemini-1.5-pro (Manual)
 
 Ensure the following requirements are met:
 
@@ -218,6 +244,7 @@ Run the shim:
 ```sh
 ./run.sh
 ```
+
 In another terminal, target the provider shim:
 
 ```sh
